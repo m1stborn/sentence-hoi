@@ -58,8 +58,8 @@ class HoiTR(nn.Module):
         self.hoi_visual_projection = nn.Linear(hidden_dim, 600)
 
         # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
-        self.human_cls_embed = nn.Linear(hidden_dim, num_humans + 1)
-        self.action_cls_embed = nn.Linear(hidden_dim, num_actions + 1)
+        # self.human_cls_embed = nn.Linear(hidden_dim, num_humans + 1)
+        # self.action_cls_embed = nn.Linear(hidden_dim, num_actions + 1)
 
         # TODO: Sentence Branch
         # self.sentence_embed = MLP(hidden_dim, hidden_dim, 900, 4)
@@ -88,12 +88,12 @@ class HoiTR(nn.Module):
         hs = self.transformer(self.input_proj(src), mask, self.query_embed.weight, pos[-1])[0]
 
         # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
-        human_outputs_class = self.human_cls_embed(hs)
+        # human_outputs_class = self.human_cls_embed(hs)
 
         human_outputs_coord = self.human_box_embed(hs).sigmoid()
         object_outputs_class = self.object_cls_embed(hs)
         object_outputs_coord = self.object_box_embed(hs).sigmoid()
-        action_outputs_class = self.action_cls_embed(hs)
+        # action_outputs_class = self.action_cls_embed(hs)
 
         hoi_outputs_class = self.hoi_visual_projection(hs)
 
@@ -108,7 +108,7 @@ class HoiTR(nn.Module):
             'pred_hoi_logits': hoi_outputs_class[-1],
 
             # Deprecated
-            'action_pred_logits': action_outputs_class[-1],
+            # 'action_pred_logits': action_outputs_class[-1],
         }
 
         if self.aux_loss:
@@ -117,7 +117,7 @@ class HoiTR(nn.Module):
                 object_outputs_class,
                 object_outputs_coord,
                 hoi_outputs_class,
-                action_outputs_class,
+                # action_outputs_class,
             )
         return out
 
@@ -127,7 +127,7 @@ class HoiTR(nn.Module):
                       object_outputs_class,
                       object_outputs_coord,
                       hoi_outputs_class,
-                      action_outputs_class,
+                      # action_outputs_class,
                       ):
         # this is a workaround to make torchscript happy, as torchscript
         # doesn't support dictionary with non-homogeneous values, such
@@ -143,14 +143,14 @@ class HoiTR(nn.Module):
             'pred_obj_logits': b,
             'pred_obj_boxes': c,
             'pred_hoi_logits': d,
-            'action_pred_logits': e,
-        } for a, b, c, d, e in
+            # 'action_pred_logits': e,
+        } for a, b, c, d in
             zip(
                 human_outputs_coord[:-1],
                 object_outputs_class[:-1],
                 object_outputs_coord[:-1],
                 hoi_outputs_class[:-1],
-                action_outputs_class[:-1],
+                # action_outputs_class[:-1],
             )]
 
 
