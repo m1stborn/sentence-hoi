@@ -2,12 +2,13 @@
 # Copyright (c) Hitachi, Ltd. All Rights Reserved.
 # Licensed under the Apache License, Version 2.0 [see LICENSE for details]
 # ------------------------------------------------------------------------
-import cv2
 import json
 import os
 from collections import defaultdict
 
+import cv2
 import numpy as np
+import torch
 
 from util.topk import top_k
 from .hico_text_label import hico_text_label
@@ -97,7 +98,9 @@ class HICOEvaluator:
 
         for i, img_gts in enumerate(gts):
             filename = img_gts['filename']
-            img_gts = {k: v.to('cpu').numpy() for k, v in img_gts.items() if k != 'id' and k != 'filename'}
+            # img_gts = {k: v.to('cpu').numpy() for k, v in img_gts.items() if k != 'id' and k != 'filename'}
+            img_gts = {k: v.to('cpu').numpy() for k, v in img_gts.items() if torch.is_tensor(v)}
+
             bbox_anns = [{'bbox': list(bbox), 'category_id': label} for bbox, label in
                          zip(img_gts['boxes'], img_gts['labels'])]
             hoi_anns = [{'subject_id': hoi[0], 'object_id': hoi[1],
@@ -135,7 +138,8 @@ class HICOEvaluator:
     def evaluate(self):
         for img_preds, img_gts in zip(self.preds, self.gts):
             pred_bboxes = img_preds['predictions']
-            if len(pred_bboxes) == 0: continue
+            if len(pred_bboxes) == 0:
+                continue
 
             gt_bboxes = img_gts['annotations']
             pred_hois = img_preds['hoi_prediction']

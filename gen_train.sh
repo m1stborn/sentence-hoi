@@ -72,7 +72,7 @@
 
 #######################################################
 
-python main_gen.py \
+python main.py \
         --pretrained pretrained/HICO_GEN_VLKT_S.pth \
         --dataset_file hico \
         --hoi_path ../gen-vlkt/data/hico_20160224_det \
@@ -93,6 +93,3 @@ python main_gen.py \
 
 # move tmep logfile to folder create by main_gen.py
 mv "./checkpoint/tmp_stdout.txt" "$(ls -td ./checkpoint/*/ | head -1)stdout.txt"
-
-
-# TODO: label composition: every batch or every epoch

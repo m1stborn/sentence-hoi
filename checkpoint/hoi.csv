@@ -1,0 +1,1486 @@
+label,triplet,sentence,verb_id,object_id,object_text,count,train_count,eval_count,in_train
+152,"(72, 3)",a photo of a person racing a motorcycle,72,3,a photo of a motorcycle,442,442,0,True
+153,"(76, 3)",a photo of a person riding a motorcycle,76,3,a photo of a motorcycle,1325,1325,0,True
+154,"(87, 3)",a photo of a person sitting on a motorcycle,87,3,a photo of a motorcycle,1628,1628,0,True
+155,"(98, 3)",a photo of a person straddling a motorcycle,98,3,a photo of a motorcycle,1523,1523,0,True
+223,"(57, 46)",a photo of a person and a banana,57,46,a photo of a banana,315,315,0,True
+64,"(57, 5)",a photo of a person and a bus,57,5,a photo of a bus,211,211,0,True
+47,"(20, 39)",a photo of a person drinking with a bottle,20,39,a photo of a bottle,158,158,0,True
+48,"(36, 39)",a photo of a person holding a bottle,36,39,a photo of a bottle,527,527,0,True
+241,"(87, 59)",a photo of a person sitting on a bed,87,59,a photo of a bed,150,150,0,True
+577,"(36, 25)",a photo of a person holding a umbrella,36,25,a photo of a umbrella,1389,1389,0,True
+582,"(94, 25)",a photo of a person standing under a umbrella,94,25,a photo of a umbrella,1181,1181,0,True
+428,"(57, 53)",a photo of a person and a pizza,57,53,a photo of a pizza,107,107,0,True
+558,"(6, 79)",a photo of a person brushing with a toothbrush,6,79,a photo of a toothbrush,226,226,0,True
+559,"(36, 79)",a photo of a person holding a toothbrush,36,79,a photo of a toothbrush,313,313,0,True
+570,"(52, 7)",a photo of a person loading a truck,52,7,a photo of a truck,107,107,0,True
+131,"(36, 17)",a photo of a person holding a horse,36,17,a photo of a horse,795,795,0,True
+139,"(76, 17)",a photo of a person riding a horse,76,17,a photo of a horse,1484,1484,0,True
+141,"(98, 17)",a photo of a person straddling a horse,98,17,a photo of a horse,1141,1141,0,True
+212,"(114, 24)",a photo of a person wearing a backpack,114,24,a photo of a backpack,982,982,0,True
+275,"(15, 51)",a photo of a person cutting a carrot,15,51,a photo of a carrot,26,26,0,True
+11,"(36, 1)",a photo of a person holding a bicycle,36,1,a photo of a bicycle,1914,1912,2,True
+18,"(76, 1)",a photo of a person riding a bicycle,76,1,a photo of a bicycle,2099,2099,0,True
+19,"(87, 1)",a photo of a person sitting on a bicycle,87,1,a photo of a bicycle,1808,1808,0,True
+20,"(98, 1)",a photo of a person straddling a bicycle,98,1,a photo of a bicycle,2147,2147,0,True
+196,"(112, 62)",a photo of a person watching a tv,112,62,a photo of a tv,197,197,0,True
+108,"(24, 60)",a photo of a person eating at a dining table,24,60,a photo of a dining table,2222,2222,0,True
+109,"(86, 60)",a photo of a person sitting at a dining table,86,60,a photo of a dining table,3024,3024,0,True
+588,"(27, 40)",a photo of a person filling a wine glass,27,40,a photo of a wine glass,27,27,0,True
+376,"(16, 43)",a photo of a person cutting with a knife,16,43,a photo of a knife,208,208,0,True
+377,"(36, 43)",a photo of a person holding a knife,36,43,a photo of a knife,557,557,0,True
+380,"(115, 43)",a photo of a person wielding a knife,115,43,a photo of a knife,568,568,0,True
+467,"(43, 30)",a photo of a person jumping a skis,43,30,a photo of a skis,117,117,0,True
+470,"(76, 30)",a photo of a person riding a skis,76,30,a photo of a skis,631,631,0,True
+471,"(93, 30)",a photo of a person standing on a skis,93,30,a photo of a skis,807,807,0,True
+472,"(114, 30)",a photo of a person wearing a skis,114,30,a photo of a skis,936,936,0,True
+208,"(8, 24)",a photo of a person carrying a backpack,8,24,a photo of a backpack,908,908,0,True
+201,"(36, 47)",a photo of a person holding an apple,36,47,a photo of an apple,217,217,0,True
+432,"(58, 72)",a photo of a person opening a refrigerator,58,72,a photo of a refrigerator,22,22,0,True
+182,"(83, 18)",a photo of a person shearing a sheep,83,18,a photo of a sheep,108,108,0,True
+478,"(43, 31)",a photo of a person jumping a snowboard,43,31,a photo of a snowboard,340,340,0,True
+480,"(93, 31)",a photo of a person standing on a snowboard,93,31,a photo of a snowboard,625,625,0,True
+479,"(76, 31)",a photo of a person riding a snowboard,76,31,a photo of a snowboard,595,595,0,True
+481,"(114, 31)",a photo of a person wearing a snowboard,114,31,a photo of a snowboard,691,691,0,True
+56,"(21, 5)",a photo of a person driving a bus,21,5,a photo of a bus,448,445,3,True
+60,"(76, 5)",a photo of a person riding a bus,76,5,a photo of a bus,1443,1443,0,True
+61,"(87, 5)",a photo of a person sitting on a bus,87,5,a photo of a bus,915,915,0,True
+89,"(87, 56)",a photo of a person sitting on a chair,87,56,a photo of a chair,1186,1186,0,True
+248,"(36, 73)",a photo of a person holding a book,36,73,a photo of a book,807,807,0,True
+249,"(58, 73)",a photo of a person opening a book,58,73,a photo of a book,551,551,0,True
+250,"(73, 73)",a photo of a person reading a book,73,73,a photo of a book,680,680,0,True
+589,"(36, 40)",a photo of a person holding a wine glass,36,40,a photo of a wine glass,400,400,0,True
+544,"(114, 27)",a photo of a person wearing a tie,114,27,a photo of a tie,798,798,0,True
+67,"(21, 2)",a photo of a person driving a car,21,2,a photo of a car,358,353,5,True
+72,"(62, 2)",a photo of a person parking a car,62,2,a photo of a car,26,26,0,True
+73,"(76, 2)",a photo of a person riding a car,76,2,a photo of a car,574,574,0,True
+506,"(8, 28)",a photo of a person carrying a suitcase,8,28,a photo of a suitcase,223,223,0,True
+508,"(36, 28)",a photo of a person holding a suitcase,36,28,a photo of a suitcase,228,227,1,True
+576,"(8, 25)",a photo of a person carrying a umbrella,8,25,a photo of a umbrella,996,996,0,True
+146,"(36, 3)",a photo of a person holding a motorcycle,36,3,a photo of a motorcycle,966,964,2,True
+446,"(36, 76)",a photo of a person holding a scissors,36,76,a photo of a scissors,242,242,0,True
+447,"(58, 76)",a photo of a person opening a scissors,58,76,a photo of a scissors,89,89,0,True
+23,"(57, 1)",a photo of a person and a bicycle,57,1,a photo of a bicycle,342,342,0,True
+457,"(43, 36)",a photo of a person jumping a skateboard,43,36,a photo of a skateboard,950,950,0,True
+459,"(76, 36)",a photo of a person riding a skateboard,76,36,a photo of a skateboard,1599,1599,0,True
+461,"(93, 36)",a photo of a person standing on a skateboard,93,36,a photo of a skateboard,1412,1412,0,True
+393,"(13, 64)",a photo of a person controlling a mouse,13,64,a photo of a mouse,46,46,0,True
+394,"(36, 64)",a photo of a person holding a mouse,36,64,a photo of a mouse,55,55,0,True
+489,"(8, 32)",a photo of a person carrying a sports ball,8,32,a photo of a sports ball,169,169,0,True
+491,"(19, 32)",a photo of a person dribbling a sports ball,19,32,a photo of a sports ball,114,114,0,True
+493,"(36, 32)",a photo of a person holding a sports ball,36,32,a photo of a sports ball,324,324,0,True
+492,"(35, 32)",a photo of a person hitting a sports ball,35,32,a photo of a sports ball,210,210,0,True
+162,"(36, 0)",a photo of a person holding a person,36,0,a photo of a person,510,510,0,True
+329,"(57, 10)",a photo of a person and a fire hydrant,57,10,a photo of a fire hydrant,196,196,0,True
+225,"(8, 34)",a photo of a person carrying a baseball bat,8,34,a photo of a baseball bat,80,80,0,True
+226,"(36, 34)",a photo of a person holding a baseball bat,36,34,a photo of a baseball bat,687,686,1,True
+230,"(115, 34)",a photo of a person wielding a baseball bat,115,34,a photo of a baseball bat,599,599,0,True
+462,"(57, 36)",a photo of a person and a skateboard,57,36,a photo of a skateboard,103,103,0,True
+370,"(30, 33)",a photo of a person flying a kite,30,33,a photo of a kite,607,607,0,True
+9,"(57, 4)",a photo of a person and an airplane,57,4,a photo of an airplane,239,239,0,True
+75,"(57, 2)",a photo of a person and a car,57,2,a photo of a car,877,877,0,True
+156,"(108, 3)",a photo of a person turning a motorcycle,108,3,a photo of a motorcycle,254,254,0,True
+194,"(13, 62)",a photo of a person controlling a tv,13,62,a photo of a tv,29,29,0,True
+264,"(3, 55)",a photo of a person blowing a cake,3,55,a photo of a cake,312,312,0,True
+94,"(87, 57)",a photo of a person sitting on a couch,87,57,a photo of a couch,888,888,0,True
+507,"(18, 28)",a photo of a person dragging a suitcase,18,28,a photo of a suitcase,113,113,0,True
+177,"(36, 18)",a photo of a person holding a sheep,36,18,a photo of a sheep,168,168,0,True
+148,"(43, 3)",a photo of a person jumping a motorcycle,43,3,a photo of a motorcycle,123,122,1,True
+10,"(8, 1)",a photo of a person carrying a bicycle,8,1,a photo of a bicycle,129,22,107,True
+21,"(110, 1)",a photo of a person walking a bicycle,110,1,a photo of a bicycle,178,178,0,True
+106,"(57, 19)",a photo of a person and a cow,57,19,a photo of a cow,424,424,0,True
+338,"(36, 29)",a photo of a person holding a frisbee,36,29,a photo of a frisbee,410,410,0,True
+38,"(76, 8)",a photo of a person riding a boat,76,8,a photo of a boat,3707,3707,0,True
+40,"(79, 8)",a photo of a person sailing a boat,79,8,a photo of a boat,359,359,0,True
+42,"(93, 8)",a photo of a person standing on a boat,93,8,a photo of a boat,1524,1524,0,True
+193,"(57, 6)",a photo of a person and a train,57,6,a photo of a train,213,213,0,True
+363,"(8, 66)",a photo of a person carrying a keyboard,8,66,a photo of a keyboard,43,43,0,True
+365,"(36, 66)",a photo of a person holding a keyboard,36,66,a photo of a keyboard,46,46,0,True
+26,"(36, 14)",a photo of a person holding a bird,36,14,a photo of a bird,127,127,0,True
+521,"(49, 37)",a photo of a person lying on a surfboard,49,37,a photo of a surfboard,28,28,0,True
+523,"(76, 37)",a photo of a person riding a surfboard,76,37,a photo of a surfboard,214,214,0,True
+283,"(8, 67)",a photo of a person carrying a cell phone,8,67,a photo of a cell phone,170,170,0,True
+284,"(36, 67)",a photo of a person holding a cell phone,36,67,a photo of a cell phone,510,510,0,True
+287,"(101, 67)",a photo of a person talking on a cell phone,101,67,a photo of a cell phone,224,224,0,True
+39,"(77, 8)",a photo of a person rowing a boat,77,8,a photo of a boat,686,686,0,True
+167,"(102, 0)",a photo of a person teaching a person,102,0,a photo of a person,139,139,0,True
+385,"(73, 63)",a photo of a person reading a laptop,73,63,a photo of a laptop,605,605,0,True
+93,"(49, 57)",a photo of a person lying on a couch,49,57,a photo of a couch,226,226,0,True
+265,"(8, 55)",a photo of a person carrying a cake,8,55,a photo of a cake,101,101,0,True
+268,"(36, 55)",a photo of a person holding a cake,36,55,a photo of a cake,137,137,0,True
+271,"(67, 55)",a photo of a person picking up a cake,67,55,a photo of a cake,74,74,0,True
+476,"(32, 31)",a photo of a person grinding a snowboard,32,31,a photo of a snowboard,59,56,3,True
+477,"(36, 31)",a photo of a person holding a snowboard,36,31,a photo of a snowboard,154,153,1,True
+297,"(36, 41)",a photo of a person holding a cup,36,41,a photo of a cup,302,302,0,True
+85,"(57, 15)",a photo of a person and a cat,57,15,a photo of a cat,76,76,0,True
+45,"(57, 8)",a photo of a person and a boat,57,8,a photo of a boat,360,360,0,True
+336,"(2, 29)",a photo of a person blocking a frisbee,2,29,a photo of a frisbee,83,83,0,True
+340,"(104, 29)",a photo of a person throwing a frisbee,104,29,a photo of a frisbee,220,220,0,True
+232,"(36, 35)",a photo of a person holding a baseball glove,36,35,a photo of a baseball glove,196,194,2,True
+233,"(114, 35)",a photo of a person wearing a baseball glove,114,35,a photo of a baseball glove,192,192,0,True
+378,"(95, 43)",a photo of a person sticking a knife,95,43,a photo of a knife,40,40,0,True
+187,"(21, 6)",a photo of a person driving a train,21,6,a photo of a train,109,107,2,True
+190,"(76, 6)",a photo of a person riding a train,76,6,a photo of a train,529,529,0,True
+191,"(87, 6)",a photo of a person sitting on a train,87,6,a photo of a train,284,284,0,True
+228,"(99, 34)",a photo of a person swinging a baseball bat,99,34,a photo of a baseball bat,321,321,0,True
+87,"(36, 56)",a photo of a person holding a chair,36,56,a photo of a chair,110,110,0,True
+88,"(49, 56)",a photo of a person lying on a chair,49,56,a photo of a chair,77,77,0,True
+200,"(23, 47)",a photo of a person eating an apple,23,47,a photo of an apple,49,49,0,True
+455,"(32, 36)",a photo of a person grinding a skateboard,32,36,a photo of a skateboard,252,252,0,True
+448,"(57, 76)",a photo of a person and a scissors,57,76,a photo of a scissors,25,25,0,True
+314,"(36, 20)",a photo of a person holding an elephant,36,20,a photo of an elephant,107,106,1,True
+319,"(65, 20)",a photo of a person petting an elephant,65,20,a photo of an elephant,79,79,0,True
+197,"(57, 62)",a photo of a person and a tv,57,62,a photo of a tv,213,213,0,True
+86,"(8, 56)",a photo of a person carrying a chair,8,56,a photo of a chair,51,51,0,True
+356,"(8, 52)",a photo of a person carrying a hot dog,8,52,a photo of a hot dog,141,141,0,True
+359,"(23, 52)",a photo of a person eating a hot dog,23,52,a photo of a hot dog,99,99,0,True
+360,"(36, 52)",a photo of a person holding a hot dog,36,52,a photo of a hot dog,214,214,0,True
+140,"(78, 17)",a photo of a person running a horse,78,17,a photo of a horse,488,488,0,True
+421,"(15, 53)",a photo of a person cutting a pizza,15,53,a photo of a pizza,47,47,0,True
+147,"(41, 3)",a photo of a person inspecting a motorcycle,41,3,a photo of a motorcycle,61,59,2,True
+282,"(57, 51)",a photo of a person and a carrot,57,51,a photo of a carrot,44,44,0,True
+110,"(57, 60)",a photo of a person and a dining table,57,60,a photo of a dining table,194,194,0,True
+111,"(8, 16)",a photo of a person carrying a dog,8,16,a photo of a dog,96,96,0,True
+115,"(36, 16)",a photo of a person holding a dog,36,16,a photo of a dog,324,324,0,True
+483,"(36, 44)",a photo of a person holding a spoon,36,44,a photo of a spoon,238,238,0,True
+502,"(36, 11)",a photo of a person holding a stop sign,36,11,a photo of a stop sign,21,21,0,True
+240,"(49, 59)",a photo of a person lying on a bed,49,59,a photo of a bed,323,323,0,True
+163,"(39, 0)",a photo of a person hugging a person,39,0,a photo of a person,261,261,0,True
+245,"(87, 13)",a photo of a person sitting on a bench,87,13,a photo of a bench,1943,1943,0,True
+413,"(57, 69)",a photo of a person and an oven,57,69,a photo of an oven,63,63,0,True
+235,"(26, 21)",a photo of a person feeding a bear,26,21,a photo of a bear,20,20,0,True
+495,"(44, 32)",a photo of a person kicking a sports ball,44,32,a photo of a sports ball,279,279,0,True
+488,"(2, 32)",a photo of a person blocking a sports ball,2,32,a photo of a sports ball,51,51,0,True
+307,"(23, 54)",a photo of a person eating a donut,23,54,a photo of a donut,122,122,0,True
+308,"(36, 54)",a photo of a person holding a donut,36,54,a photo of a donut,270,270,0,True
+41,"(87, 8)",a photo of a person sitting on a boat,87,8,a photo of a boat,2215,2215,0,True
+128,"(57, 16)",a photo of a person and a dog,57,16,a photo of a dog,195,195,0,True
+159,"(57, 3)",a photo of a person and a motorcycle,57,3,a photo of a motorcycle,475,475,0,True
+3,"(30, 4)",a photo of a person flying an airplane,30,4,a photo of an airplane,177,176,1,True
+6,"(76, 4)",a photo of a person riding an airplane,76,4,a photo of an airplane,279,279,0,True
+7,"(87, 4)",a photo of a person sitting on an airplane,87,4,a photo of an airplane,303,303,0,True
+557,"(57, 61)",a photo of a person and a toilet,57,61,a photo of a toilet,96,96,0,True
+374,"(70, 33)",a photo of a person pulling a kite,70,33,a photo of a kite,378,378,0,True
+164,"(45, 0)",a photo of a person kissing a person,45,0,a photo of a person,62,62,0,True
+68,"(38, 2)",a photo of a person hosing a car,38,2,a photo of a car,57,57,0,True
+69,"(41, 2)",a photo of a person inspecting a car,41,2,a photo of a car,81,80,1,True
+74,"(111, 2)",a photo of a person washing a car,111,2,a photo of a car,162,162,0,True
+32,"(21, 8)",a photo of a person driving a boat,21,8,a photo of a boat,201,200,1,True
+430,"(36, 72)",a photo of a person holding a refrigerator,36,72,a photo of a refrigerator,37,37,0,True
+320,"(76, 20)",a photo of a person riding an elephant,76,20,a photo of an elephant,447,447,0,True
+475,"(8, 31)",a photo of a person carrying a snowboard,8,31,a photo of a snowboard,36,36,0,True
+454,"(28, 36)",a photo of a person flipping a skateboard,28,36,a photo of a skateboard,423,423,0,True
+285,"(73, 67)",a photo of a person reading a cell phone,73,67,a photo of a cell phone,181,181,0,True
+288,"(103, 67)",a photo of a person texting on a cell phone,103,67,a photo of a cell phone,129,129,0,True
+434,"(36, 65)",a photo of a person holding a remote,36,65,a photo of a remote,181,181,0,True
+435,"(68, 65)",a photo of a person pointing a remote,68,65,a photo of a remote,60,60,0,True
+53,"(57, 39)",a photo of a person and a bottle,57,39,a photo of a bottle,466,466,0,True
+346,"(112, 23)",a photo of a person watching a giraffe,112,23,a photo of a giraffe,374,374,0,True
+215,"(8, 46)",a photo of a person carrying a banana,8,46,a photo of a banana,259,259,0,True
+218,"(36, 46)",a photo of a person holding a banana,36,46,a photo of a banana,308,308,0,True
+304,"(57, 41)",a photo of a person and a cup,57,41,a photo of a cup,286,286,0,True
+375,"(57, 33)",a photo of a person and a kite,57,33,a photo of a kite,97,97,0,True
+185,"(57, 18)",a photo of a person and a sheep,57,18,a photo of a sheep,462,462,0,True
+37,"(75, 8)",a photo of a person repairing a boat,75,8,a photo of a boat,54,54,0,True
+371,"(36, 33)",a photo of a person holding a kite,36,33,a photo of a kite,485,485,0,True
+310,"(67, 54)",a photo of a person picking up a donut,67,54,a photo of a donut,82,82,0,True
+91,"(57, 56)",a photo of a person and a chair,57,56,a photo of a chair,288,288,0,True
+388,"(57, 63)",a photo of a person and a laptop,57,63,a photo of a laptop,184,184,0,True
+442,"(36, 48)",a photo of a person holding a sandwich,36,48,a photo of a sandwich,188,188,0,True
+76,"(22, 15)",a photo of a person drying a cat,22,15,a photo of a cat,4,1,3,True
+78,"(36, 15)",a photo of a person holding a cat,36,15,a photo of a cat,158,158,0,True
+83,"(111, 15)",a photo of a person washing a cat,111,15,a photo of a cat,3,3,0,True
+347,"(57, 23)",a photo of a person and a giraffe,57,23,a photo of a giraffe,90,90,0,True
+383,"(36, 63)",a photo of a person holding a laptop,36,63,a photo of a laptop,226,226,0,True
+321,"(110, 20)",a photo of a person walking an elephant,110,20,a photo of an elephant,181,181,0,True
+515,"(57, 28)",a photo of a person and a suitcase,57,28,a photo of a suitcase,742,742,0,True
+337,"(9, 29)",a photo of a person catching a frisbee,9,29,a photo of a frisbee,295,295,0,True
+366,"(109, 66)",a photo of a person typing on a keyboard,109,66,a photo of a keyboard,215,215,0,True
+528,"(8, 77)",a photo of a person carrying a teddy bear,8,77,a photo of a teddy bear,45,45,0,True
+529,"(36, 77)",a photo of a person holding a teddy bear,36,77,a photo of a teddy bear,268,268,0,True
+530,"(39, 77)",a photo of a person hugging a teddy bear,39,77,a photo of a teddy bear,56,56,0,True
+267,"(23, 55)",a photo of a person eating a cake,23,55,a photo of a cake,70,70,0,True
+169,"(57, 0)",a photo of a person and a person,57,0,a photo of a person,640,640,0,True
+533,"(8, 38)",a photo of a person carrying a tennis racket,8,38,a photo of a tennis racket,187,187,0,True
+536,"(99, 38)",a photo of a person swinging a tennis racket,99,38,a photo of a tennis racket,80,80,0,True
+79,"(39, 15)",a photo of a person hugging a cat,39,15,a photo of a cat,76,76,0,True
+294,"(57, 74)",a photo of a person and a clock,57,74,a photo of a clock,432,432,0,True
+414,"(11, 12)",a photo of a person checking a parking meter,11,12,a photo of a parking meter,96,35,61,True
+387,"(109, 63)",a photo of a person typing on a laptop,109,63,a photo of a laptop,245,245,0,True
+97,"(34, 19)",a photo of a person herding a cow,34,19,a photo of a cow,224,224,0,True
+105,"(110, 19)",a photo of a person walking a cow,110,19,a photo of a cow,120,120,0,True
+103,"(65, 19)",a photo of a person petting a cow,65,19,a photo of a cow,46,46,0,True
+138,"(72, 17)",a photo of a person racing a horse,72,17,a photo of a horse,214,214,0,True
+566,"(57, 9)",a photo of a person and a traffic light,57,9,a photo of a traffic light,597,597,0,True
+4,"(41, 4)",a photo of a person inspecting an airplane,41,4,a photo of an airplane,193,192,1,True
+130,"(33, 17)",a photo of a person grooming a horse,33,17,a photo of a horse,35,35,0,True
+137,"(65, 17)",a photo of a person petting a horse,65,17,a photo of a horse,84,84,0,True
+168,"(48, 0)",a photo of a person licking a person,48,0,a photo of a person,7,7,0,True
+263,"(57, 50)",a photo of a person and a broccoli,57,50,a photo of a broccoli,22,22,0,True
+411,"(75, 69)",a photo of a person repairing an oven,75,69,a photo of an oven,18,18,0,True
+335,"(57, 42)",a photo of a person and a fork,57,42,a photo of a fork,129,129,0,True
+160,"(8, 0)",a photo of a person carrying a person,8,0,a photo of a person,86,86,0,True
+217,"(23, 46)",a photo of a person eating a banana,23,46,a photo of a banana,113,113,0,True
+277,"(36, 51)",a photo of a person holding a carrot,36,51,a photo of a carrot,194,194,0,True
+278,"(64, 51)",a photo of a person peeling a carrot,64,51,a photo of a carrot,22,22,0,True
+296,"(20, 41)",a photo of a person drinking with a cup,20,41,a photo of a cup,113,113,0,True
+300,"(85, 41)",a photo of a person sipping a cup,85,41,a photo of a cup,80,80,0,True
+456,"(36, 36)",a photo of a person holding a skateboard,36,36,a photo of a skateboard,394,394,0,True
+587,"(57, 75)",a photo of a person and a vase,57,75,a photo of a vase,175,175,0,True
+518,"(36, 37)",a photo of a person holding a surfboard,36,37,a photo of a surfboard,342,305,37,True
+98,"(36, 19)",a photo of a person holding a cow,36,19,a photo of a cow,94,94,0,True
+516,"(8, 37)",a photo of a person carrying a surfboard,8,37,a photo of a surfboard,225,225,0,True
+500,"(104, 32)",a photo of a person throwing a sports ball,104,32,a photo of a sports ball,133,133,0,True
+594,"(57, 40)",a photo of a person and a wine glass,57,40,a photo of a wine glass,378,378,0,True
+362,"(57, 52)",a photo of a person and a hot dog,57,52,a photo of a hot dog,96,96,0,True
+348,"(36, 78)",a photo of a person holding a hair drier,36,78,a photo of a hair drier,47,47,0,True
+349,"(59, 78)",a photo of a person operating a hair drier,59,78,a photo of a hair drier,48,48,0,True
+453,"(8, 36)",a photo of a person carrying a skateboard,8,36,a photo of a skateboard,125,125,0,True
+353,"(36, 26)",a photo of a person holding a handbag,36,26,a photo of a handbag,154,153,1,True
+342,"(26, 23)",a photo of a person feeding a giraffe,26,23,a photo of a giraffe,157,157,0,True
+369,"(8, 33)",a photo of a person carrying a kite,8,33,a photo of a kite,206,206,0,True
+372,"(41, 33)",a photo of a person inspecting a kite,41,33,a photo of a kite,106,105,1,True
+266,"(15, 55)",a photo of a person cutting a cake,15,55,a photo of a cake,297,297,0,True
+534,"(36, 38)",a photo of a person holding a tennis racket,36,38,a photo of a tennis racket,233,232,1,True
+25,"(26, 14)",a photo of a person feeding a bird,26,14,a photo of a bird,225,224,1,True
+117,"(39, 16)",a photo of a person hugging a dog,39,16,a photo of a dog,176,176,0,True
+202,"(41, 47)",a photo of a person inspecting an apple,41,47,a photo of an apple,29,29,0,True
+204,"(66, 47)",a photo of a person picking an apple,66,47,a photo of an apple,28,28,0,True
+13,"(43, 1)",a photo of a person jumping a bicycle,43,1,a photo of a bicycle,120,120,0,True
+16,"(71, 1)",a photo of a person pushing a bicycle,71,1,a photo of a bicycle,115,115,0,True
+384,"(58, 63)",a photo of a person opening a laptop,58,63,a photo of a laptop,36,36,0,True
+49,"(41, 39)",a photo of a person inspecting a bottle,41,39,a photo of a bottle,52,51,1,True
+244,"(49, 13)",a photo of a person lying on a bench,49,13,a photo of a bench,86,86,0,True
+423,"(36, 53)",a photo of a person holding a pizza,36,53,a photo of a pizza,179,179,0,True
+295,"(8, 41)",a photo of a person carrying a cup,8,41,a photo of a cup,135,135,0,True
+452,"(57, 71)",a photo of a person and a sink,57,71,a photo of a sink,76,76,0,True
+199,"(15, 47)",a photo of a person cutting an apple,15,47,a photo of an apple,18,18,0,True
+203,"(64, 47)",a photo of a person peeling an apple,64,47,a photo of an apple,25,25,0,True
+219,"(41, 46)",a photo of a person inspecting a banana,41,46,a photo of a banana,193,193,0,True
+221,"(66, 46)",a photo of a person picking a banana,66,46,a photo of a banana,23,23,0,True
+125,"(110, 16)",a photo of a person walking a dog,110,16,a photo of a dog,125,125,0,True
+568,"(21, 7)",a photo of a person driving a truck,21,7,a photo of a truck,141,138,3,True
+572,"(76, 7)",a photo of a person riding a truck,76,7,a photo of a truck,273,273,0,True
+157,"(110, 3)",a photo of a person walking a motorcycle,110,3,a photo of a motorcycle,15,15,0,True
+497,"(81, 32)",a photo of a person serving a sports ball,81,32,a photo of a sports ball,55,55,0,True
+445,"(16, 76)",a photo of a person cutting with a scissors,16,76,a photo of a scissors,147,147,0,True
+54,"(4, 5)",a photo of a person boarding a bus,4,5,a photo of a bus,3415,225,3190,True
+490,"(9, 32)",a photo of a person catching a sports ball,9,32,a photo of a sports ball,82,82,0,True
+437,"(57, 65)",a photo of a person and a remote,57,65,a photo of a remote,15,15,0,True
+441,"(23, 48)",a photo of a person eating a sandwich,23,48,a photo of a sandwich,117,117,0,True
+598,"(112, 22)",a photo of a person watching a zebra,112,22,a photo of a zebra,64,64,0,True
+120,"(65, 16)",a photo of a person petting a dog,65,16,a photo of a dog,159,159,0,True
+123,"(98, 16)",a photo of a person straddling a dog,98,16,a photo of a dog,15,15,0,True
+134,"(45, 17)",a photo of a person kissing a horse,45,17,a photo of a horse,11,11,0,True
+524,"(93, 37)",a photo of a person standing on a surfboard,93,37,a photo of a surfboard,151,151,0,True
+575,"(57, 7)",a photo of a person and a truck,57,7,a photo of a truck,233,233,0,True
+173,"(57, 58)",a photo of a person and a potted plant,57,58,a photo of a potted plant,204,202,2,True
+224,"(5, 34)",a photo of a person breaking a baseball bat,5,34,a photo of a baseball bat,45,45,0,True
+175,"(26, 18)",a photo of a person feeding a sheep,26,18,a photo of a sheep,94,93,1,True
+133,"(43, 17)",a photo of a person jumping a horse,43,17,a photo of a horse,137,137,0,True
+330,"(36, 42)",a photo of a person holding a fork,36,42,a photo of a fork,132,132,0,True
+331,"(50, 42)",a photo of a person lifting a fork,50,42,a photo of a fork,99,99,0,True
+583,"(57, 25)",a photo of a person and a umbrella,57,25,a photo of a umbrella,413,413,0,True
+444,"(57, 48)",a photo of a person and a sandwich,57,48,a photo of a sandwich,75,75,0,True
+341,"(57, 29)",a photo of a person and a frisbee,57,29,a photo of a frisbee,78,78,0,True
+309,"(54, 54)",a photo of a person making a donut,54,54,a photo of a donut,44,44,0,True
+290,"(11, 74)",a photo of a person checking a clock,11,74,a photo of a clock,68,68,0,True
+312,"(57, 54)",a photo of a person and a donut,57,54,a photo of a donut,257,257,0,True
+306,"(8, 54)",a photo of a person carrying a donut,8,54,a photo of a donut,55,55,0,True
+12,"(41, 1)",a photo of a person inspecting a bicycle,41,1,a photo of a bicycle,129,128,1,True
+17,"(75, 1)",a photo of a person repairing a bicycle,75,1,a photo of a bicycle,84,84,0,True
+256,"(57, 45)",a photo of a person and a bowl,57,45,a photo of a bowl,55,54,1,True
+538,"(0, 27)",a photo of a person adjusting a tie,0,27,a photo of a tie,61,57,4,True
+540,"(36, 27)",a photo of a person holding a tie,36,27,a photo of a tie,83,83,0,True
+299,"(69, 41)",a photo of a person pouring a cup,69,41,a photo of a cup,15,15,0,True
+424,"(54, 53)",a photo of a person making a pizza,54,53,a photo of a pizza,58,58,0,True
+579,"(58, 25)",a photo of a person opening a umbrella,58,25,a photo of a umbrella,12,12,0,True
+415,"(63, 12)",a photo of a person paying a parking meter,63,12,a photo of a parking meter,24,24,0,True
+473,"(57, 30)",a photo of a person and a skis,57,30,a photo of a skis,18,18,0,True
+150,"(62, 3)",a photo of a person parking a motorcycle,62,3,a photo of a motorcycle,98,98,0,True
+425,"(67, 53)",a photo of a person picking up a pizza,67,53,a photo of a pizza,49,49,0,True
+501,"(57, 32)",a photo of a person and a sports ball,57,32,a photo of a sports ball,19,19,0,True
+92,"(8, 57)",a photo of a person carrying a couch,8,57,a photo of a couch,28,28,0,True
+433,"(57, 72)",a photo of a person and a refrigerator,57,72,a photo of a refrigerator,36,36,0,True
+573,"(87, 7)",a photo of a person sitting on a truck,87,7,a photo of a truck,192,192,0,True
+591,"(106, 40)",a photo of a person toasting a wine glass,106,40,a photo of a wine glass,74,74,0,True
+2,"(25, 4)",a photo of a person exiting an airplane,25,4,a photo of an airplane,54,53,1,True
+213,"(57, 24)",a photo of a person and a backpack,57,24,a photo of a backpack,138,138,0,True
+316,"(39, 20)",a photo of a person hugging an elephant,39,20,a photo of an elephant,13,13,0,True
+527,"(57, 37)",a photo of a person and a surfboard,57,37,a photo of a surfboard,160,160,0,True
+323,"(112, 20)",a photo of a person watching an elephant,112,20,a photo of an elephant,605,605,0,True
+276,"(23, 51)",a photo of a person eating a carrot,23,51,a photo of a carrot,37,37,0,True
+246,"(57, 13)",a photo of a person and a bench,57,13,a photo of a bench,200,200,0,True
+237,"(112, 21)",a photo of a person watching a bear,112,21,a photo of a bear,95,95,0,True
+531,"(45, 77)",a photo of a person kissing a teddy bear,45,77,a photo of a teddy bear,3,3,0,True
+143,"(110, 17)",a photo of a person walking a horse,110,17,a photo of a horse,94,94,0,True
+77,"(26, 15)",a photo of a person feeding a cat,26,15,a photo of a cat,5,4,1,True
+326,"(41, 10)",a photo of a person inspecting a fire hydrant,41,10,a photo of a fire hydrant,28,27,1,True
+328,"(61, 10)",a photo of a person painting a fire hydrant,61,10,a photo of a fire hydrant,9,9,0,True
+537,"(57, 38)",a photo of a person and a tennis racket,57,38,a photo of a tennis racket,28,28,0,True
+417,"(57, 12)",a photo of a person and a parking meter,57,12,a photo of a parking meter,235,235,0,True
+291,"(36, 74)",a photo of a person holding a clock,36,74,a photo of a clock,44,44,0,True
+174,"(8, 18)",a photo of a person carrying a sheep,8,18,a photo of a sheep,21,21,0,True
+178,"(39, 18)",a photo of a person hugging a sheep,39,18,a photo of a sheep,32,32,0,True
+496,"(67, 32)",a photo of a person picking up a sports ball,67,32,a photo of a sports ball,10,10,0,True
+176,"(34, 18)",a photo of a person herding a sheep,34,18,a photo of a sheep,366,366,0,True
+183,"(110, 18)",a photo of a person walking a sheep,110,18,a photo of a sheep,120,120,0,True
+124,"(107, 16)",a photo of a person training a dog,107,16,a photo of a dog,48,48,0,True
+251,"(57, 73)",a photo of a person and a book,57,73,a photo of a book,198,198,0,True
+565,"(97, 9)",a photo of a person stopping at a traffic light,97,9,a photo of a traffic light,23,23,0,True
+567,"(17, 7)",a photo of a person directing a truck,17,7,a photo of a truck,25,22,3,True
+242,"(57, 59)",a photo of a person and a bed,57,59,a photo of a bed,33,33,0,True
+81,"(65, 15)",a photo of a person petting a cat,65,15,a photo of a cat,69,69,0,True
+82,"(80, 15)",a photo of a person scratching a cat,80,15,a photo of a cat,49,49,0,True
+0,"(4, 4)",a photo of a person boarding an airplane,4,4,a photo of an airplane,163,163,0,True
+562,"(42, 9)",a photo of a person installing a traffic light,42,9,a photo of a traffic light,11,10,1,True
+563,"(75, 9)",a photo of a person repairing a traffic light,75,9,a photo of a traffic light,15,15,0,True
+344,"(65, 23)",a photo of a person petting a giraffe,65,23,a photo of a giraffe,23,23,0,True
+409,"(41, 69)",a photo of a person inspecting an oven,41,69,a photo of an oven,77,77,0,True
+484,"(48, 44)",a photo of a person licking a spoon,48,44,a photo of a spoon,92,92,0,True
+486,"(85, 44)",a photo of a person sipping a spoon,85,44,a photo of a spoon,31,31,0,True
+252,"(36, 45)",a photo of a person holding a bowl,36,45,a photo of a bowl,73,73,0,True
+505,"(57, 11)",a photo of a person and a stop sign,57,11,a photo of a stop sign,41,41,0,True
+29,"(112, 14)",a photo of a person watching a bird,112,14,a photo of a bird,396,396,0,True
+57,"(25, 5)",a photo of a person exiting a bus,25,5,a photo of a bus,24,23,1,True
+126,"(111, 16)",a photo of a person washing a dog,111,16,a photo of a dog,24,24,0,True
+525,"(87, 37)",a photo of a person sitting on a surfboard,87,37,a photo of a surfboard,25,25,0,True
+396,"(57, 64)",a photo of a person and a mouse,57,64,a photo of a mouse,41,41,0,True
+65,"(4, 2)",a photo of a person boarding a car,4,2,a photo of a car,65,26,39,True
+466,"(41, 30)",a photo of a person inspecting a skis,41,30,a photo of a skis,21,20,1,True
+210,"(41, 24)",a photo of a person inspecting a backpack,41,24,a photo of a backpack,22,20,2,True
+211,"(58, 24)",a photo of a person opening a backpack,58,24,a photo of a backpack,16,16,0,True
+327,"(58, 10)",a photo of a person opening a fire hydrant,58,10,a photo of a fire hydrant,14,14,0,True
+298,"(41, 41)",a photo of a person inspecting a cup,41,41,a photo of a cup,16,16,0,True
+339,"(90, 29)",a photo of a person spinning a frisbee,90,29,a photo of a frisbee,15,15,0,True
+318,"(37, 20)",a photo of a person hopping on an elephant,37,20,a photo of an elephant,15,14,1,True
+273,"(8, 51)",a photo of a person carrying a carrot,8,51,a photo of a carrot,101,101,0,True
+584,"(36, 75)",a photo of a person holding a vase,36,75,a photo of a vase,15,15,0,True
+585,"(54, 75)",a photo of a person making a vase,54,75,a photo of a vase,17,17,0,True
+586,"(61, 75)",a photo of a person painting a vase,61,75,a photo of a vase,1,1,0,True
+332,"(95, 42)",a photo of a person sticking a fork,95,42,a photo of a fork,28,28,0,True
+511,"(58, 28)",a photo of a person opening a suitcase,58,28,a photo of a suitcase,11,11,0,True
+357,"(14, 52)",a photo of a person cooking a hot dog,14,52,a photo of a hot dog,110,110,0,True
+243,"(41, 13)",a photo of a person inspecting a bench,41,13,a photo of a bench,14,13,1,True
+258,"(23, 50)",a photo of a person eating a broccoli,23,50,a photo of a broccoli,45,45,0,True
+259,"(36, 50)",a photo of a person holding a broccoli,36,50,a photo of a broccoli,45,45,0,True
+422,"(23, 53)",a photo of a person eating a pizza,23,53,a photo of a pizza,121,121,0,True
+512,"(60, 28)",a photo of a person packing a suitcase,60,28,a photo of a suitcase,29,29,0,True
+595,"(26, 22)",a photo of a person feeding a zebra,26,22,a photo of a zebra,8,8,0,True
+36,"(47, 8)",a photo of a person launching a boat,47,8,a photo of a boat,165,165,0,True
+129,"(26, 17)",a photo of a person feeding a horse,26,17,a photo of a horse,22,22,0,True
+542,"(70, 27)",a photo of a person pulling a tie,70,27,a photo of a tie,30,30,0,True
+543,"(105, 27)",a photo of a person tying a tie,105,27,a photo of a tie,28,28,0,True
+419,"(8, 53)",a photo of a person carrying a pizza,8,53,a photo of a pizza,77,77,0,True
+214,"(7, 46)",a photo of a person buying a banana,7,46,a photo of a banana,9,9,0,True
+513,"(67, 28)",a photo of a person picking up a suitcase,67,28,a photo of a suitcase,29,29,0,True
+142,"(107, 17)",a photo of a person training a horse,107,17,a photo of a horse,88,88,0,True
+368,"(1, 33)",a photo of a person assembling a kite,1,33,a photo of a kite,42,42,0,True
+132,"(39, 17)",a photo of a person hugging a horse,39,17,a photo of a horse,26,26,0,True
+464,"(8, 30)",a photo of a person carrying a skis,8,30,a photo of a skis,66,66,0,True
+465,"(36, 30)",a photo of a person holding a skis,36,30,a photo of a skis,84,84,0,True
+367,"(57, 66)",a photo of a person and a keyboard,57,66,a photo of a keyboard,96,96,0,True
+468,"(67, 30)",a photo of a person picking up a skis,67,30,a photo of a skis,29,29,0,True
+101,"(46, 19)",a photo of a person lassoing a cow,46,19,a photo of a cow,45,45,0,True
+569,"(41, 7)",a photo of a person inspecting a truck,41,7,a photo of a truck,49,48,1,True
+571,"(75, 7)",a photo of a person repairing a truck,75,7,a photo of a truck,19,19,0,True
+322,"(111, 20)",a photo of a person washing an elephant,111,20,a photo of an elephant,51,51,0,True
+392,"(57, 68)",a photo of a person and a microwave,57,68,a photo of a microwave,17,17,0,True
+1,"(17, 4)",a photo of a person directing an airplane,17,4,a photo of an airplane,96,91,5,True
+34,"(41, 8)",a photo of a person inspecting a boat,41,8,a photo of a boat,109,108,1,True
+96,"(26, 19)",a photo of a person feeding a cow,26,19,a photo of a cow,10,8,2,True
+209,"(36, 24)",a photo of a person holding a backpack,36,24,a photo of a backpack,80,80,0,True
+46,"(8, 39)",a photo of a person carrying a bottle,8,39,a photo of a bottle,149,149,0,True
+247,"(8, 73)",a photo of a person carrying a book,8,73,a photo of a book,125,125,0,True
+302,"(27, 41)",a photo of a person filling a cup,27,41,a photo of a cup,50,50,0,True
+408,"(36, 69)",a photo of a person holding an oven,36,69,a photo of an oven,13,13,0,True
+590,"(85, 40)",a photo of a person sipping a wine glass,85,40,a photo of a wine glass,45,45,0,True
+458,"(67, 36)",a photo of a person picking up a skateboard,67,36,a photo of a skateboard,56,56,0,True
+554,"(87, 61)",a photo of a person sitting on a toilet,87,61,a photo of a toilet,55,55,0,True
+186,"(4, 6)",a photo of a person boarding a train,4,6,a photo of a train,134,105,29,True
+450,"(75, 71)",a photo of a person repairing a sink,75,71,a photo of a sink,12,12,0,True
+50,"(48, 39)",a photo of a person licking a bottle,48,39,a photo of a bottle,7,7,0,True
+407,"(12, 69)",a photo of a person cleaning an oven,12,69,a photo of an oven,4,4,0,True
+355,"(57, 26)",a photo of a person and a handbag,57,26,a photo of a handbag,37,37,0,True
+494,"(41, 32)",a photo of a person inspecting a sports ball,41,32,a photo of a sports ball,96,95,1,True
+95,"(57, 57)",a photo of a person and a couch,57,57,a photo of a couch,48,48,0,True
+30,"(57, 14)",a photo of a person and a bird,57,14,a photo of a bird,72,72,0,True
+301,"(89, 41)",a photo of a person smelling a cup,89,41,a photo of a cup,35,35,0,True
+122,"(80, 16)",a photo of a person scratching a dog,80,16,a photo of a dog,83,83,0,True
+51,"(58, 39)",a photo of a person opening a bottle,58,39,a photo of a bottle,15,15,0,True
+28,"(74, 14)",a photo of a person releasing a bird,74,14,a photo of a bird,16,16,0,True
+561,"(57, 79)",a photo of a person and a toothbrush,57,79,a photo of a toothbrush,19,19,0,True
+5,"(52, 4)",a photo of a person loading an airplane,52,4,a photo of an airplane,72,72,0,True
+361,"(54, 52)",a photo of a person making a hot dog,54,52,a photo of a hot dog,50,50,0,True
+269,"(51, 55)",a photo of a person lighting a cake,51,55,a photo of a cake,30,30,0,True
+352,"(8, 26)",a photo of a person carrying a handbag,8,26,a photo of a handbag,71,71,0,True
+438,"(8, 48)",a photo of a person carrying a sandwich,8,48,a photo of a sandwich,26,26,0,True
+31,"(4, 8)",a photo of a person boarding a boat,4,8,a photo of a boat,106,101,5,True
+136,"(37, 17)",a photo of a person hopping on a horse,37,17,a photo of a horse,8,8,0,True
+144,"(111, 17)",a photo of a person washing a horse,111,17,a photo of a horse,26,26,0,True
+373,"(47, 33)",a photo of a person launching a kite,47,33,a photo of a kite,140,140,0,True
+100,"(45, 19)",a photo of a person kissing a cow,45,19,a photo of a cow,5,5,0,True
+503,"(94, 11)",a photo of a person standing under a stop sign,94,11,a photo of a stop sign,10,10,0,True
+181,"(76, 18)",a photo of a person riding a sheep,76,18,a photo of a sheep,1,1,0,True
+172,"(38, 58)",a photo of a person hosing a potted plant,38,58,a photo of a potted plant,8,8,0,True
+207,"(57, 47)",a photo of a person and an apple,57,47,a photo of an apple,44,44,0,True
+188,"(25, 6)",a photo of a person exiting a train,25,6,a photo of a train,5,4,1,True
+532,"(57, 77)",a photo of a person and a teddy bear,57,77,a photo of a teddy bear,131,131,0,True
+107,"(12, 60)",a photo of a person cleaning a dining table,12,60,a photo of a dining table,5,5,0,True
+399,"(23, 49)",a photo of a person eating an orange,23,49,a photo of an orange,2,2,0,True
+400,"(36, 49)",a photo of a person holding an orange,36,49,a photo of an orange,33,33,0,True
+206,"(111, 47)",a photo of a person washing an apple,111,47,a photo of an apple,2,2,0,True
+59,"(52, 5)",a photo of a person loading a bus,52,5,a photo of a bus,65,65,0,True
+236,"(40, 21)",a photo of a person hunting a bear,40,21,a photo of a bear,57,56,1,True
+119,"(45, 16)",a photo of a person kissing a dog,45,16,a photo of a dog,20,20,0,True
+180,"(65, 18)",a photo of a person petting a sheep,65,18,a photo of a sheep,24,24,0,True
+102,"(55, 19)",a photo of a person milking a cow,55,19,a photo of a cow,32,32,0,True
+420,"(14, 53)",a photo of a person cooking a pizza,14,53,a photo of a pizza,35,35,0,True
+14,"(37, 1)",a photo of a person hopping on a bicycle,37,1,a photo of a bicycle,28,25,3,True
+549,"(57, 70)",a photo of a person and a toaster,57,70,a photo of a toaster,2,2,0,True
+313,"(26, 20)",a photo of a person feeding an elephant,26,20,a photo of an elephant,40,39,1,True
+510,"(52, 28)",a photo of a person loading a suitcase,52,28,a photo of a suitcase,11,10,1,True
+272,"(57, 55)",a photo of a person and a cake,57,55,a photo of a cake,177,177,0,True
+161,"(31, 0)",a photo of a person greeting a person,31,0,a photo of a person,18,18,0,True
+198,"(7, 47)",a photo of a person buying an apple,7,47,a photo of an apple,7,7,0,True
+550,"(12, 61)",a photo of a person cleaning a toilet,12,61,a photo of a toilet,7,7,0,True
+556,"(111, 61)",a photo of a person washing a toilet,111,61,a photo of a toilet,5,5,0,True
+253,"(96, 45)",a photo of a person stirring a bowl,96,45,a photo of a bowl,34,34,0,True
+485,"(111, 44)",a photo of a person washing a spoon,111,44,a photo of a spoon,1,1,0,True
+324,"(57, 20)",a photo of a person and an elephant,57,20,a photo of an elephant,11,11,0,True
+145,"(57, 17)",a photo of a person and a horse,57,17,a photo of a horse,50,50,0,True
+397,"(7, 49)",a photo of a person buying an orange,7,49,a photo of an orange,1,1,0,True
+401,"(41, 49)",a photo of a person inspecting an orange,41,49,a photo of an orange,1,1,0,True
+386,"(75, 63)",a photo of a person repairing a laptop,75,63,a photo of a laptop,14,14,0,True
+410,"(58, 69)",a photo of a person opening an oven,58,69,a photo of an oven,5,5,0,True
+52,"(69, 39)",a photo of a person pouring a bottle,69,39,a photo of a bottle,23,23,0,True
+343,"(45, 23)",a photo of a person kissing a giraffe,45,23,a photo of a giraffe,12,12,0,True
+364,"(12, 66)",a photo of a person cleaning a keyboard,12,66,a photo of a keyboard,3,3,0,True
+15,"(62, 1)",a photo of a person parking a bicycle,62,1,a photo of a bicycle,17,17,0,True
+71,"(52, 2)",a photo of a person loading a car,52,2,a photo of a car,20,20,0,True
+270,"(54, 55)",a photo of a person making a cake,54,55,a photo of a cake,20,11,9,True
+460,"(87, 36)",a photo of a person sitting on a skateboard,87,36,a photo of a skateboard,22,22,0,True
+553,"(75, 61)",a photo of a person repairing a toilet,75,61,a photo of a toilet,15,15,0,True
+99,"(39, 19)",a photo of a person hugging a cow,39,19,a photo of a cow,5,5,0,True
+519,"(41, 37)",a photo of a person inspecting a surfboard,41,37,a photo of a surfboard,16,15,1,True
+381,"(48, 43)",a photo of a person licking a knife,48,43,a photo of a knife,5,5,0,True
+487,"(57, 44)",a photo of a person and a spoon,57,44,a photo of a spoon,94,94,0,True
+149,"(37, 3)",a photo of a person hopping on a motorcycle,37,3,a photo of a motorcycle,4,3,1,True
+165,"(92, 0)",a photo of a person stabbing a person,92,0,a photo of a person,5,5,0,True
+58,"(41, 5)",a photo of a person inspecting a bus,41,5,a photo of a bus,28,27,1,True
+184,"(111, 18)",a photo of a person washing a sheep,111,18,a photo of a sheep,5,5,0,True
+116,"(38, 16)",a photo of a person hosing a dog,38,16,a photo of a dog,21,21,0,True
+436,"(99, 65)",a photo of a person swinging a remote,99,65,a photo of a remote,3,3,0,True
+382,"(57, 43)",a photo of a person and a knife,57,43,a photo of a knife,37,37,0,True
+43,"(105, 8)",a photo of a person tying a boat,105,8,a photo of a boat,40,40,0,True
+474,"(0, 31)",a photo of a person adjusting a snowboard,0,31,a photo of a snowboard,8,5,3,True
+192,"(111, 6)",a photo of a person washing a train,111,6,a photo of a train,8,8,0,True
+195,"(75, 62)",a photo of a person repairing a tv,75,62,a photo of a tv,3,3,0,True
+27,"(65, 14)",a photo of a person petting a bird,65,14,a photo of a bird,5,5,0,True
+24,"(10, 14)",a photo of a person chasing a bird,10,14,a photo of a bird,36,36,0,True
+325,"(39, 10)",a photo of a person hugging a fire hydrant,39,10,a photo of a fire hydrant,1,1,0,True
+22,"(111, 1)",a photo of a person washing a bicycle,111,1,a photo of a bicycle,2,2,0,True
+592,"(48, 40)",a photo of a person licking a wine glass,48,40,a photo of a wine glass,1,1,0,True
+581,"(82, 25)",a photo of a person setting a umbrella,82,25,a photo of a umbrella,9,9,0,True
+315,"(38, 20)",a photo of a person hosing an elephant,38,20,a photo of an elephant,3,2,1,True
+545,"(57, 27)",a photo of a person and a tie,57,27,a photo of a tie,159,159,0,True
+305,"(7, 54)",a photo of a person buying a donut,7,54,a photo of a donut,10,10,0,True
+33,"(25, 8)",a photo of a person exiting a boat,25,8,a photo of a boat,40,39,1,True
+220,"(64, 46)",a photo of a person peeling a banana,64,46,a photo of a banana,8,8,0,True
+254,"(111, 45)",a photo of a person washing a bowl,111,45,a photo of a bowl,3,3,0,True
+391,"(59, 68)",a photo of a person operating a microwave,59,68,a photo of a microwave,6,6,0,True
+482,"(57, 31)",a photo of a person and a snowboard,57,31,a photo of a snowboard,3,3,0,True
+574,"(111, 7)",a photo of a person washing a truck,111,7,a photo of a truck,13,13,0,True
+135,"(52, 17)",a photo of a person loading a horse,52,17,a photo of a horse,1,1,0,True
+520,"(43, 37)",a photo of a person jumping a surfboard,43,37,a photo of a surfboard,3,3,0,True
+440,"(15, 48)",a photo of a person cutting a sandwich,15,48,a photo of a sandwich,3,3,0,True
+443,"(54, 48)",a photo of a person making a sandwich,54,48,a photo of a sandwich,12,12,0,True
+317,"(45, 20)",a photo of a person kissing an elephant,45,20,a photo of an elephant,2,2,0,True
+541,"(41, 27)",a photo of a person inspecting a tie,41,27,a photo of a tie,14,13,1,True
+121,"(78, 16)",a photo of a person running a dog,78,16,a photo of a dog,20,20,0,True
+127,"(10, 16)",a photo of a person chasing a dog,10,16,a photo of a dog,3,3,0,True
+596,"(36, 22)",a photo of a person holding a zebra,36,22,a photo of a zebra,2,2,0,True
+580,"(75, 25)",a photo of a person repairing a umbrella,75,25,a photo of a umbrella,9,9,0,True
+551,"(29, 61)",a photo of a person flushing a toilet,29,61,a photo of a toilet,1,1,0,True
+62,"(111, 5)",a photo of a person washing a bus,111,5,a photo of a bus,6,6,0,True
+151,"(71, 3)",a photo of a person pushing a motorcycle,71,3,a photo of a motorcycle,12,12,0,True
+535,"(41, 38)",a photo of a person inspecting a tennis racket,41,38,a photo of a tennis racket,2,1,1,True
+404,"(91, 49)",a photo of a person squeezing an orange,91,49,a photo of an orange,7,7,0,True
+255,"(48, 45)",a photo of a person licking a bowl,48,45,a photo of a bowl,3,2,1,True
+451,"(111, 71)",a photo of a person washing a sink,111,71,a photo of a sink,8,8,0,True
+463,"(0, 30)",a photo of a person adjusting a skis,0,30,a photo of a skis,9,5,4,True
+469,"(75, 30)",a photo of a person repairing a skis,75,30,a photo of a skis,5,5,0,True
+55,"(17, 5)",a photo of a person directing a bus,17,5,a photo of a bus,11,6,5,True
+426,"(88, 53)",a photo of a person sliding a pizza,88,53,a photo of a pizza,3,3,0,True
+231,"(57, 34)",a photo of a person and a baseball bat,57,34,a photo of a baseball bat,49,49,0,True
+412,"(59, 69)",a photo of a person operating an oven,59,69,a photo of an oven,23,23,0,True
+104,"(76, 19)",a photo of a person riding a cow,76,19,a photo of a cow,6,6,0,True
+257,"(15, 50)",a photo of a person cutting a broccoli,15,50,a photo of a broccoli,1,1,0,True
+8,"(111, 4)",a photo of a person washing an airplane,111,4,a photo of an airplane,4,4,0,True
+66,"(17, 2)",a photo of a person directing a car,17,2,a photo of a car,8,1,7,True
+390,"(58, 68)",a photo of a person opening a microwave,58,68,a photo of a microwave,4,4,0,True
+354,"(41, 26)",a photo of a person inspecting a handbag,41,26,a photo of a handbag,6,5,1,True
+526,"(111, 37)",a photo of a person washing a surfboard,111,37,a photo of a surfboard,1,1,0,True
+449,"(12, 71)",a photo of a person cleaning a sink,12,71,a photo of a sink,2,2,0,True
+279,"(89, 51)",a photo of a person smelling a carrot,89,51,a photo of a carrot,1,1,0,True
+292,"(75, 74)",a photo of a person repairing a clock,75,74,a photo of a clock,6,6,0,True
+293,"(82, 74)",a photo of a person setting a clock,82,74,a photo of a clock,11,11,0,True
+170,"(8, 58)",a photo of a person carrying a potted plant,8,58,a photo of a potted plant,10,10,0,True
+171,"(36, 58)",a photo of a person holding a potted plant,36,58,a photo of a potted plant,10,10,0,True
+439,"(14, 48)",a photo of a person cooking a sandwich,14,48,a photo of a sandwich,1,1,0,True
+564,"(94, 9)",a photo of a person standing under a traffic light,94,9,a photo of a traffic light,21,21,0,True
+547,"(59, 70)",a photo of a person operating a toaster,59,70,a photo of a toaster,2,2,0,True
+599,"(57, 22)",a photo of a person and a zebra,57,22,a photo of a zebra,2,2,0,True
+431,"(56, 72)",a photo of a person moving a refrigerator,56,72,a photo of a refrigerator,4,4,0,True
+406,"(57, 49)",a photo of a person and an orange,57,49,a photo of an orange,125,125,0,True
+517,"(18, 37)",a photo of a person dragging a surfboard,18,37,a photo of a surfboard,6,6,0,True
+303,"(111, 41)",a photo of a person washing a cup,111,41,a photo of a cup,1,1,0,True
+416,"(75, 12)",a photo of a person repairing a parking meter,75,12,a photo of a parking meter,1,1,0,True
+189,"(52, 6)",a photo of a person loading a train,52,6,a photo of a train,2,2,0,True
+205,"(89, 47)",a photo of a person smelling an apple,89,47,a photo of an apple,2,2,0,True
+158,"(111, 3)",a photo of a person washing a motorcycle,111,3,a photo of a motorcycle,3,3,0,True
+80,"(45, 15)",a photo of a person kissing a cat,45,15,a photo of a cat,6,6,0,True
+289,"(57, 67)",a photo of a person and a cell phone,57,67,a photo of a cell phone,1,1,0,True
+260,"(89, 50)",a photo of a person smelling a broccoli,89,50,a photo of a broccoli,1,1,0,True
+597,"(65, 22)",a photo of a person petting a zebra,65,22,a photo of a zebra,4,4,0,True
+274,"(14, 51)",a photo of a person cooking a carrot,14,51,a photo of a carrot,4,4,0,True
+286,"(75, 67)",a photo of a person repairing a cell phone,75,67,a photo of a cell phone,1,1,0,True
+229,"(104, 34)",a photo of a person throwing a baseball bat,104,34,a photo of a baseball bat,2,2,0,True
+429,"(12, 72)",a photo of a person cleaning a refrigerator,12,72,a photo of a refrigerator,2,2,0,True
+403,"(66, 49)",a photo of a person picking an orange,66,49,a photo of an orange,2,2,0,True
+504,"(97, 11)",a photo of a person stopping at a stop sign,97,11,a photo of a stop sign,1,1,0,True
+499,"(90, 32)",a photo of a person spinning a sports ball,90,32,a photo of a sports ball,1,1,0,True
+113,"(26, 16)",a photo of a person feeding a dog,26,16,a photo of a dog,14,12,2,True
+118,"(41, 16)",a photo of a person inspecting a dog,41,16,a photo of a dog,19,18,1,True
+166,"(100, 0)",a photo of a person tagging a person,100,0,a photo of a person,1,1,0,True
+280,"(96, 51)",a photo of a person stirring a carrot,96,51,a photo of a carrot,1,1,0,True
+311,"(89, 54)",a photo of a person smelling a donut,89,54,a photo of a donut,1,1,0,True
+498,"(84, 32)",a photo of a person signing a sports ball,84,32,a photo of a sports ball,1,1,0,True
+44,"(111, 8)",a photo of a person washing a boat,111,8,a photo of a boat,2,2,0,True
+548,"(75, 70)",a photo of a person repairing a toaster,75,70,a photo of a toaster,1,1,0,True
+114,"(33, 16)",a photo of a person grooming a dog,33,16,a photo of a dog,11,11,0,True
+539,"(15, 27)",a photo of a person cutting a tie,15,27,a photo of a tie,1,1,0,True
+333,"(48, 42)",a photo of a person licking a fork,48,42,a photo of a fork,6,6,0,True
+398,"(15, 49)",a photo of a person cutting an orange,15,49,a photo of an orange,3,3,0,True
+578,"(53, 25)",a photo of a person losing a umbrella,53,25,a photo of a umbrella,6,6,0,True
+222,"(89, 46)",a photo of a person smelling a banana,89,46,a photo of a banana,3,3,0,True
+379,"(111, 43)",a photo of a person washing a knife,111,43,a photo of a knife,1,1,0,True
+63,"(113, 5)",a photo of a person waving a bus,113,5,a photo of a bus,1,1,0,True
+216,"(15, 46)",a photo of a person cutting a banana,15,46,a photo of a banana,4,4,0,True
+281,"(111, 51)",a photo of a person washing a carrot,111,51,a photo of a carrot,3,3,0,True
+112,"(22, 16)",a photo of a person drying a dog,22,16,a photo of a dog,5,2,3,True
+546,"(36, 70)",a photo of a person holding a toaster,36,70,a photo of a toaster,2,2,0,True
+402,"(64, 49)",a photo of a person peeling an orange,64,49,a photo of an orange,1,1,0,True
+514,"(116, 28)",a photo of a person zipping a suitcase,116,28,a photo of a suitcase,1,1,0,True
+351,"(57, 78)",a photo of a person and a hair drier,57,78,a photo of a hair drier,1,1,0,True
+509,"(39, 28)",a photo of a person hugging a suitcase,39,28,a photo of a suitcase,3,1,2,True
+35,"(43, 8)",a photo of a person jumping a boat,43,8,a photo of a boat,10,10,0,True
+90,"(93, 56)",a photo of a person standing on a chair,93,56,a photo of a chair,1,1,0,True
+179,"(45, 18)",a photo of a person kissing a sheep,45,18,a photo of a sheep,1,1,0,True
+239,"(12, 59)",a photo of a person cleaning a bed,12,59,a photo of a bed,2,2,0,True
+261,"(96, 50)",a photo of a person stirring a broccoli,96,50,a photo of a broccoli,1,1,0,True
+418,"(7, 53)",a photo of a person buying a pizza,7,53,a photo of a pizza,1,1,0,True
+427,"(89, 53)",a photo of a person smelling a pizza,89,53,a photo of a pizza,1,1,0,True
+84,"(10, 15)",a photo of a person chasing a cat,10,15,a photo of a cat,1,1,0,True
+227,"(84, 34)",a photo of a person signing a baseball bat,84,34,a photo of a baseball bat,1,1,0,True
+238,"(57, 21)",a photo of a person and a bear,57,21,a photo of a bear,2,2,0,True
+262,"(111, 50)",a photo of a person washing a broccoli,111,50,a photo of a broccoli,1,1,0,True
+334,"(111, 42)",a photo of a person washing a fork,111,42,a photo of a fork,2,2,0,True
+345,"(76, 23)",a photo of a person riding a giraffe,76,23,a photo of a giraffe,1,1,0,True
+350,"(75, 78)",a photo of a person repairing a hair drier,75,78,a photo of a hair drier,2,2,0,True
+389,"(12, 68)",a photo of a person cleaning a microwave,12,68,a photo of a microwave,1,1,0,True
+405,"(111, 49)",a photo of a person washing an orange,111,49,a photo of an orange,2,2,0,True
+522,"(52, 37)",a photo of a person loading a surfboard,52,37,a photo of a surfboard,2,2,0,True
+552,"(58, 61)",a photo of a person opening a toilet,58,61,a photo of a toilet,3,3,0,True
+555,"(93, 61)",a photo of a person standing on a toilet,93,61,a photo of a toilet,3,3,0,True
+560,"(111, 79)",a photo of a person washing a toothbrush,111,79,a photo of a toothbrush,1,1,0,True
+593,"(111, 40)",a photo of a person washing a wine glass,111,40,a photo of a wine glass,1,1,0,True
+70,"(43, 2)",a photo of a person jumping a car,43,2,a photo of a car,1,1,0,True
+395,"(75, 64)",a photo of a person repairing a mouse,75,64,a photo of a mouse,1,1,0,True
+-1,"(0, 1)",A photo of unseen interaction.,0,1,a photo of a bicycle,9546,0,9546,False
+-1,"(2, 1)",A photo of unseen interaction.,2,1,a photo of a bicycle,1031,0,1031,False
+-1,"(2, 3)",A photo of unseen interaction.,2,3,a photo of a motorcycle,5711,0,5711,False
+-1,"(3, 4)",A photo of unseen interaction.,3,4,a photo of an airplane,325,0,325,False
+-1,"(5, 4)",A photo of unseen interaction.,5,4,a photo of an airplane,142,0,142,False
+-1,"(6, 7)",A photo of unseen interaction.,6,7,a photo of a truck,1556,0,1556,False
+-1,"(8, 9)",A photo of unseen interaction.,8,9,a photo of a traffic light,863,0,863,False
+-1,"(3, 1)",A photo of unseen interaction.,3,1,a photo of a bicycle,535,0,535,False
+-1,"(4, 1)",A photo of unseen interaction.,4,1,a photo of a bicycle,383,0,383,False
+-1,"(5, 6)",A photo of unseen interaction.,5,6,a photo of a train,235,0,235,False
+-1,"(0, 2)",A photo of unseen interaction.,0,2,a photo of a car,322,0,322,False
+-1,"(0, 3)",A photo of unseen interaction.,0,3,a photo of a motorcycle,159,0,159,False
+-1,"(0, 4)",A photo of unseen interaction.,0,4,a photo of an airplane,97,0,97,False
+-1,"(5, 1)",A photo of unseen interaction.,5,1,a photo of a bicycle,252,0,252,False
+-1,"(5, 2)",A photo of unseen interaction.,5,2,a photo of a car,34,0,34,False
+-1,"(5, 3)",A photo of unseen interaction.,5,3,a photo of a motorcycle,133,0,133,False
+-1,"(6, 1)",A photo of unseen interaction.,6,1,a photo of a bicycle,173,0,173,False
+-1,"(6, 2)",A photo of unseen interaction.,6,2,a photo of a car,29,0,29,False
+-1,"(6, 3)",A photo of unseen interaction.,6,3,a photo of a motorcycle,96,0,96,False
+-1,"(6, 4)",A photo of unseen interaction.,6,4,a photo of an airplane,30,0,30,False
+-1,"(7, 1)",A photo of unseen interaction.,7,1,a photo of a bicycle,137,0,137,False
+-1,"(7, 2)",A photo of unseen interaction.,7,2,a photo of a car,28,0,28,False
+-1,"(7, 3)",A photo of unseen interaction.,7,3,a photo of a motorcycle,85,0,85,False
+-1,"(7, 4)",A photo of unseen interaction.,7,4,a photo of an airplane,22,0,22,False
+-1,"(6, 8)",A photo of unseen interaction.,6,8,a photo of a boat,14,0,14,False
+-1,"(10, 11)",A photo of unseen interaction.,10,11,a photo of a stop sign,590,0,590,False
+-1,"(12, 13)",A photo of unseen interaction.,12,13,a photo of a bench,401,0,401,False
+-1,"(4, 3)",A photo of unseen interaction.,4,3,a photo of a motorcycle,257,0,257,False
+-1,"(10, 9)",A photo of unseen interaction.,10,9,a photo of a traffic light,42,0,42,False
+-1,"(11, 9)",A photo of unseen interaction.,11,9,a photo of a traffic light,33,0,33,False
+-1,"(12, 9)",A photo of unseen interaction.,12,9,a photo of a traffic light,25,0,25,False
+-1,"(13, 9)",A photo of unseen interaction.,13,9,a photo of a traffic light,15,0,15,False
+-1,"(14, 9)",A photo of unseen interaction.,14,9,a photo of a traffic light,12,0,12,False
+-1,"(15, 9)",A photo of unseen interaction.,15,9,a photo of a traffic light,7,0,7,False
+-1,"(8, 7)",A photo of unseen interaction.,8,7,a photo of a truck,89,0,89,False
+-1,"(9, 7)",A photo of unseen interaction.,9,7,a photo of a truck,50,0,50,False
+-1,"(10, 7)",A photo of unseen interaction.,10,7,a photo of a truck,43,0,43,False
+-1,"(11, 7)",A photo of unseen interaction.,11,7,a photo of a truck,31,0,31,False
+-1,"(7, 6)",A photo of unseen interaction.,7,6,a photo of a train,103,0,103,False
+-1,"(13, 14)",A photo of unseen interaction.,13,14,a photo of a bird,63,0,63,False
+-1,"(15, 16)",A photo of unseen interaction.,15,16,a photo of a dog,49,0,49,False
+-1,"(17, 16)",A photo of unseen interaction.,17,16,a photo of a dog,12,0,12,False
+-1,"(18, 16)",A photo of unseen interaction.,18,16,a photo of a dog,7,0,7,False
+-1,"(19, 16)",A photo of unseen interaction.,19,16,a photo of a dog,7,0,7,False
+-1,"(9, 10)",A photo of unseen interaction.,9,10,a photo of a fire hydrant,86,0,86,False
+-1,"(11, 10)",A photo of unseen interaction.,11,10,a photo of a fire hydrant,33,0,33,False
+-1,"(14, 15)",A photo of unseen interaction.,14,15,a photo of a cat,317,0,317,False
+-1,"(16, 17)",A photo of unseen interaction.,16,17,a photo of a horse,241,0,241,False
+-1,"(8, 6)",A photo of unseen interaction.,8,6,a photo of a train,42,0,42,False
+-1,"(9, 6)",A photo of unseen interaction.,9,6,a photo of a train,38,0,38,False
+-1,"(10, 6)",A photo of unseen interaction.,10,6,a photo of a train,15,0,15,False
+-1,"(11, 6)",A photo of unseen interaction.,11,6,a photo of a train,17,0,17,False
+-1,"(7, 8)",A photo of unseen interaction.,7,8,a photo of a boat,133,0,133,False
+-1,"(9, 8)",A photo of unseen interaction.,9,8,a photo of a boat,52,0,52,False
+-1,"(10, 8)",A photo of unseen interaction.,10,8,a photo of a boat,33,0,33,False
+-1,"(18, 19)",A photo of unseen interaction.,18,19,a photo of a cow,207,0,207,False
+-1,"(20, 21)",A photo of unseen interaction.,20,21,a photo of a bear,170,0,170,False
+-1,"(22, 23)",A photo of unseen interaction.,22,23,a photo of a giraffe,143,0,143,False
+-1,"(24, 25)",A photo of unseen interaction.,24,25,a photo of a umbrella,111,0,111,False
+-1,"(26, 27)",A photo of unseen interaction.,26,27,a photo of a tie,87,0,87,False
+-1,"(28, 29)",A photo of unseen interaction.,28,29,a photo of a frisbee,76,0,76,False
+-1,"(30, 31)",A photo of unseen interaction.,30,31,a photo of a snowboard,67,0,67,False
+-1,"(9, 1)",A photo of unseen interaction.,9,1,a photo of a bicycle,78,0,78,False
+-1,"(10, 1)",A photo of unseen interaction.,10,1,a photo of a bicycle,60,0,60,False
+-1,"(11, 1)",A photo of unseen interaction.,11,1,a photo of a bicycle,52,0,52,False
+-1,"(12, 1)",A photo of unseen interaction.,12,1,a photo of a bicycle,41,0,41,False
+-1,"(13, 1)",A photo of unseen interaction.,13,1,a photo of a bicycle,35,0,35,False
+-1,"(14, 1)",A photo of unseen interaction.,14,1,a photo of a bicycle,28,0,28,False
+-1,"(15, 1)",A photo of unseen interaction.,15,1,a photo of a bicycle,24,0,24,False
+-1,"(16, 1)",A photo of unseen interaction.,16,1,a photo of a bicycle,23,0,23,False
+-1,"(17, 18)",A photo of unseen interaction.,17,18,a photo of a sheep,36,0,36,False
+-1,"(19, 18)",A photo of unseen interaction.,19,18,a photo of a sheep,9,0,9,False
+-1,"(20, 18)",A photo of unseen interaction.,20,18,a photo of a sheep,6,0,6,False
+-1,"(21, 18)",A photo of unseen interaction.,21,18,a photo of a sheep,5,0,5,False
+-1,"(22, 18)",A photo of unseen interaction.,22,18,a photo of a sheep,5,0,5,False
+-1,"(23, 18)",A photo of unseen interaction.,23,18,a photo of a sheep,3,0,3,False
+-1,"(24, 18)",A photo of unseen interaction.,24,18,a photo of a sheep,1,0,1,False
+-1,"(25, 18)",A photo of unseen interaction.,25,18,a photo of a sheep,1,0,1,False
+-1,"(27, 18)",A photo of unseen interaction.,27,18,a photo of a sheep,2,0,2,False
+-1,"(28, 18)",A photo of unseen interaction.,28,18,a photo of a sheep,2,0,2,False
+-1,"(29, 18)",A photo of unseen interaction.,29,18,a photo of a sheep,1,0,1,False
+-1,"(30, 18)",A photo of unseen interaction.,30,18,a photo of a sheep,2,0,2,False
+-1,"(31, 18)",A photo of unseen interaction.,31,18,a photo of a sheep,1,0,1,False
+-1,"(32, 18)",A photo of unseen interaction.,32,18,a photo of a sheep,2,0,2,False
+-1,"(22, 19)",A photo of unseen interaction.,22,19,a photo of a cow,2,0,2,False
+-1,"(23, 24)",A photo of unseen interaction.,23,24,a photo of a backpack,18,0,18,False
+-1,"(12, 10)",A photo of unseen interaction.,12,10,a photo of a fire hydrant,19,0,19,False
+-1,"(2, 4)",A photo of unseen interaction.,2,4,a photo of an airplane,56,0,56,False
+-1,"(6, 5)",A photo of unseen interaction.,6,5,a photo of a bus,132,0,132,False
+-1,"(7, 5)",A photo of unseen interaction.,7,5,a photo of a bus,73,0,73,False
+-1,"(8, 5)",A photo of unseen interaction.,8,5,a photo of a bus,36,0,36,False
+-1,"(9, 5)",A photo of unseen interaction.,9,5,a photo of a bus,29,0,29,False
+-1,"(10, 5)",A photo of unseen interaction.,10,5,a photo of a bus,21,0,21,False
+-1,"(11, 5)",A photo of unseen interaction.,11,5,a photo of a bus,21,0,21,False
+-1,"(14, 13)",A photo of unseen interaction.,14,13,a photo of a bench,23,0,23,False
+-1,"(15, 13)",A photo of unseen interaction.,15,13,a photo of a bench,15,0,15,False
+-1,"(0, 5)",A photo of unseen interaction.,0,5,a photo of a bus,65,0,65,False
+-1,"(0, 6)",A photo of unseen interaction.,0,6,a photo of a train,49,0,49,False
+-1,"(0, 7)",A photo of unseen interaction.,0,7,a photo of a truck,33,0,33,False
+-1,"(0, 8)",A photo of unseen interaction.,0,8,a photo of a boat,29,0,29,False
+-1,"(0, 9)",A photo of unseen interaction.,0,9,a photo of a traffic light,23,0,23,False
+-1,"(0, 10)",A photo of unseen interaction.,0,10,a photo of a fire hydrant,20,0,20,False
+-1,"(0, 11)",A photo of unseen interaction.,0,11,a photo of a stop sign,16,0,16,False
+-1,"(0, 12)",A photo of unseen interaction.,0,12,a photo of a parking meter,13,0,13,False
+-1,"(0, 13)",A photo of unseen interaction.,0,13,a photo of a bench,13,0,13,False
+-1,"(0, 14)",A photo of unseen interaction.,0,14,a photo of a bird,13,0,13,False
+-1,"(0, 15)",A photo of unseen interaction.,0,15,a photo of a cat,12,0,12,False
+-1,"(0, 16)",A photo of unseen interaction.,0,16,a photo of a dog,9,0,9,False
+-1,"(0, 17)",A photo of unseen interaction.,0,17,a photo of a horse,8,0,8,False
+-1,"(0, 18)",A photo of unseen interaction.,0,18,a photo of a sheep,6,0,6,False
+-1,"(0, 19)",A photo of unseen interaction.,0,19,a photo of a cow,6,0,6,False
+-1,"(0, 20)",A photo of unseen interaction.,0,20,a photo of an elephant,6,0,6,False
+-1,"(0, 21)",A photo of unseen interaction.,0,21,a photo of a bear,5,0,5,False
+-1,"(0, 22)",A photo of unseen interaction.,0,22,a photo of a zebra,5,0,5,False
+-1,"(0, 23)",A photo of unseen interaction.,0,23,a photo of a giraffe,5,0,5,False
+-1,"(0, 24)",A photo of unseen interaction.,0,24,a photo of a backpack,5,0,5,False
+-1,"(4, 7)",A photo of unseen interaction.,4,7,a photo of a truck,10,0,10,False
+-1,"(4, 9)",A photo of unseen interaction.,4,9,a photo of a traffic light,2,0,2,False
+-1,"(32, 33)",A photo of unseen interaction.,32,33,a photo of a kite,57,0,57,False
+-1,"(34, 35)",A photo of unseen interaction.,34,35,a photo of a baseball glove,49,0,49,False
+-1,"(38, 39)",A photo of unseen interaction.,38,39,a photo of a bottle,32,0,32,False
+-1,"(40, 41)",A photo of unseen interaction.,40,41,a photo of a cup,26,0,26,False
+-1,"(42, 43)",A photo of unseen interaction.,42,43,a photo of a knife,22,0,22,False
+-1,"(44, 45)",A photo of unseen interaction.,44,45,a photo of a bowl,24,0,24,False
+-1,"(1, 0)",A photo of unseen interaction.,1,0,a photo of a person,50,0,50,False
+-1,"(6, 9)",A photo of unseen interaction.,6,9,a photo of a traffic light,7,0,7,False
+-1,"(6, 10)",A photo of unseen interaction.,6,10,a photo of a fire hydrant,6,0,6,False
+-1,"(6, 11)",A photo of unseen interaction.,6,11,a photo of a stop sign,4,0,4,False
+-1,"(6, 12)",A photo of unseen interaction.,6,12,a photo of a parking meter,3,0,3,False
+-1,"(6, 13)",A photo of unseen interaction.,6,13,a photo of a bench,1,0,1,False
+-1,"(6, 14)",A photo of unseen interaction.,6,14,a photo of a bird,1,0,1,False
+-1,"(6, 15)",A photo of unseen interaction.,6,15,a photo of a cat,1,0,1,False
+-1,"(6, 16)",A photo of unseen interaction.,6,16,a photo of a dog,1,0,1,False
+-1,"(6, 17)",A photo of unseen interaction.,6,17,a photo of a horse,1,0,1,False
+-1,"(6, 18)",A photo of unseen interaction.,6,18,a photo of a sheep,1,0,1,False
+-1,"(6, 19)",A photo of unseen interaction.,6,19,a photo of a cow,1,0,1,False
+-1,"(6, 20)",A photo of unseen interaction.,6,20,a photo of an elephant,1,0,1,False
+-1,"(6, 21)",A photo of unseen interaction.,6,21,a photo of a bear,1,0,1,False
+-1,"(6, 22)",A photo of unseen interaction.,6,22,a photo of a zebra,1,0,1,False
+-1,"(6, 23)",A photo of unseen interaction.,6,23,a photo of a giraffe,1,0,1,False
+-1,"(6, 24)",A photo of unseen interaction.,6,24,a photo of a backpack,1,0,1,False
+-1,"(6, 25)",A photo of unseen interaction.,6,25,a photo of a umbrella,1,0,1,False
+-1,"(6, 26)",A photo of unseen interaction.,6,26,a photo of a handbag,1,0,1,False
+-1,"(6, 27)",A photo of unseen interaction.,6,27,a photo of a tie,1,0,1,False
+-1,"(28, 2)",A photo of unseen interaction.,28,2,a photo of a car,2,0,2,False
+-1,"(28, 7)",A photo of unseen interaction.,28,7,a photo of a truck,1,0,1,False
+-1,"(28, 8)",A photo of unseen interaction.,28,8,a photo of a boat,1,0,1,False
+-1,"(28, 9)",A photo of unseen interaction.,28,9,a photo of a traffic light,1,0,1,False
+-1,"(28, 10)",A photo of unseen interaction.,28,10,a photo of a fire hydrant,1,0,1,False
+-1,"(28, 11)",A photo of unseen interaction.,28,11,a photo of a stop sign,1,0,1,False
+-1,"(28, 12)",A photo of unseen interaction.,28,12,a photo of a parking meter,1,0,1,False
+-1,"(28, 3)",A photo of unseen interaction.,28,3,a photo of a motorcycle,4,0,4,False
+-1,"(28, 13)",A photo of unseen interaction.,28,13,a photo of a bench,1,0,1,False
+-1,"(28, 14)",A photo of unseen interaction.,28,14,a photo of a bird,3,0,3,False
+-1,"(28, 15)",A photo of unseen interaction.,28,15,a photo of a cat,1,0,1,False
+-1,"(28, 16)",A photo of unseen interaction.,28,16,a photo of a dog,3,0,3,False
+-1,"(28, 17)",A photo of unseen interaction.,28,17,a photo of a horse,1,0,1,False
+-1,"(28, 4)",A photo of unseen interaction.,28,4,a photo of an airplane,1,0,1,False
+-1,"(28, 5)",A photo of unseen interaction.,28,5,a photo of a bus,1,0,1,False
+-1,"(28, 19)",A photo of unseen interaction.,28,19,a photo of a cow,1,0,1,False
+-1,"(28, 20)",A photo of unseen interaction.,28,20,a photo of an elephant,2,0,2,False
+-1,"(28, 21)",A photo of unseen interaction.,28,21,a photo of a bear,2,0,2,False
+-1,"(28, 22)",A photo of unseen interaction.,28,22,a photo of a zebra,1,0,1,False
+-1,"(28, 23)",A photo of unseen interaction.,28,23,a photo of a giraffe,1,0,1,False
+-1,"(28, 24)",A photo of unseen interaction.,28,24,a photo of a backpack,2,0,2,False
+-1,"(28, 25)",A photo of unseen interaction.,28,25,a photo of a umbrella,2,0,2,False
+-1,"(28, 26)",A photo of unseen interaction.,28,26,a photo of a handbag,2,0,2,False
+-1,"(28, 27)",A photo of unseen interaction.,28,27,a photo of a tie,1,0,1,False
+-1,"(30, 1)",A photo of unseen interaction.,30,1,a photo of a bicycle,5,0,5,False
+-1,"(30, 2)",A photo of unseen interaction.,30,2,a photo of a car,1,0,1,False
+-1,"(30, 29)",A photo of unseen interaction.,30,29,a photo of a frisbee,1,0,1,False
+-1,"(30, 7)",A photo of unseen interaction.,30,7,a photo of a truck,1,0,1,False
+-1,"(30, 8)",A photo of unseen interaction.,30,8,a photo of a boat,1,0,1,False
+-1,"(30, 9)",A photo of unseen interaction.,30,9,a photo of a traffic light,1,0,1,False
+-1,"(30, 10)",A photo of unseen interaction.,30,10,a photo of a fire hydrant,1,0,1,False
+-1,"(30, 11)",A photo of unseen interaction.,30,11,a photo of a stop sign,1,0,1,False
+-1,"(30, 12)",A photo of unseen interaction.,30,12,a photo of a parking meter,1,0,1,False
+-1,"(30, 3)",A photo of unseen interaction.,30,3,a photo of a motorcycle,2,0,2,False
+-1,"(30, 13)",A photo of unseen interaction.,30,13,a photo of a bench,1,0,1,False
+-1,"(30, 14)",A photo of unseen interaction.,30,14,a photo of a bird,1,0,1,False
+-1,"(30, 15)",A photo of unseen interaction.,30,15,a photo of a cat,1,0,1,False
+-1,"(30, 16)",A photo of unseen interaction.,30,16,a photo of a dog,2,0,2,False
+-1,"(30, 17)",A photo of unseen interaction.,30,17,a photo of a horse,1,0,1,False
+-1,"(30, 5)",A photo of unseen interaction.,30,5,a photo of a bus,1,0,1,False
+-1,"(30, 19)",A photo of unseen interaction.,30,19,a photo of a cow,1,0,1,False
+-1,"(30, 20)",A photo of unseen interaction.,30,20,a photo of an elephant,2,0,2,False
+-1,"(30, 21)",A photo of unseen interaction.,30,21,a photo of a bear,1,0,1,False
+-1,"(30, 22)",A photo of unseen interaction.,30,22,a photo of a zebra,1,0,1,False
+-1,"(30, 23)",A photo of unseen interaction.,30,23,a photo of a giraffe,1,0,1,False
+-1,"(30, 24)",A photo of unseen interaction.,30,24,a photo of a backpack,1,0,1,False
+-1,"(30, 25)",A photo of unseen interaction.,30,25,a photo of a umbrella,2,0,2,False
+-1,"(30, 26)",A photo of unseen interaction.,30,26,a photo of a handbag,3,0,3,False
+-1,"(30, 27)",A photo of unseen interaction.,30,27,a photo of a tie,1,0,1,False
+-1,"(11, 8)",A photo of unseen interaction.,11,8,a photo of a boat,28,0,28,False
+-1,"(12, 8)",A photo of unseen interaction.,12,8,a photo of a boat,18,0,18,False
+-1,"(13, 8)",A photo of unseen interaction.,13,8,a photo of a boat,13,0,13,False
+-1,"(12, 11)",A photo of unseen interaction.,12,11,a photo of a stop sign,29,0,29,False
+-1,"(46, 47)",A photo of unseen interaction.,46,47,a photo of an apple,18,0,18,False
+-1,"(48, 49)",A photo of unseen interaction.,48,49,a photo of an orange,15,0,15,False
+-1,"(3, 2)",A photo of unseen interaction.,3,2,a photo of a car,41,0,41,False
+-1,"(13, 11)",A photo of unseen interaction.,13,11,a photo of a stop sign,20,0,20,False
+-1,"(14, 11)",A photo of unseen interaction.,14,11,a photo of a stop sign,18,0,18,False
+-1,"(19, 20)",A photo of unseen interaction.,19,20,a photo of an elephant,20,0,20,False
+-1,"(29, 30)",A photo of unseen interaction.,29,30,a photo of a skis,10,0,10,False
+-1,"(31, 27)",A photo of unseen interaction.,31,27,a photo of a tie,1,0,1,False
+-1,"(31, 32)",A photo of unseen interaction.,31,32,a photo of a sports ball,8,0,8,False
+-1,"(33, 34)",A photo of unseen interaction.,33,34,a photo of a baseball bat,9,0,9,False
+-1,"(35, 36)",A photo of unseen interaction.,35,36,a photo of a skateboard,9,0,9,False
+-1,"(37, 38)",A photo of unseen interaction.,37,38,a photo of a tennis racket,7,0,7,False
+-1,"(39, 40)",A photo of unseen interaction.,39,40,a photo of a wine glass,7,0,7,False
+-1,"(41, 42)",A photo of unseen interaction.,41,42,a photo of a fork,8,0,8,False
+-1,"(43, 44)",A photo of unseen interaction.,43,44,a photo of a spoon,7,0,7,False
+-1,"(45, 46)",A photo of unseen interaction.,45,46,a photo of a banana,5,0,5,False
+-1,"(47, 48)",A photo of unseen interaction.,47,48,a photo of a sandwich,6,0,6,False
+-1,"(49, 50)",A photo of unseen interaction.,49,50,a photo of a broccoli,5,0,5,False
+-1,"(51, 52)",A photo of unseen interaction.,51,52,a photo of a hot dog,5,0,5,False
+-1,"(53, 54)",A photo of unseen interaction.,53,54,a photo of a donut,4,0,4,False
+-1,"(55, 56)",A photo of unseen interaction.,55,56,a photo of a chair,3,0,3,False
+-1,"(13, 12)",A photo of unseen interaction.,13,12,a photo of a parking meter,13,0,13,False
+-1,"(12, 5)",A photo of unseen interaction.,12,5,a photo of a bus,17,0,17,False
+-1,"(8, 10)",A photo of unseen interaction.,8,10,a photo of a fire hydrant,3,0,3,False
+-1,"(0, 25)",A photo of unseen interaction.,0,25,a photo of a umbrella,4,0,4,False
+-1,"(0, 26)",A photo of unseen interaction.,0,26,a photo of a handbag,4,0,4,False
+-1,"(0, 28)",A photo of unseen interaction.,0,28,a photo of a suitcase,4,0,4,False
+-1,"(0, 29)",A photo of unseen interaction.,0,29,a photo of a frisbee,4,0,4,False
+-1,"(0, 32)",A photo of unseen interaction.,0,32,a photo of a sports ball,3,0,3,False
+-1,"(0, 33)",A photo of unseen interaction.,0,33,a photo of a kite,3,0,3,False
+-1,"(0, 34)",A photo of unseen interaction.,0,34,a photo of a baseball bat,3,0,3,False
+-1,"(0, 35)",A photo of unseen interaction.,0,35,a photo of a baseball glove,3,0,3,False
+-1,"(0, 36)",A photo of unseen interaction.,0,36,a photo of a skateboard,3,0,3,False
+-1,"(0, 37)",A photo of unseen interaction.,0,37,a photo of a surfboard,2,0,2,False
+-1,"(0, 38)",A photo of unseen interaction.,0,38,a photo of a tennis racket,2,0,2,False
+-1,"(0, 39)",A photo of unseen interaction.,0,39,a photo of a bottle,2,0,2,False
+-1,"(0, 40)",A photo of unseen interaction.,0,40,a photo of a wine glass,1,0,1,False
+-1,"(0, 41)",A photo of unseen interaction.,0,41,a photo of a cup,1,0,1,False
+-1,"(0, 42)",A photo of unseen interaction.,0,42,a photo of a fork,1,0,1,False
+-1,"(0, 43)",A photo of unseen interaction.,0,43,a photo of a knife,1,0,1,False
+-1,"(22, 21)",A photo of unseen interaction.,22,21,a photo of a bear,6,0,6,False
+-1,"(25, 24)",A photo of unseen interaction.,25,24,a photo of a backpack,1,0,1,False
+-1,"(50, 51)",A photo of unseen interaction.,50,51,a photo of a carrot,13,0,13,False
+-1,"(52, 53)",A photo of unseen interaction.,52,53,a photo of a pizza,11,0,11,False
+-1,"(56, 57)",A photo of unseen interaction.,56,57,a photo of a couch,9,0,9,False
+-1,"(58, 59)",A photo of unseen interaction.,58,59,a photo of a bed,9,0,9,False
+-1,"(2, 0)",A photo of unseen interaction.,2,0,a photo of a person,14,0,14,False
+-1,"(3, 5)",A photo of unseen interaction.,3,5,a photo of a bus,30,0,30,False
+-1,"(9, 11)",A photo of unseen interaction.,9,11,a photo of a stop sign,3,0,3,False
+-1,"(9, 12)",A photo of unseen interaction.,9,12,a photo of a parking meter,1,0,1,False
+-1,"(12, 6)",A photo of unseen interaction.,12,6,a photo of a train,14,0,14,False
+-1,"(13, 6)",A photo of unseen interaction.,13,6,a photo of a train,13,0,13,False
+-1,"(13, 10)",A photo of unseen interaction.,13,10,a photo of a fire hydrant,19,0,19,False
+-1,"(14, 7)",A photo of unseen interaction.,14,7,a photo of a truck,8,0,8,False
+-1,"(8, 3)",A photo of unseen interaction.,8,3,a photo of a motorcycle,66,0,66,False
+-1,"(9, 3)",A photo of unseen interaction.,9,3,a photo of a motorcycle,49,0,49,False
+-1,"(10, 3)",A photo of unseen interaction.,10,3,a photo of a motorcycle,43,0,43,False
+-1,"(16, 15)",A photo of unseen interaction.,16,15,a photo of a cat,14,0,14,False
+-1,"(17, 15)",A photo of unseen interaction.,17,15,a photo of a cat,7,0,7,False
+-1,"(18, 15)",A photo of unseen interaction.,18,15,a photo of a cat,7,0,7,False
+-1,"(19, 15)",A photo of unseen interaction.,19,15,a photo of a cat,6,0,6,False
+-1,"(20, 15)",A photo of unseen interaction.,20,15,a photo of a cat,5,0,5,False
+-1,"(21, 15)",A photo of unseen interaction.,21,15,a photo of a cat,5,0,5,False
+-1,"(12, 7)",A photo of unseen interaction.,12,7,a photo of a truck,13,0,13,False
+-1,"(13, 7)",A photo of unseen interaction.,13,7,a photo of a truck,15,0,15,False
+-1,"(11, 3)",A photo of unseen interaction.,11,3,a photo of a motorcycle,35,0,35,False
+-1,"(12, 3)",A photo of unseen interaction.,12,3,a photo of a motorcycle,30,0,30,False
+-1,"(13, 3)",A photo of unseen interaction.,13,3,a photo of a motorcycle,26,0,26,False
+-1,"(8, 4)",A photo of unseen interaction.,8,4,a photo of an airplane,17,0,17,False
+-1,"(15, 7)",A photo of unseen interaction.,15,7,a photo of a truck,6,0,6,False
+-1,"(16, 7)",A photo of unseen interaction.,16,7,a photo of a truck,5,0,5,False
+-1,"(18, 1)",A photo of unseen interaction.,18,1,a photo of a bicycle,18,0,18,False
+-1,"(19, 1)",A photo of unseen interaction.,19,1,a photo of a bicycle,16,0,16,False
+-1,"(20, 7)",A photo of unseen interaction.,20,7,a photo of a truck,3,0,3,False
+-1,"(22, 7)",A photo of unseen interaction.,22,7,a photo of a truck,2,0,2,False
+-1,"(25, 26)",A photo of unseen interaction.,25,26,a photo of a handbag,11,0,11,False
+-1,"(27, 24)",A photo of unseen interaction.,27,24,a photo of a backpack,2,0,2,False
+-1,"(29, 24)",A photo of unseen interaction.,29,24,a photo of a backpack,1,0,1,False
+-1,"(31, 26)",A photo of unseen interaction.,31,26,a photo of a handbag,1,0,1,False
+-1,"(32, 24)",A photo of unseen interaction.,32,24,a photo of a backpack,2,0,2,False
+-1,"(33, 24)",A photo of unseen interaction.,33,24,a photo of a backpack,1,0,1,False
+-1,"(34, 24)",A photo of unseen interaction.,34,24,a photo of a backpack,1,0,1,False
+-1,"(35, 24)",A photo of unseen interaction.,35,24,a photo of a backpack,1,0,1,False
+-1,"(37, 24)",A photo of unseen interaction.,37,24,a photo of a backpack,1,0,1,False
+-1,"(38, 24)",A photo of unseen interaction.,38,24,a photo of a backpack,1,0,1,False
+-1,"(39, 24)",A photo of unseen interaction.,39,24,a photo of a backpack,1,0,1,False
+-1,"(40, 26)",A photo of unseen interaction.,40,26,a photo of a handbag,2,0,2,False
+-1,"(42, 26)",A photo of unseen interaction.,42,26,a photo of a handbag,2,0,2,False
+-1,"(43, 26)",A photo of unseen interaction.,43,26,a photo of a handbag,1,0,1,False
+-1,"(44, 26)",A photo of unseen interaction.,44,26,a photo of a handbag,1,0,1,False
+-1,"(45, 26)",A photo of unseen interaction.,45,26,a photo of a handbag,1,0,1,False
+-1,"(46, 26)",A photo of unseen interaction.,46,26,a photo of a handbag,1,0,1,False
+-1,"(47, 26)",A photo of unseen interaction.,47,26,a photo of a handbag,1,0,1,False
+-1,"(48, 26)",A photo of unseen interaction.,48,26,a photo of a handbag,1,0,1,False
+-1,"(49, 26)",A photo of unseen interaction.,49,26,a photo of a handbag,1,0,1,False
+-1,"(16, 13)",A photo of unseen interaction.,16,13,a photo of a bench,13,0,13,False
+-1,"(17, 13)",A photo of unseen interaction.,17,13,a photo of a bench,9,0,9,False
+-1,"(18, 13)",A photo of unseen interaction.,18,13,a photo of a bench,6,0,6,False
+-1,"(17, 1)",A photo of unseen interaction.,17,1,a photo of a bicycle,19,0,19,False
+-1,"(10, 12)",A photo of unseen interaction.,10,12,a photo of a parking meter,7,0,7,False
+-1,"(13, 15)",A photo of unseen interaction.,13,15,a photo of a cat,3,0,3,False
+-1,"(16, 18)",A photo of unseen interaction.,16,18,a photo of a sheep,2,0,2,False
+-1,"(27, 28)",A photo of unseen interaction.,27,28,a photo of a suitcase,12,0,12,False
+-1,"(31, 28)",A photo of unseen interaction.,31,28,a photo of a suitcase,2,0,2,False
+-1,"(32, 30)",A photo of unseen interaction.,32,30,a photo of a skis,2,0,2,False
+-1,"(35, 34)",A photo of unseen interaction.,35,34,a photo of a baseball bat,1,0,1,False
+-1,"(8, 2)",A photo of unseen interaction.,8,2,a photo of a car,22,0,22,False
+-1,"(9, 2)",A photo of unseen interaction.,9,2,a photo of a car,21,0,21,False
+-1,"(10, 2)",A photo of unseen interaction.,10,2,a photo of a car,17,0,17,False
+-1,"(11, 2)",A photo of unseen interaction.,11,2,a photo of a car,19,0,19,False
+-1,"(12, 2)",A photo of unseen interaction.,12,2,a photo of a car,16,0,16,False
+-1,"(13, 2)",A photo of unseen interaction.,13,2,a photo of a car,13,0,13,False
+-1,"(14, 10)",A photo of unseen interaction.,14,10,a photo of a fire hydrant,13,0,13,False
+-1,"(15, 10)",A photo of unseen interaction.,15,10,a photo of a fire hydrant,12,0,12,False
+-1,"(16, 10)",A photo of unseen interaction.,16,10,a photo of a fire hydrant,11,0,11,False
+-1,"(17, 10)",A photo of unseen interaction.,17,10,a photo of a fire hydrant,10,0,10,False
+-1,"(15, 11)",A photo of unseen interaction.,15,11,a photo of a stop sign,10,0,10,False
+-1,"(16, 11)",A photo of unseen interaction.,16,11,a photo of a stop sign,7,0,7,False
+-1,"(17, 11)",A photo of unseen interaction.,17,11,a photo of a stop sign,6,0,6,False
+-1,"(19, 11)",A photo of unseen interaction.,19,11,a photo of a stop sign,5,0,5,False
+-1,"(23, 21)",A photo of unseen interaction.,23,21,a photo of a bear,2,0,2,False
+-1,"(24, 21)",A photo of unseen interaction.,24,21,a photo of a bear,1,0,1,False
+-1,"(27, 26)",A photo of unseen interaction.,27,26,a photo of a handbag,2,0,2,False
+-1,"(29, 26)",A photo of unseen interaction.,29,26,a photo of a handbag,2,0,2,False
+-1,"(33, 26)",A photo of unseen interaction.,33,26,a photo of a handbag,1,0,1,False
+-1,"(34, 26)",A photo of unseen interaction.,34,26,a photo of a handbag,1,0,1,False
+-1,"(37, 26)",A photo of unseen interaction.,37,26,a photo of a handbag,2,0,2,False
+-1,"(38, 36)",A photo of unseen interaction.,38,36,a photo of a skateboard,1,0,1,False
+-1,"(39, 36)",A photo of unseen interaction.,39,36,a photo of a skateboard,1,0,1,False
+-1,"(40, 36)",A photo of unseen interaction.,40,36,a photo of a skateboard,2,0,2,False
+-1,"(41, 36)",A photo of unseen interaction.,41,36,a photo of a skateboard,2,0,2,False
+-1,"(14, 12)",A photo of unseen interaction.,14,12,a photo of a parking meter,9,0,9,False
+-1,"(15, 12)",A photo of unseen interaction.,15,12,a photo of a parking meter,7,0,7,False
+-1,"(16, 12)",A photo of unseen interaction.,16,12,a photo of a parking meter,6,0,6,False
+-1,"(17, 12)",A photo of unseen interaction.,17,12,a photo of a parking meter,6,0,6,False
+-1,"(18, 12)",A photo of unseen interaction.,18,12,a photo of a parking meter,3,0,3,False
+-1,"(19, 12)",A photo of unseen interaction.,19,12,a photo of a parking meter,2,0,2,False
+-1,"(20, 12)",A photo of unseen interaction.,20,12,a photo of a parking meter,2,0,2,False
+-1,"(21, 12)",A photo of unseen interaction.,21,12,a photo of a parking meter,2,0,2,False
+-1,"(2, 5)",A photo of unseen interaction.,2,5,a photo of a bus,19,0,19,False
+-1,"(2, 6)",A photo of unseen interaction.,2,6,a photo of a train,14,0,14,False
+-1,"(2, 7)",A photo of unseen interaction.,2,7,a photo of a truck,12,0,12,False
+-1,"(2, 8)",A photo of unseen interaction.,2,8,a photo of a boat,9,0,9,False
+-1,"(2, 9)",A photo of unseen interaction.,2,9,a photo of a traffic light,8,0,8,False
+-1,"(2, 10)",A photo of unseen interaction.,2,10,a photo of a fire hydrant,7,0,7,False
+-1,"(2, 11)",A photo of unseen interaction.,2,11,a photo of a stop sign,5,0,5,False
+-1,"(2, 12)",A photo of unseen interaction.,2,12,a photo of a parking meter,5,0,5,False
+-1,"(2, 13)",A photo of unseen interaction.,2,13,a photo of a bench,4,0,4,False
+-1,"(2, 14)",A photo of unseen interaction.,2,14,a photo of a bird,4,0,4,False
+-1,"(2, 15)",A photo of unseen interaction.,2,15,a photo of a cat,3,0,3,False
+-1,"(2, 16)",A photo of unseen interaction.,2,16,a photo of a dog,2,0,2,False
+-1,"(2, 17)",A photo of unseen interaction.,2,17,a photo of a horse,2,0,2,False
+-1,"(21, 20)",A photo of unseen interaction.,21,20,a photo of an elephant,1,0,1,False
+-1,"(22, 20)",A photo of unseen interaction.,22,20,a photo of an elephant,1,0,1,False
+-1,"(23, 20)",A photo of unseen interaction.,23,20,a photo of an elephant,1,0,1,False
+-1,"(24, 20)",A photo of unseen interaction.,24,20,a photo of an elephant,1,0,1,False
+-1,"(25, 20)",A photo of unseen interaction.,25,20,a photo of an elephant,1,0,1,False
+-1,"(27, 20)",A photo of unseen interaction.,27,20,a photo of an elephant,2,0,2,False
+-1,"(29, 20)",A photo of unseen interaction.,29,20,a photo of an elephant,1,0,1,False
+-1,"(31, 20)",A photo of unseen interaction.,31,20,a photo of an elephant,1,0,1,False
+-1,"(32, 20)",A photo of unseen interaction.,32,20,a photo of an elephant,2,0,2,False
+-1,"(33, 20)",A photo of unseen interaction.,33,20,a photo of an elephant,1,0,1,False
+-1,"(34, 20)",A photo of unseen interaction.,34,20,a photo of an elephant,1,0,1,False
+-1,"(35, 20)",A photo of unseen interaction.,35,20,a photo of an elephant,1,0,1,False
+-1,"(23, 15)",A photo of unseen interaction.,23,15,a photo of a cat,2,0,2,False
+-1,"(24, 15)",A photo of unseen interaction.,24,15,a photo of a cat,1,0,1,False
+-1,"(25, 15)",A photo of unseen interaction.,25,15,a photo of a cat,1,0,1,False
+-1,"(27, 15)",A photo of unseen interaction.,27,15,a photo of a cat,1,0,1,False
+-1,"(14, 3)",A photo of unseen interaction.,14,3,a photo of a motorcycle,19,0,19,False
+-1,"(15, 3)",A photo of unseen interaction.,15,3,a photo of a motorcycle,15,0,15,False
+-1,"(16, 3)",A photo of unseen interaction.,16,3,a photo of a motorcycle,12,0,12,False
+-1,"(17, 3)",A photo of unseen interaction.,17,3,a photo of a motorcycle,9,0,9,False
+-1,"(18, 3)",A photo of unseen interaction.,18,3,a photo of a motorcycle,9,0,9,False
+-1,"(19, 3)",A photo of unseen interaction.,19,3,a photo of a motorcycle,8,0,8,False
+-1,"(20, 3)",A photo of unseen interaction.,20,3,a photo of a motorcycle,7,0,7,False
+-1,"(21, 3)",A photo of unseen interaction.,21,3,a photo of a motorcycle,6,0,6,False
+-1,"(22, 3)",A photo of unseen interaction.,22,3,a photo of a motorcycle,5,0,5,False
+-1,"(23, 3)",A photo of unseen interaction.,23,3,a photo of a motorcycle,3,0,3,False
+-1,"(24, 3)",A photo of unseen interaction.,24,3,a photo of a motorcycle,5,0,5,False
+-1,"(25, 3)",A photo of unseen interaction.,25,3,a photo of a motorcycle,5,0,5,False
+-1,"(26, 3)",A photo of unseen interaction.,26,3,a photo of a motorcycle,4,0,4,False
+-1,"(27, 3)",A photo of unseen interaction.,27,3,a photo of a motorcycle,4,0,4,False
+-1,"(29, 3)",A photo of unseen interaction.,29,3,a photo of a motorcycle,2,0,2,False
+-1,"(31, 3)",A photo of unseen interaction.,31,3,a photo of a motorcycle,2,0,2,False
+-1,"(32, 3)",A photo of unseen interaction.,32,3,a photo of a motorcycle,1,0,1,False
+-1,"(33, 3)",A photo of unseen interaction.,33,3,a photo of a motorcycle,1,0,1,False
+-1,"(34, 3)",A photo of unseen interaction.,34,3,a photo of a motorcycle,2,0,2,False
+-1,"(35, 3)",A photo of unseen interaction.,35,3,a photo of a motorcycle,1,0,1,False
+-1,"(38, 3)",A photo of unseen interaction.,38,3,a photo of a motorcycle,1,0,1,False
+-1,"(39, 3)",A photo of unseen interaction.,39,3,a photo of a motorcycle,1,0,1,False
+-1,"(40, 3)",A photo of unseen interaction.,40,3,a photo of a motorcycle,2,0,2,False
+-1,"(42, 3)",A photo of unseen interaction.,42,3,a photo of a motorcycle,2,0,2,False
+-1,"(44, 3)",A photo of unseen interaction.,44,3,a photo of a motorcycle,1,0,1,False
+-1,"(45, 3)",A photo of unseen interaction.,45,3,a photo of a motorcycle,1,0,1,False
+-1,"(21, 22)",A photo of unseen interaction.,21,22,a photo of a zebra,14,0,14,False
+-1,"(60, 61)",A photo of unseen interaction.,60,61,a photo of a toilet,8,0,8,False
+-1,"(62, 63)",A photo of unseen interaction.,62,63,a photo of a laptop,5,0,5,False
+-1,"(64, 65)",A photo of unseen interaction.,64,65,a photo of a remote,5,0,5,False
+-1,"(66, 67)",A photo of unseen interaction.,66,67,a photo of a cell phone,4,0,4,False
+-1,"(20, 16)",A photo of unseen interaction.,20,16,a photo of a dog,6,0,6,False
+-1,"(21, 16)",A photo of unseen interaction.,21,16,a photo of a dog,5,0,5,False
+-1,"(23, 16)",A photo of unseen interaction.,23,16,a photo of a dog,3,0,3,False
+-1,"(24, 16)",A photo of unseen interaction.,24,16,a photo of a dog,3,0,3,False
+-1,"(25, 16)",A photo of unseen interaction.,25,16,a photo of a dog,2,0,2,False
+-1,"(27, 16)",A photo of unseen interaction.,27,16,a photo of a dog,2,0,2,False
+-1,"(29, 16)",A photo of unseen interaction.,29,16,a photo of a dog,2,0,2,False
+-1,"(31, 16)",A photo of unseen interaction.,31,16,a photo of a dog,1,0,1,False
+-1,"(3, 0)",A photo of unseen interaction.,3,0,a photo of a person,8,0,8,False
+-1,"(4, 0)",A photo of unseen interaction.,4,0,a photo of a person,6,0,6,False
+-1,"(5, 0)",A photo of unseen interaction.,5,0,a photo of a person,4,0,4,False
+-1,"(9, 4)",A photo of unseen interaction.,9,4,a photo of an airplane,13,0,13,False
+-1,"(10, 4)",A photo of unseen interaction.,10,4,a photo of an airplane,11,0,11,False
+-1,"(11, 4)",A photo of unseen interaction.,11,4,a photo of an airplane,12,0,12,False
+-1,"(12, 4)",A photo of unseen interaction.,12,4,a photo of an airplane,11,0,11,False
+-1,"(13, 4)",A photo of unseen interaction.,13,4,a photo of an airplane,11,0,11,False
+-1,"(13, 5)",A photo of unseen interaction.,13,5,a photo of a bus,13,0,13,False
+-1,"(14, 2)",A photo of unseen interaction.,14,2,a photo of a car,11,0,11,False
+-1,"(14, 4)",A photo of unseen interaction.,14,4,a photo of an airplane,9,0,9,False
+-1,"(14, 5)",A photo of unseen interaction.,14,5,a photo of a bus,10,0,10,False
+-1,"(14, 6)",A photo of unseen interaction.,14,6,a photo of a train,8,0,8,False
+-1,"(15, 2)",A photo of unseen interaction.,15,2,a photo of a car,8,0,8,False
+-1,"(15, 4)",A photo of unseen interaction.,15,4,a photo of an airplane,7,0,7,False
+-1,"(15, 5)",A photo of unseen interaction.,15,5,a photo of a bus,10,0,10,False
+-1,"(15, 6)",A photo of unseen interaction.,15,6,a photo of a train,7,0,7,False
+-1,"(16, 2)",A photo of unseen interaction.,16,2,a photo of a car,8,0,8,False
+-1,"(16, 4)",A photo of unseen interaction.,16,4,a photo of an airplane,7,0,7,False
+-1,"(16, 5)",A photo of unseen interaction.,16,5,a photo of a bus,10,0,10,False
+-1,"(16, 6)",A photo of unseen interaction.,16,6,a photo of a train,7,0,7,False
+-1,"(17, 6)",A photo of unseen interaction.,17,6,a photo of a train,5,0,5,False
+-1,"(18, 2)",A photo of unseen interaction.,18,2,a photo of a car,6,0,6,False
+-1,"(18, 4)",A photo of unseen interaction.,18,4,a photo of an airplane,5,0,5,False
+-1,"(18, 5)",A photo of unseen interaction.,18,5,a photo of a bus,6,0,6,False
+-1,"(18, 6)",A photo of unseen interaction.,18,6,a photo of a train,5,0,5,False
+-1,"(19, 2)",A photo of unseen interaction.,19,2,a photo of a car,6,0,6,False
+-1,"(19, 4)",A photo of unseen interaction.,19,4,a photo of an airplane,4,0,4,False
+-1,"(19, 5)",A photo of unseen interaction.,19,5,a photo of a bus,4,0,4,False
+-1,"(19, 6)",A photo of unseen interaction.,19,6,a photo of a train,3,0,3,False
+-1,"(18, 11)",A photo of unseen interaction.,18,11,a photo of a stop sign,4,0,4,False
+-1,"(14, 8)",A photo of unseen interaction.,14,8,a photo of a boat,9,0,9,False
+-1,"(15, 8)",A photo of unseen interaction.,15,8,a photo of a boat,4,0,4,False
+-1,"(16, 8)",A photo of unseen interaction.,16,8,a photo of a boat,4,0,4,False
+-1,"(16, 9)",A photo of unseen interaction.,16,9,a photo of a traffic light,3,0,3,False
+-1,"(17, 8)",A photo of unseen interaction.,17,8,a photo of a boat,3,0,3,False
+-1,"(17, 9)",A photo of unseen interaction.,17,9,a photo of a traffic light,1,0,1,False
+-1,"(18, 7)",A photo of unseen interaction.,18,7,a photo of a truck,3,0,3,False
+-1,"(18, 8)",A photo of unseen interaction.,18,8,a photo of a boat,3,0,3,False
+-1,"(18, 9)",A photo of unseen interaction.,18,9,a photo of a traffic light,2,0,2,False
+-1,"(18, 10)",A photo of unseen interaction.,18,10,a photo of a fire hydrant,5,0,5,False
+-1,"(19, 13)",A photo of unseen interaction.,19,13,a photo of a bench,3,0,3,False
+-1,"(19, 7)",A photo of unseen interaction.,19,7,a photo of a truck,2,0,2,False
+-1,"(19, 8)",A photo of unseen interaction.,19,8,a photo of a boat,1,0,1,False
+-1,"(19, 9)",A photo of unseen interaction.,19,9,a photo of a traffic light,1,0,1,False
+-1,"(19, 10)",A photo of unseen interaction.,19,10,a photo of a fire hydrant,3,0,3,False
+-1,"(20, 13)",A photo of unseen interaction.,20,13,a photo of a bench,3,0,3,False
+-1,"(20, 1)",A photo of unseen interaction.,20,1,a photo of a bicycle,12,0,12,False
+-1,"(20, 2)",A photo of unseen interaction.,20,2,a photo of a car,4,0,4,False
+-1,"(20, 4)",A photo of unseen interaction.,20,4,a photo of an airplane,3,0,3,False
+-1,"(20, 5)",A photo of unseen interaction.,20,5,a photo of a bus,4,0,4,False
+-1,"(20, 6)",A photo of unseen interaction.,20,6,a photo of a train,3,0,3,False
+-1,"(20, 8)",A photo of unseen interaction.,20,8,a photo of a boat,2,0,2,False
+-1,"(20, 9)",A photo of unseen interaction.,20,9,a photo of a traffic light,1,0,1,False
+-1,"(20, 10)",A photo of unseen interaction.,20,10,a photo of a fire hydrant,2,0,2,False
+-1,"(20, 11)",A photo of unseen interaction.,20,11,a photo of a stop sign,1,0,1,False
+-1,"(21, 13)",A photo of unseen interaction.,21,13,a photo of a bench,3,0,3,False
+-1,"(21, 1)",A photo of unseen interaction.,21,1,a photo of a bicycle,14,0,14,False
+-1,"(21, 4)",A photo of unseen interaction.,21,4,a photo of an airplane,4,0,4,False
+-1,"(21, 9)",A photo of unseen interaction.,21,9,a photo of a traffic light,1,0,1,False
+-1,"(21, 10)",A photo of unseen interaction.,21,10,a photo of a fire hydrant,2,0,2,False
+-1,"(21, 11)",A photo of unseen interaction.,21,11,a photo of a stop sign,1,0,1,False
+-1,"(22, 1)",A photo of unseen interaction.,22,1,a photo of a bicycle,10,0,10,False
+-1,"(22, 2)",A photo of unseen interaction.,22,2,a photo of a car,2,0,2,False
+-1,"(22, 4)",A photo of unseen interaction.,22,4,a photo of an airplane,1,0,1,False
+-1,"(22, 5)",A photo of unseen interaction.,22,5,a photo of a bus,2,0,2,False
+-1,"(22, 6)",A photo of unseen interaction.,22,6,a photo of a train,1,0,1,False
+-1,"(22, 8)",A photo of unseen interaction.,22,8,a photo of a boat,2,0,2,False
+-1,"(22, 9)",A photo of unseen interaction.,22,9,a photo of a traffic light,1,0,1,False
+-1,"(22, 10)",A photo of unseen interaction.,22,10,a photo of a fire hydrant,1,0,1,False
+-1,"(22, 11)",A photo of unseen interaction.,22,11,a photo of a stop sign,1,0,1,False
+-1,"(23, 13)",A photo of unseen interaction.,23,13,a photo of a bench,1,0,1,False
+-1,"(23, 1)",A photo of unseen interaction.,23,1,a photo of a bicycle,10,0,10,False
+-1,"(23, 2)",A photo of unseen interaction.,23,2,a photo of a car,2,0,2,False
+-1,"(23, 4)",A photo of unseen interaction.,23,4,a photo of an airplane,2,0,2,False
+-1,"(23, 5)",A photo of unseen interaction.,23,5,a photo of a bus,2,0,2,False
+-1,"(23, 6)",A photo of unseen interaction.,23,6,a photo of a train,1,0,1,False
+-1,"(23, 7)",A photo of unseen interaction.,23,7,a photo of a truck,1,0,1,False
+-1,"(23, 8)",A photo of unseen interaction.,23,8,a photo of a boat,1,0,1,False
+-1,"(23, 9)",A photo of unseen interaction.,23,9,a photo of a traffic light,1,0,1,False
+-1,"(23, 10)",A photo of unseen interaction.,23,10,a photo of a fire hydrant,1,0,1,False
+-1,"(23, 11)",A photo of unseen interaction.,23,11,a photo of a stop sign,1,0,1,False
+-1,"(24, 13)",A photo of unseen interaction.,24,13,a photo of a bench,1,0,1,False
+-1,"(24, 1)",A photo of unseen interaction.,24,1,a photo of a bicycle,8,0,8,False
+-1,"(24, 2)",A photo of unseen interaction.,24,2,a photo of a car,2,0,2,False
+-1,"(24, 4)",A photo of unseen interaction.,24,4,a photo of an airplane,1,0,1,False
+-1,"(24, 5)",A photo of unseen interaction.,24,5,a photo of a bus,1,0,1,False
+-1,"(24, 6)",A photo of unseen interaction.,24,6,a photo of a train,1,0,1,False
+-1,"(24, 7)",A photo of unseen interaction.,24,7,a photo of a truck,2,0,2,False
+-1,"(24, 8)",A photo of unseen interaction.,24,8,a photo of a boat,1,0,1,False
+-1,"(24, 9)",A photo of unseen interaction.,24,9,a photo of a traffic light,1,0,1,False
+-1,"(24, 10)",A photo of unseen interaction.,24,10,a photo of a fire hydrant,1,0,1,False
+-1,"(24, 11)",A photo of unseen interaction.,24,11,a photo of a stop sign,1,0,1,False
+-1,"(25, 13)",A photo of unseen interaction.,25,13,a photo of a bench,1,0,1,False
+-1,"(25, 1)",A photo of unseen interaction.,25,1,a photo of a bicycle,8,0,8,False
+-1,"(25, 2)",A photo of unseen interaction.,25,2,a photo of a car,2,0,2,False
+-1,"(25, 7)",A photo of unseen interaction.,25,7,a photo of a truck,2,0,2,False
+-1,"(25, 9)",A photo of unseen interaction.,25,9,a photo of a traffic light,1,0,1,False
+-1,"(25, 10)",A photo of unseen interaction.,25,10,a photo of a fire hydrant,1,0,1,False
+-1,"(25, 11)",A photo of unseen interaction.,25,11,a photo of a stop sign,1,0,1,False
+-1,"(15, 14)",A photo of unseen interaction.,15,14,a photo of a bird,11,0,11,False
+-1,"(16, 14)",A photo of unseen interaction.,16,14,a photo of a bird,10,0,10,False
+-1,"(17, 14)",A photo of unseen interaction.,17,14,a photo of a bird,9,0,9,False
+-1,"(18, 14)",A photo of unseen interaction.,18,14,a photo of a bird,6,0,6,False
+-1,"(19, 14)",A photo of unseen interaction.,19,14,a photo of a bird,5,0,5,False
+-1,"(20, 14)",A photo of unseen interaction.,20,14,a photo of a bird,6,0,6,False
+-1,"(21, 14)",A photo of unseen interaction.,21,14,a photo of a bird,6,0,6,False
+-1,"(22, 14)",A photo of unseen interaction.,22,14,a photo of a bird,6,0,6,False
+-1,"(23, 14)",A photo of unseen interaction.,23,14,a photo of a bird,5,0,5,False
+-1,"(24, 14)",A photo of unseen interaction.,24,14,a photo of a bird,3,0,3,False
+-1,"(25, 14)",A photo of unseen interaction.,25,14,a photo of a bird,3,0,3,False
+-1,"(18, 17)",A photo of unseen interaction.,18,17,a photo of a horse,5,0,5,False
+-1,"(5, 7)",A photo of unseen interaction.,5,7,a photo of a truck,10,0,10,False
+-1,"(5, 8)",A photo of unseen interaction.,5,8,a photo of a boat,4,0,4,False
+-1,"(5, 9)",A photo of unseen interaction.,5,9,a photo of a traffic light,3,0,3,False
+-1,"(5, 10)",A photo of unseen interaction.,5,10,a photo of a fire hydrant,3,0,3,False
+-1,"(40, 37)",A photo of unseen interaction.,40,37,a photo of a surfboard,3,0,3,False
+-1,"(29, 1)",A photo of unseen interaction.,29,1,a photo of a bicycle,5,0,5,False
+-1,"(32, 1)",A photo of unseen interaction.,32,1,a photo of a bicycle,4,0,4,False
+-1,"(33, 1)",A photo of unseen interaction.,33,1,a photo of a bicycle,3,0,3,False
+-1,"(35, 1)",A photo of unseen interaction.,35,1,a photo of a bicycle,3,0,3,False
+-1,"(42, 41)",A photo of unseen interaction.,42,41,a photo of a cup,1,0,1,False
+-1,"(43, 41)",A photo of unseen interaction.,43,41,a photo of a cup,1,0,1,False
+-1,"(46, 45)",A photo of unseen interaction.,46,45,a photo of a bowl,1,0,1,False
+-1,"(47, 41)",A photo of unseen interaction.,47,41,a photo of a cup,1,0,1,False
+-1,"(49, 45)",A photo of unseen interaction.,49,45,a photo of a bowl,1,0,1,False
+-1,"(50, 41)",A photo of unseen interaction.,50,41,a photo of a cup,1,0,1,False
+-1,"(51, 41)",A photo of unseen interaction.,51,41,a photo of a cup,1,0,1,False
+-1,"(52, 41)",A photo of unseen interaction.,52,41,a photo of a cup,1,0,1,False
+-1,"(53, 41)",A photo of unseen interaction.,53,41,a photo of a cup,1,0,1,False
+-1,"(54, 41)",A photo of unseen interaction.,54,41,a photo of a cup,1,0,1,False
+-1,"(55, 41)",A photo of unseen interaction.,55,41,a photo of a cup,1,0,1,False
+-1,"(56, 41)",A photo of unseen interaction.,56,41,a photo of a cup,1,0,1,False
+-1,"(58, 45)",A photo of unseen interaction.,58,45,a photo of a bowl,1,0,1,False
+-1,"(59, 45)",A photo of unseen interaction.,59,45,a photo of a bowl,1,0,1,False
+-1,"(60, 45)",A photo of unseen interaction.,60,45,a photo of a bowl,1,0,1,False
+-1,"(61, 45)",A photo of unseen interaction.,61,45,a photo of a bowl,1,0,1,False
+-1,"(62, 45)",A photo of unseen interaction.,62,45,a photo of a bowl,1,0,1,False
+-1,"(63, 45)",A photo of unseen interaction.,63,45,a photo of a bowl,1,0,1,False
+-1,"(64, 45)",A photo of unseen interaction.,64,45,a photo of a bowl,1,0,1,False
+-1,"(65, 45)",A photo of unseen interaction.,65,45,a photo of a bowl,1,0,1,False
+-1,"(66, 41)",A photo of unseen interaction.,66,41,a photo of a cup,1,0,1,False
+-1,"(67, 41)",A photo of unseen interaction.,67,41,a photo of a cup,1,0,1,False
+-1,"(68, 45)",A photo of unseen interaction.,68,45,a photo of a bowl,1,0,1,False
+-1,"(69, 45)",A photo of unseen interaction.,69,45,a photo of a bowl,1,0,1,False
+-1,"(70, 41)",A photo of unseen interaction.,70,41,a photo of a cup,1,0,1,False
+-1,"(71, 45)",A photo of unseen interaction.,71,45,a photo of a bowl,1,0,1,False
+-1,"(72, 41)",A photo of unseen interaction.,72,41,a photo of a cup,1,0,1,False
+-1,"(73, 45)",A photo of unseen interaction.,73,45,a photo of a bowl,1,0,1,False
+-1,"(74, 45)",A photo of unseen interaction.,74,45,a photo of a bowl,1,0,1,False
+-1,"(75, 45)",A photo of unseen interaction.,75,45,a photo of a bowl,1,0,1,False
+-1,"(76, 45)",A photo of unseen interaction.,76,45,a photo of a bowl,1,0,1,False
+-1,"(77, 45)",A photo of unseen interaction.,77,45,a photo of a bowl,1,0,1,False
+-1,"(22, 13)",A photo of unseen interaction.,22,13,a photo of a bench,2,0,2,False
+-1,"(19, 17)",A photo of unseen interaction.,19,17,a photo of a horse,2,0,2,False
+-1,"(20, 17)",A photo of unseen interaction.,20,17,a photo of a horse,2,0,2,False
+-1,"(21, 17)",A photo of unseen interaction.,21,17,a photo of a horse,2,0,2,False
+-1,"(22, 17)",A photo of unseen interaction.,22,17,a photo of a horse,2,0,2,False
+-1,"(23, 17)",A photo of unseen interaction.,23,17,a photo of a horse,1,0,1,False
+-1,"(26, 25)",A photo of unseen interaction.,26,25,a photo of a umbrella,3,0,3,False
+-1,"(27, 25)",A photo of unseen interaction.,27,25,a photo of a umbrella,2,0,2,False
+-1,"(29, 25)",A photo of unseen interaction.,29,25,a photo of a umbrella,2,0,2,False
+-1,"(31, 25)",A photo of unseen interaction.,31,25,a photo of a umbrella,1,0,1,False
+-1,"(10, 13)",A photo of unseen interaction.,10,13,a photo of a bench,1,0,1,False
+-1,"(1, 4)",A photo of unseen interaction.,1,4,a photo of an airplane,1,0,1,False
+-1,"(3, 6)",A photo of unseen interaction.,3,6,a photo of a train,7,0,7,False
+-1,"(1, 7)",A photo of unseen interaction.,1,7,a photo of a truck,1,0,1,False
+-1,"(16, 19)",A photo of unseen interaction.,16,19,a photo of a cow,1,0,1,False
+-1,"(16, 20)",A photo of unseen interaction.,16,20,a photo of an elephant,1,0,1,False
+-1,"(16, 21)",A photo of unseen interaction.,16,21,a photo of a bear,1,0,1,False
+-1,"(16, 22)",A photo of unseen interaction.,16,22,a photo of a zebra,1,0,1,False
+-1,"(16, 23)",A photo of unseen interaction.,16,23,a photo of a giraffe,1,0,1,False
+-1,"(16, 24)",A photo of unseen interaction.,16,24,a photo of a backpack,1,0,1,False
+-1,"(16, 25)",A photo of unseen interaction.,16,25,a photo of a umbrella,1,0,1,False
+-1,"(16, 26)",A photo of unseen interaction.,16,26,a photo of a handbag,1,0,1,False
+-1,"(27, 17)",A photo of unseen interaction.,27,17,a photo of a horse,1,0,1,False
+-1,"(27, 19)",A photo of unseen interaction.,27,19,a photo of a cow,1,0,1,False
+-1,"(27, 21)",A photo of unseen interaction.,27,21,a photo of a bear,1,0,1,False
+-1,"(27, 22)",A photo of unseen interaction.,27,22,a photo of a zebra,1,0,1,False
+-1,"(27, 23)",A photo of unseen interaction.,27,23,a photo of a giraffe,1,0,1,False
+-1,"(37, 39)",A photo of unseen interaction.,37,39,a photo of a bottle,1,0,1,False
+-1,"(37, 40)",A photo of unseen interaction.,37,40,a photo of a wine glass,1,0,1,False
+-1,"(37, 41)",A photo of unseen interaction.,37,41,a photo of a cup,1,0,1,False
+-1,"(26, 1)",A photo of unseen interaction.,26,1,a photo of a bicycle,7,0,7,False
+-1,"(29, 28)",A photo of unseen interaction.,29,28,a photo of a suitcase,2,0,2,False
+-1,"(30, 28)",A photo of unseen interaction.,30,28,a photo of a suitcase,1,0,1,False
+-1,"(32, 28)",A photo of unseen interaction.,32,28,a photo of a suitcase,2,0,2,False
+-1,"(33, 28)",A photo of unseen interaction.,33,28,a photo of a suitcase,1,0,1,False
+-1,"(34, 28)",A photo of unseen interaction.,34,28,a photo of a suitcase,1,0,1,False
+-1,"(35, 28)",A photo of unseen interaction.,35,28,a photo of a suitcase,1,0,1,False
+-1,"(37, 28)",A photo of unseen interaction.,37,28,a photo of a suitcase,2,0,2,False
+-1,"(38, 28)",A photo of unseen interaction.,38,28,a photo of a suitcase,2,0,2,False
+-1,"(40, 28)",A photo of unseen interaction.,40,28,a photo of a suitcase,2,0,2,False
+-1,"(41, 28)",A photo of unseen interaction.,41,28,a photo of a suitcase,2,0,2,False
+-1,"(42, 28)",A photo of unseen interaction.,42,28,a photo of a suitcase,2,0,2,False
+-1,"(43, 28)",A photo of unseen interaction.,43,28,a photo of a suitcase,1,0,1,False
+-1,"(44, 28)",A photo of unseen interaction.,44,28,a photo of a suitcase,1,0,1,False
+-1,"(45, 28)",A photo of unseen interaction.,45,28,a photo of a suitcase,1,0,1,False
+-1,"(46, 28)",A photo of unseen interaction.,46,28,a photo of a suitcase,1,0,1,False
+-1,"(47, 28)",A photo of unseen interaction.,47,28,a photo of a suitcase,1,0,1,False
+-1,"(48, 28)",A photo of unseen interaction.,48,28,a photo of a suitcase,1,0,1,False
+-1,"(49, 28)",A photo of unseen interaction.,49,28,a photo of a suitcase,1,0,1,False
+-1,"(50, 28)",A photo of unseen interaction.,50,28,a photo of a suitcase,1,0,1,False
+-1,"(51, 28)",A photo of unseen interaction.,51,28,a photo of a suitcase,1,0,1,False
+-1,"(40, 1)",A photo of unseen interaction.,40,1,a photo of a bicycle,1,0,1,False
+-1,"(40, 2)",A photo of unseen interaction.,40,2,a photo of a car,1,0,1,False
+-1,"(40, 4)",A photo of unseen interaction.,40,4,a photo of an airplane,1,0,1,False
+-1,"(40, 5)",A photo of unseen interaction.,40,5,a photo of a bus,1,0,1,False
+-1,"(40, 6)",A photo of unseen interaction.,40,6,a photo of a train,1,0,1,False
+-1,"(40, 7)",A photo of unseen interaction.,40,7,a photo of a truck,1,0,1,False
+-1,"(40, 8)",A photo of unseen interaction.,40,8,a photo of a boat,1,0,1,False
+-1,"(40, 9)",A photo of unseen interaction.,40,9,a photo of a traffic light,1,0,1,False
+-1,"(40, 10)",A photo of unseen interaction.,40,10,a photo of a fire hydrant,1,0,1,False
+-1,"(40, 11)",A photo of unseen interaction.,40,11,a photo of a stop sign,1,0,1,False
+-1,"(40, 12)",A photo of unseen interaction.,40,12,a photo of a parking meter,1,0,1,False
+-1,"(40, 13)",A photo of unseen interaction.,40,13,a photo of a bench,1,0,1,False
+-1,"(40, 14)",A photo of unseen interaction.,40,14,a photo of a bird,1,0,1,False
+-1,"(40, 15)",A photo of unseen interaction.,40,15,a photo of a cat,1,0,1,False
+-1,"(40, 16)",A photo of unseen interaction.,40,16,a photo of a dog,1,0,1,False
+-1,"(40, 17)",A photo of unseen interaction.,40,17,a photo of a horse,1,0,1,False
+-1,"(40, 18)",A photo of unseen interaction.,40,18,a photo of a sheep,1,0,1,False
+-1,"(40, 19)",A photo of unseen interaction.,40,19,a photo of a cow,1,0,1,False
+-1,"(40, 20)",A photo of unseen interaction.,40,20,a photo of an elephant,1,0,1,False
+-1,"(40, 22)",A photo of unseen interaction.,40,22,a photo of a zebra,1,0,1,False
+-1,"(40, 23)",A photo of unseen interaction.,40,23,a photo of a giraffe,1,0,1,False
+-1,"(40, 24)",A photo of unseen interaction.,40,24,a photo of a backpack,1,0,1,False
+-1,"(40, 25)",A photo of unseen interaction.,40,25,a photo of a umbrella,1,0,1,False
+-1,"(40, 27)",A photo of unseen interaction.,40,27,a photo of a tie,1,0,1,False
+-1,"(40, 29)",A photo of unseen interaction.,40,29,a photo of a frisbee,1,0,1,False
+-1,"(40, 30)",A photo of unseen interaction.,40,30,a photo of a skis,1,0,1,False
+-1,"(40, 31)",A photo of unseen interaction.,40,31,a photo of a snowboard,1,0,1,False
+-1,"(40, 32)",A photo of unseen interaction.,40,32,a photo of a sports ball,1,0,1,False
+-1,"(40, 33)",A photo of unseen interaction.,40,33,a photo of a kite,1,0,1,False
+-1,"(40, 34)",A photo of unseen interaction.,40,34,a photo of a baseball bat,2,0,2,False
+-1,"(40, 35)",A photo of unseen interaction.,40,35,a photo of a baseball glove,1,0,1,False
+-1,"(40, 38)",A photo of unseen interaction.,40,38,a photo of a tennis racket,1,0,1,False
+-1,"(40, 39)",A photo of unseen interaction.,40,39,a photo of a bottle,2,0,2,False
+-1,"(41, 6)",A photo of unseen interaction.,41,6,a photo of a train,1,0,1,False
+-1,"(41, 9)",A photo of unseen interaction.,41,9,a photo of a traffic light,1,0,1,False
+-1,"(41, 11)",A photo of unseen interaction.,41,11,a photo of a stop sign,1,0,1,False
+-1,"(41, 12)",A photo of unseen interaction.,41,12,a photo of a parking meter,1,0,1,False
+-1,"(41, 14)",A photo of unseen interaction.,41,14,a photo of a bird,1,0,1,False
+-1,"(41, 15)",A photo of unseen interaction.,41,15,a photo of a cat,1,0,1,False
+-1,"(41, 17)",A photo of unseen interaction.,41,17,a photo of a horse,1,0,1,False
+-1,"(41, 18)",A photo of unseen interaction.,41,18,a photo of a sheep,1,0,1,False
+-1,"(41, 19)",A photo of unseen interaction.,41,19,a photo of a cow,1,0,1,False
+-1,"(41, 20)",A photo of unseen interaction.,41,20,a photo of an elephant,1,0,1,False
+-1,"(41, 21)",A photo of unseen interaction.,41,21,a photo of a bear,1,0,1,False
+-1,"(41, 22)",A photo of unseen interaction.,41,22,a photo of a zebra,1,0,1,False
+-1,"(41, 23)",A photo of unseen interaction.,41,23,a photo of a giraffe,1,0,1,False
+-1,"(41, 25)",A photo of unseen interaction.,41,25,a photo of a umbrella,1,0,1,False
+-1,"(41, 29)",A photo of unseen interaction.,41,29,a photo of a frisbee,1,0,1,False
+-1,"(41, 31)",A photo of unseen interaction.,41,31,a photo of a snowboard,1,0,1,False
+-1,"(41, 34)",A photo of unseen interaction.,41,34,a photo of a baseball bat,1,0,1,False
+-1,"(41, 35)",A photo of unseen interaction.,41,35,a photo of a baseball glove,1,0,1,False
+-1,"(42, 1)",A photo of unseen interaction.,42,1,a photo of a bicycle,1,0,1,False
+-1,"(42, 2)",A photo of unseen interaction.,42,2,a photo of a car,1,0,1,False
+-1,"(42, 4)",A photo of unseen interaction.,42,4,a photo of an airplane,1,0,1,False
+-1,"(42, 5)",A photo of unseen interaction.,42,5,a photo of a bus,1,0,1,False
+-1,"(42, 6)",A photo of unseen interaction.,42,6,a photo of a train,1,0,1,False
+-1,"(42, 7)",A photo of unseen interaction.,42,7,a photo of a truck,1,0,1,False
+-1,"(42, 8)",A photo of unseen interaction.,42,8,a photo of a boat,1,0,1,False
+-1,"(42, 10)",A photo of unseen interaction.,42,10,a photo of a fire hydrant,1,0,1,False
+-1,"(42, 11)",A photo of unseen interaction.,42,11,a photo of a stop sign,1,0,1,False
+-1,"(42, 12)",A photo of unseen interaction.,42,12,a photo of a parking meter,1,0,1,False
+-1,"(42, 13)",A photo of unseen interaction.,42,13,a photo of a bench,1,0,1,False
+-1,"(42, 14)",A photo of unseen interaction.,42,14,a photo of a bird,1,0,1,False
+-1,"(42, 15)",A photo of unseen interaction.,42,15,a photo of a cat,1,0,1,False
+-1,"(42, 16)",A photo of unseen interaction.,42,16,a photo of a dog,1,0,1,False
+-1,"(42, 17)",A photo of unseen interaction.,42,17,a photo of a horse,1,0,1,False
+-1,"(42, 18)",A photo of unseen interaction.,42,18,a photo of a sheep,1,0,1,False
+-1,"(42, 19)",A photo of unseen interaction.,42,19,a photo of a cow,1,0,1,False
+-1,"(42, 20)",A photo of unseen interaction.,42,20,a photo of an elephant,1,0,1,False
+-1,"(42, 21)",A photo of unseen interaction.,42,21,a photo of a bear,1,0,1,False
+-1,"(42, 22)",A photo of unseen interaction.,42,22,a photo of a zebra,1,0,1,False
+-1,"(42, 23)",A photo of unseen interaction.,42,23,a photo of a giraffe,1,0,1,False
+-1,"(42, 24)",A photo of unseen interaction.,42,24,a photo of a backpack,1,0,1,False
+-1,"(42, 25)",A photo of unseen interaction.,42,25,a photo of a umbrella,1,0,1,False
+-1,"(42, 27)",A photo of unseen interaction.,42,27,a photo of a tie,1,0,1,False
+-1,"(42, 29)",A photo of unseen interaction.,42,29,a photo of a frisbee,1,0,1,False
+-1,"(42, 30)",A photo of unseen interaction.,42,30,a photo of a skis,1,0,1,False
+-1,"(42, 31)",A photo of unseen interaction.,42,31,a photo of a snowboard,1,0,1,False
+-1,"(42, 32)",A photo of unseen interaction.,42,32,a photo of a sports ball,1,0,1,False
+-1,"(42, 33)",A photo of unseen interaction.,42,33,a photo of a kite,1,0,1,False
+-1,"(42, 34)",A photo of unseen interaction.,42,34,a photo of a baseball bat,1,0,1,False
+-1,"(42, 35)",A photo of unseen interaction.,42,35,a photo of a baseball glove,1,0,1,False
+-1,"(42, 36)",A photo of unseen interaction.,42,36,a photo of a skateboard,1,0,1,False
+-1,"(42, 37)",A photo of unseen interaction.,42,37,a photo of a surfboard,1,0,1,False
+-1,"(42, 38)",A photo of unseen interaction.,42,38,a photo of a tennis racket,1,0,1,False
+-1,"(42, 39)",A photo of unseen interaction.,42,39,a photo of a bottle,1,0,1,False
+-1,"(5, 11)",A photo of unseen interaction.,5,11,a photo of a stop sign,1,0,1,False
+-1,"(5, 12)",A photo of unseen interaction.,5,12,a photo of a parking meter,1,0,1,False
+-1,"(18, 20)",A photo of unseen interaction.,18,20,a photo of an elephant,3,0,3,False
+-1,"(23, 22)",A photo of unseen interaction.,23,22,a photo of a zebra,1,0,1,False
+-1,"(24, 23)",A photo of unseen interaction.,24,23,a photo of a giraffe,2,0,2,False
+-1,"(25, 19)",A photo of unseen interaction.,25,19,a photo of a cow,1,0,1,False
+-1,"(24, 26)",A photo of unseen interaction.,24,26,a photo of a handbag,1,0,1,False
+-1,"(31, 30)",A photo of unseen interaction.,31,30,a photo of a skis,2,0,2,False
+-1,"(37, 19)",A photo of unseen interaction.,37,19,a photo of a cow,1,0,1,False
+-1,"(27, 1)",A photo of unseen interaction.,27,1,a photo of a bicycle,6,0,6,False
+-1,"(28, 1)",A photo of unseen interaction.,28,1,a photo of a bicycle,5,0,5,False
+-1,"(31, 1)",A photo of unseen interaction.,31,1,a photo of a bicycle,3,0,3,False
+-1,"(34, 1)",A photo of unseen interaction.,34,1,a photo of a bicycle,2,0,2,False
+-1,"(38, 1)",A photo of unseen interaction.,38,1,a photo of a bicycle,2,0,2,False
+-1,"(39, 1)",A photo of unseen interaction.,39,1,a photo of a bicycle,1,0,1,False
+-1,"(68, 69)",A photo of unseen interaction.,68,69,a photo of an oven,3,0,3,False
+-1,"(70, 71)",A photo of unseen interaction.,70,71,a photo of a sink,2,0,2,False
+-1,"(72, 73)",A photo of unseen interaction.,72,73,a photo of a book,2,0,2,False
+-1,"(74, 75)",A photo of unseen interaction.,74,75,a photo of a vase,2,0,2,False
+-1,"(76, 77)",A photo of unseen interaction.,76,77,a photo of a teddy bear,2,0,2,False
+-1,"(78, 79)",A photo of unseen interaction.,78,79,a photo of a toothbrush,2,0,2,False
+-1,"(80, 81)",A photo of unseen interaction.,80,81,A photo of unseen object.,2,0,2,False
+-1,"(82, 83)",A photo of unseen interaction.,82,83,A photo of unseen object.,2,0,2,False
+-1,"(84, 85)",A photo of unseen interaction.,84,85,A photo of unseen object.,2,0,2,False
+-1,"(86, 87)",A photo of unseen interaction.,86,87,A photo of unseen object.,2,0,2,False
+-1,"(88, 89)",A photo of unseen interaction.,88,89,A photo of unseen object.,2,0,2,False
+-1,"(90, 91)",A photo of unseen interaction.,90,91,A photo of unseen object.,2,0,2,False
+-1,"(92, 93)",A photo of unseen interaction.,92,93,A photo of unseen object.,2,0,2,False
+-1,"(94, 95)",A photo of unseen interaction.,94,95,A photo of unseen object.,1,0,1,False
+-1,"(96, 97)",A photo of unseen interaction.,96,97,A photo of unseen object.,1,0,1,False
+-1,"(98, 99)",A photo of unseen interaction.,98,99,A photo of unseen object.,1,0,1,False
+-1,"(100, 101)",A photo of unseen interaction.,100,101,A photo of unseen object.,1,0,1,False
+-1,"(102, 103)",A photo of unseen interaction.,102,103,A photo of unseen object.,1,0,1,False
+-1,"(104, 105)",A photo of unseen interaction.,104,105,A photo of unseen object.,1,0,1,False
+-1,"(106, 107)",A photo of unseen interaction.,106,107,A photo of unseen object.,1,0,1,False
+-1,"(108, 109)",A photo of unseen interaction.,108,109,A photo of unseen object.,1,0,1,False
+-1,"(110, 111)",A photo of unseen interaction.,110,111,A photo of unseen object.,1,0,1,False
+-1,"(112, 113)",A photo of unseen interaction.,112,113,A photo of unseen object.,1,0,1,False
+-1,"(114, 115)",A photo of unseen interaction.,114,115,A photo of unseen object.,1,0,1,False
+-1,"(116, 117)",A photo of unseen interaction.,116,117,A photo of unseen object.,1,0,1,False
+-1,"(32, 25)",A photo of unseen interaction.,32,25,a photo of a umbrella,2,0,2,False
+-1,"(33, 30)",A photo of unseen interaction.,33,30,a photo of a skis,1,0,1,False
+-1,"(37, 35)",A photo of unseen interaction.,37,35,a photo of a baseball glove,2,0,2,False
+-1,"(2, 18)",A photo of unseen interaction.,2,18,a photo of a sheep,1,0,1,False
+-1,"(2, 19)",A photo of unseen interaction.,2,19,a photo of a cow,1,0,1,False
+-1,"(2, 20)",A photo of unseen interaction.,2,20,a photo of an elephant,1,0,1,False
+-1,"(2, 21)",A photo of unseen interaction.,2,21,a photo of a bear,1,0,1,False
+-1,"(2, 22)",A photo of unseen interaction.,2,22,a photo of a zebra,1,0,1,False
+-1,"(2, 23)",A photo of unseen interaction.,2,23,a photo of a giraffe,1,0,1,False
+-1,"(2, 24)",A photo of unseen interaction.,2,24,a photo of a backpack,1,0,1,False
+-1,"(2, 25)",A photo of unseen interaction.,2,25,a photo of a umbrella,1,0,1,False
+-1,"(2, 26)",A photo of unseen interaction.,2,26,a photo of a handbag,1,0,1,False
+-1,"(2, 27)",A photo of unseen interaction.,2,27,a photo of a tie,1,0,1,False
+-1,"(2, 28)",A photo of unseen interaction.,2,28,a photo of a suitcase,1,0,1,False
+-1,"(26, 2)",A photo of unseen interaction.,26,2,a photo of a car,1,0,1,False
+-1,"(27, 2)",A photo of unseen interaction.,27,2,a photo of a car,1,0,1,False
+-1,"(29, 2)",A photo of unseen interaction.,29,2,a photo of a car,1,0,1,False
+-1,"(3, 7)",A photo of unseen interaction.,3,7,a photo of a truck,4,0,4,False
+-1,"(3, 8)",A photo of unseen interaction.,3,8,a photo of a boat,4,0,4,False
+-1,"(3, 9)",A photo of unseen interaction.,3,9,a photo of a traffic light,4,0,4,False
+-1,"(3, 10)",A photo of unseen interaction.,3,10,a photo of a fire hydrant,4,0,4,False
+-1,"(3, 11)",A photo of unseen interaction.,3,11,a photo of a stop sign,4,0,4,False
+-1,"(3, 12)",A photo of unseen interaction.,3,12,a photo of a parking meter,3,0,3,False
+-1,"(3, 13)",A photo of unseen interaction.,3,13,a photo of a bench,2,0,2,False
+-1,"(3, 14)",A photo of unseen interaction.,3,14,a photo of a bird,2,0,2,False
+-1,"(3, 15)",A photo of unseen interaction.,3,15,a photo of a cat,2,0,2,False
+-1,"(3, 16)",A photo of unseen interaction.,3,16,a photo of a dog,2,0,2,False
+-1,"(3, 17)",A photo of unseen interaction.,3,17,a photo of a horse,2,0,2,False
+-1,"(3, 18)",A photo of unseen interaction.,3,18,a photo of a sheep,1,0,1,False
+-1,"(3, 19)",A photo of unseen interaction.,3,19,a photo of a cow,1,0,1,False
+-1,"(3, 20)",A photo of unseen interaction.,3,20,a photo of an elephant,1,0,1,False
+-1,"(3, 21)",A photo of unseen interaction.,3,21,a photo of a bear,1,0,1,False
+-1,"(3, 22)",A photo of unseen interaction.,3,22,a photo of a zebra,1,0,1,False
+-1,"(3, 23)",A photo of unseen interaction.,3,23,a photo of a giraffe,1,0,1,False
+-1,"(3, 24)",A photo of unseen interaction.,3,24,a photo of a backpack,1,0,1,False
+-1,"(3, 25)",A photo of unseen interaction.,3,25,a photo of a umbrella,1,0,1,False
+-1,"(3, 26)",A photo of unseen interaction.,3,26,a photo of a handbag,1,0,1,False
+-1,"(3, 27)",A photo of unseen interaction.,3,27,a photo of a tie,1,0,1,False
+-1,"(3, 28)",A photo of unseen interaction.,3,28,a photo of a suitcase,1,0,1,False
+-1,"(3, 29)",A photo of unseen interaction.,3,29,a photo of a frisbee,1,0,1,False
+-1,"(3, 30)",A photo of unseen interaction.,3,30,a photo of a skis,1,0,1,False
+-1,"(3, 31)",A photo of unseen interaction.,3,31,a photo of a snowboard,1,0,1,False
+-1,"(32, 4)",A photo of unseen interaction.,32,4,a photo of an airplane,1,0,1,False
+-1,"(32, 5)",A photo of unseen interaction.,32,5,a photo of a bus,1,0,1,False
+-1,"(32, 6)",A photo of unseen interaction.,32,6,a photo of a train,1,0,1,False
+-1,"(32, 7)",A photo of unseen interaction.,32,7,a photo of a truck,1,0,1,False
+-1,"(32, 8)",A photo of unseen interaction.,32,8,a photo of a boat,1,0,1,False
+-1,"(32, 9)",A photo of unseen interaction.,32,9,a photo of a traffic light,1,0,1,False
+-1,"(32, 10)",A photo of unseen interaction.,32,10,a photo of a fire hydrant,1,0,1,False
+-1,"(32, 11)",A photo of unseen interaction.,32,11,a photo of a stop sign,1,0,1,False
+-1,"(32, 12)",A photo of unseen interaction.,32,12,a photo of a parking meter,1,0,1,False
+-1,"(32, 13)",A photo of unseen interaction.,32,13,a photo of a bench,1,0,1,False
+-1,"(32, 14)",A photo of unseen interaction.,32,14,a photo of a bird,1,0,1,False
+-1,"(32, 15)",A photo of unseen interaction.,32,15,a photo of a cat,1,0,1,False
+-1,"(32, 16)",A photo of unseen interaction.,32,16,a photo of a dog,1,0,1,False
+-1,"(32, 17)",A photo of unseen interaction.,32,17,a photo of a horse,1,0,1,False
+-1,"(32, 19)",A photo of unseen interaction.,32,19,a photo of a cow,1,0,1,False
+-1,"(32, 21)",A photo of unseen interaction.,32,21,a photo of a bear,1,0,1,False
+-1,"(32, 22)",A photo of unseen interaction.,32,22,a photo of a zebra,1,0,1,False
+-1,"(32, 23)",A photo of unseen interaction.,32,23,a photo of a giraffe,1,0,1,False
+-1,"(32, 26)",A photo of unseen interaction.,32,26,a photo of a handbag,1,0,1,False
+-1,"(32, 27)",A photo of unseen interaction.,32,27,a photo of a tie,1,0,1,False
+-1,"(32, 29)",A photo of unseen interaction.,32,29,a photo of a frisbee,1,0,1,False
+-1,"(7, 9)",A photo of unseen interaction.,7,9,a photo of a traffic light,6,0,6,False
+-1,"(12, 14)",A photo of unseen interaction.,12,14,a photo of a bird,2,0,2,False
+-1,"(12, 15)",A photo of unseen interaction.,12,15,a photo of a cat,1,0,1,False
+-1,"(13, 16)",A photo of unseen interaction.,13,16,a photo of a dog,2,0,2,False
+-1,"(13, 17)",A photo of unseen interaction.,13,17,a photo of a horse,2,0,2,False
+-1,"(13, 18)",A photo of unseen interaction.,13,18,a photo of a sheep,2,0,2,False
+-1,"(13, 19)",A photo of unseen interaction.,13,19,a photo of a cow,2,0,2,False
+-1,"(13, 20)",A photo of unseen interaction.,13,20,a photo of an elephant,1,0,1,False
+-1,"(13, 21)",A photo of unseen interaction.,13,21,a photo of a bear,1,0,1,False
+-1,"(59, 60)",A photo of unseen interaction.,59,60,a photo of a dining table,2,0,2,False
+-1,"(61, 62)",A photo of unseen interaction.,61,62,a photo of a tv,1,0,1,False
+-1,"(63, 64)",A photo of unseen interaction.,63,64,a photo of a mouse,1,0,1,False
+-1,"(65, 66)",A photo of unseen interaction.,65,66,a photo of a keyboard,1,0,1,False
+-1,"(67, 68)",A photo of unseen interaction.,67,68,a photo of a microwave,1,0,1,False
+-1,"(69, 70)",A photo of unseen interaction.,69,70,a photo of a toaster,1,0,1,False
+-1,"(71, 72)",A photo of unseen interaction.,71,72,a photo of a refrigerator,1,0,1,False
+-1,"(73, 74)",A photo of unseen interaction.,73,74,a photo of a clock,1,0,1,False
+-1,"(75, 76)",A photo of unseen interaction.,75,76,a photo of a scissors,1,0,1,False
+-1,"(77, 78)",A photo of unseen interaction.,77,78,a photo of a hair drier,1,0,1,False
+-1,"(79, 80)",A photo of unseen interaction.,79,80,a photo of nothing,1,0,1,False
+-1,"(81, 82)",A photo of unseen interaction.,81,82,A photo of unseen object.,1,0,1,False
+-1,"(83, 84)",A photo of unseen interaction.,83,84,A photo of unseen object.,1,0,1,False
+-1,"(85, 86)",A photo of unseen interaction.,85,86,A photo of unseen object.,1,0,1,False
+-1,"(87, 88)",A photo of unseen interaction.,87,88,A photo of unseen object.,1,0,1,False
+-1,"(89, 90)",A photo of unseen interaction.,89,90,A photo of unseen object.,1,0,1,False
+-1,"(91, 92)",A photo of unseen interaction.,91,92,A photo of unseen object.,1,0,1,False
+-1,"(93, 94)",A photo of unseen interaction.,93,94,A photo of unseen object.,1,0,1,False
+-1,"(95, 96)",A photo of unseen interaction.,95,96,A photo of unseen object.,1,0,1,False
+-1,"(97, 98)",A photo of unseen interaction.,97,98,A photo of unseen object.,1,0,1,False
+-1,"(99, 100)",A photo of unseen interaction.,99,100,A photo of unseen object.,1,0,1,False
+-1,"(24, 19)",A photo of unseen interaction.,24,19,a photo of a cow,1,0,1,False
+-1,"(27, 14)",A photo of unseen interaction.,27,14,a photo of a bird,2,0,2,False
+-1,"(29, 14)",A photo of unseen interaction.,29,14,a photo of a bird,1,0,1,False
+-1,"(35, 31)",A photo of unseen interaction.,35,31,a photo of a snowboard,1,0,1,False
+-1,"(37, 34)",A photo of unseen interaction.,37,34,a photo of a baseball bat,2,0,2,False
+-1,"(38, 31)",A photo of unseen interaction.,38,31,a photo of a snowboard,1,0,1,False
+-1,"(39, 31)",A photo of unseen interaction.,39,31,a photo of a snowboard,1,0,1,False
+-1,"(32, 34)",A photo of unseen interaction.,32,34,a photo of a baseball bat,1,0,1,False
+-1,"(7, 10)",A photo of unseen interaction.,7,10,a photo of a fire hydrant,1,0,1,False
+-1,"(11, 13)",A photo of unseen interaction.,11,13,a photo of a bench,3,0,3,False
+-1,"(11, 14)",A photo of unseen interaction.,11,14,a photo of a bird,3,0,3,False
+-1,"(11, 15)",A photo of unseen interaction.,11,15,a photo of a cat,3,0,3,False
+-1,"(11, 16)",A photo of unseen interaction.,11,16,a photo of a dog,3,0,3,False
+-1,"(11, 17)",A photo of unseen interaction.,11,17,a photo of a horse,3,0,3,False
+-1,"(23, 25)",A photo of unseen interaction.,23,25,a photo of a umbrella,1,0,1,False
+-1,"(23, 26)",A photo of unseen interaction.,23,26,a photo of a handbag,1,0,1,False
+-1,"(27, 29)",A photo of unseen interaction.,27,29,a photo of a frisbee,1,0,1,False
+-1,"(27, 30)",A photo of unseen interaction.,27,30,a photo of a skis,1,0,1,False
+-1,"(27, 31)",A photo of unseen interaction.,27,31,a photo of a snowboard,1,0,1,False
+-1,"(43, 45)",A photo of unseen interaction.,43,45,a photo of a bowl,1,0,1,False
+-1,"(43, 46)",A photo of unseen interaction.,43,46,a photo of a banana,1,0,1,False
+-1,"(6, 0)",A photo of unseen interaction.,6,0,a photo of a person,2,0,2,False
+-1,"(11, 18)",A photo of unseen interaction.,11,18,a photo of a sheep,2,0,2,False
+-1,"(11, 19)",A photo of unseen interaction.,11,19,a photo of a cow,2,0,2,False
+-1,"(11, 20)",A photo of unseen interaction.,11,20,a photo of an elephant,2,0,2,False
+-1,"(11, 21)",A photo of unseen interaction.,11,21,a photo of a bear,2,0,2,False
+-1,"(11, 22)",A photo of unseen interaction.,11,22,a photo of a zebra,1,0,1,False
+-1,"(11, 23)",A photo of unseen interaction.,11,23,a photo of a giraffe,1,0,1,False
+-1,"(11, 24)",A photo of unseen interaction.,11,24,a photo of a backpack,1,0,1,False
+-1,"(11, 25)",A photo of unseen interaction.,11,25,a photo of a umbrella,1,0,1,False
+-1,"(11, 26)",A photo of unseen interaction.,11,26,a photo of a handbag,1,0,1,False
+-1,"(34, 31)",A photo of unseen interaction.,34,31,a photo of a snowboard,1,0,1,False
+-1,"(35, 27)",A photo of unseen interaction.,35,27,a photo of a tie,1,0,1,False
+-1,"(43, 29)",A photo of unseen interaction.,43,29,a photo of a frisbee,1,0,1,False
+-1,"(25, 23)",A photo of unseen interaction.,25,23,a photo of a giraffe,1,0,1,False
+-1,"(14, 16)",A photo of unseen interaction.,14,16,a photo of a dog,1,0,1,False
+-1,"(20, 22)",A photo of unseen interaction.,20,22,a photo of a zebra,1,0,1,False
+-1,"(20, 23)",A photo of unseen interaction.,20,23,a photo of a giraffe,1,0,1,False
+-1,"(20, 24)",A photo of unseen interaction.,20,24,a photo of a backpack,1,0,1,False
+-1,"(25, 27)",A photo of unseen interaction.,25,27,a photo of a tie,1,0,1,False
+-1,"(25, 28)",A photo of unseen interaction.,25,28,a photo of a suitcase,1,0,1,False
+-1,"(25, 29)",A photo of unseen interaction.,25,29,a photo of a frisbee,1,0,1,False
+-1,"(25, 30)",A photo of unseen interaction.,25,30,a photo of a skis,1,0,1,False
+-1,"(25, 31)",A photo of unseen interaction.,25,31,a photo of a snowboard,1,0,1,False
+-1,"(25, 32)",A photo of unseen interaction.,25,32,a photo of a sports ball,1,0,1,False
+-1,"(25, 33)",A photo of unseen interaction.,25,33,a photo of a kite,1,0,1,False
+-1,"(25, 34)",A photo of unseen interaction.,25,34,a photo of a baseball bat,1,0,1,False
+-1,"(25, 35)",A photo of unseen interaction.,25,35,a photo of a baseball glove,1,0,1,False
+-1,"(25, 36)",A photo of unseen interaction.,25,36,a photo of a skateboard,1,0,1,False
+-1,"(37, 27)",A photo of unseen interaction.,37,27,a photo of a tie,1,0,1,False
+-1,"(37, 29)",A photo of unseen interaction.,37,29,a photo of a frisbee,1,0,1,False
+-1,"(37, 30)",A photo of unseen interaction.,37,30,a photo of a skis,1,0,1,False
+-1,"(37, 31)",A photo of unseen interaction.,37,31,a photo of a snowboard,1,0,1,False
+-1,"(37, 32)",A photo of unseen interaction.,37,32,a photo of a sports ball,1,0,1,False
+-1,"(37, 33)",A photo of unseen interaction.,37,33,a photo of a kite,1,0,1,False
+-1,"(37, 36)",A photo of unseen interaction.,37,36,a photo of a skateboard,1,0,1,False
+-1,"(15, 17)",A photo of unseen interaction.,15,17,a photo of a horse,1,0,1,False
+-1,"(22, 24)",A photo of unseen interaction.,22,24,a photo of a backpack,1,0,1,False
+-1,"(26, 7)",A photo of unseen interaction.,26,7,a photo of a truck,1,0,1,False
+-1,"(27, 5)",A photo of unseen interaction.,27,5,a photo of a bus,1,0,1,False

@@ -18,6 +18,8 @@ from torch import Tensor
 
 # needed due to empty tensor bug in pytorch and torchvision 0.5
 import torchvision
+
+
 # if float(torchvision.__version__[:3]) < 0.7:
 #     from torchvision.ops import _new_empty_tensor
 #     from torchvision.ops.misc import _output_size
@@ -179,10 +181,9 @@ class MetricLogger(object):
         # bbox_loss = ['loss_sub_bbox', 'loss_obj_bbox', 'loss_sub_giou', 'loss_obj_giou']
         # hoi_loss = ['loss_hoi_labels', 'hoi_class_error']  # cross entropy loss, classification error
         # obj_loss = ['loss_obj_ce', 'obj_class_error']  # cross entropy loss, classification error
-        loss_to_log = ["loss",
-                       'loss_sub_bbox', 'loss_obj_bbox', 'loss_sub_giou', 'loss_obj_giou',
-                       'loss_hoi_labels', 'hoi_class_error',
-                        'loss_obj_ce', 'obj_class_error']
+        loss_to_log = ["loss", 'loss_sub_bbox', 'loss_obj_bbox', 'loss_sub_giou', 'loss_obj_giou',
+                       'loss_hoi_labels', 'hoi_class_error', 'loss_sentence_l1', 'loss_obj_ce',
+                       'obj_class_error']
         loss_str = [f"{name.replace('loss_', '')}: {str(meter)}"
                     for name, meter in self.meters.items() if name in loss_to_log]
         # loss_str = [f"{name}: {str(self.meters[name])}" for name in loss_to_log]
@@ -260,6 +261,7 @@ def get_sha():
 
     def _run(command):
         return subprocess.check_output(command, cwd=cwd).decode('ascii').strip()
+
     sha = 'N/A'
     diff = "clean"
     branch = 'N/A'

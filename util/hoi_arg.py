@@ -1,7 +1,23 @@
 import argparse
+import os
+import getpass
+
+
 import datetime
 
-from main import create_log_dir
+# from main import create_log_dir
+
+
+def create_log_dir(checkpoint='checkpoint', log_path='/data/LOG/train_log'):
+    base_dir = os.path.join(log_path, getpass.getuser())
+    exp_name = os.path.basename(os.path.abspath('.'))
+    log_dir = os.path.join(base_dir, exp_name)
+    print(log_dir)
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir, exist_ok=True)
+    if not os.path.exists(checkpoint):
+        cmd = "ln -s {} {}".format(log_dir, checkpoint)
+        os.system(cmd)
 
 
 def get_args_parser():

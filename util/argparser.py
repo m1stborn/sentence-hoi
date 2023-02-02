@@ -191,4 +191,8 @@ def get_args_parser():
 
     parser.add_argument('--dev', action='store_true', help='')
 
+    # sentence hoi
+    parser.add_argument('--with_sentence_branch', action='store_true', help='Use sentence branch')
+    parser.add_argument('--sentence_l1_loss_coef', default=3, type=float)
+
     return parser

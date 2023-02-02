@@ -10,6 +10,7 @@ import util.misc as utils
 from datasets import build_gen_dataset
 from engine_gen import evaluate_hoi
 from models.hoitr import build as build_model
+from models.sentence_critreion import SentenceCriterion
 from util.argparser import get_args_parser
 
 
@@ -25,12 +26,15 @@ def main(args):
     dataset_val = build_gen_dataset(image_set='val', args=args)
     sampler_val = torch.utils.data.SequentialSampler(dataset_val)
 
-    data_loader_val = DataLoader(dataset_val, args.batch_size, sampler=sampler_val,
+    data_loader_val = DataLoader(dataset_val, 8, sampler=sampler_val,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
-    # TODO: load model
     model, criterion, postprocessors = build_model(args)
     model.to(device)
+
+    sen_criterion = None
+    if args.with_sentence_branch:
+        sen_criterion = SentenceCriterion(device=device)
 
     if args.resume:
         checkpoint = torch.load(args.resume, map_location='cpu')
@@ -38,14 +42,8 @@ def main(args):
         print(f"Load model from Epoch {checkpoint['epoch']}")
 
     test_stats = evaluate_hoi(args.dataset_file, model, postprocessors, data_loader_val,
-                              args.subject_category_id, device, args)
+                              args.subject_category_id, device, args, sen_criterion)
     print(test_stats)
-
-    # Evaluate
-    # evaluator = HICOEvaluatorJson("./checkpoint/p_202301160140/results.json", dataset_val.rare_triplets,
-    #                               dataset_val.non_rare_triplets, args=args)
-
-    # evaluator.evaluate()
     return
 
 

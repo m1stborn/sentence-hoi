@@ -1,17 +1,21 @@
-import math
-import os
-import sys
-from typing import Iterable
-import numpy as np
 import copy
 import itertools
+import json
+import math
+import sys
+import time
+from argparse import Namespace
+from typing import Iterable
 
+import numpy as np
 import torch
 
 import util.misc as utils
 from datasets.hico_eval_triplet import HICOEvaluator
-
-from argparse import Namespace
+from datasets.sentence_eval import SentenceEvaluator
+from models.gen_set_criterion import PostProcessHOITriplet
+from models.hoitr import HoiTR
+from models.sentence_critreion import SentenceCriterion
 # from datasets.vcoco_eval import VCOCOEvaluator
 
 
@@ -22,6 +26,7 @@ def train_one_epoch(model: torch.nn.Module,
                     device: torch.device,
                     args: Namespace,
                     epoch: int,
+                    sen_criterion: SentenceCriterion = None,
                     max_norm: float = 0):
     model.train()
     criterion.train()
@@ -43,6 +48,10 @@ def train_one_epoch(model: torch.nn.Module,
         outputs = model(samples)
 
         loss_dict = criterion(outputs, targets)
+        if args.with_sentence_branch:
+            sen_loss = sen_criterion.batch_l1_loss(outputs, targets)
+            loss_dict['loss_sentence_l1'] = sen_loss['l1_loss']
+
         weight_dict = criterion.weight_dict
         losses = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
 
@@ -88,7 +97,14 @@ def train_one_epoch(model: torch.nn.Module,
 
 
 @torch.no_grad()
-def evaluate_hoi(dataset_file, model, postprocessors, data_loader, subject_category_id, device, args):
+def evaluate_hoi(dataset_file,
+                 model: HoiTR,
+                 postprocessors: PostProcessHOITriplet,
+                 data_loader,
+                 subject_category_id,
+                 device,
+                 args,
+                 sen_criterion: SentenceCriterion = None):
     model.eval()
 
     metric_logger = utils.MetricLogger(delimiter="  ")
@@ -96,22 +112,31 @@ def evaluate_hoi(dataset_file, model, postprocessors, data_loader, subject_categ
 
     preds = []
     gts = []
-    indices = []
+    sen_pred = []
 
     for i, (samples, targets) in enumerate(metric_logger.log_every(data_loader, 10, header)):
         samples = samples.to(device)
-        # print(targets)
-        # outputs = model(samples, is_training=False)
         outputs = model(samples)
         orig_target_sizes = torch.stack([t["orig_size"] for t in targets], dim=0)
-        results = postprocessors['hoi'](outputs, orig_target_sizes)
+        # results = postprocessors['hoi'](outputs, orig_target_sizes)
+        results = postprocessors(outputs, orig_target_sizes)
 
         preds.extend(list(itertools.chain.from_iterable(utils.all_gather(results))))
         # For avoiding a runtime error, the copy is used
         gts.extend(list(itertools.chain.from_iterable(utils.all_gather(copy.deepcopy(targets)))))
 
+        # if args.with_sentence_branch:
+        #     sen_pred.extend(sen_criterion.inference(outputs))
+
         if args.dev and i >= 20:
             break
+
+    if args.with_sentence_branch:
+        with open(f"{args.output_dir}/sen_result.jsonl", 'w') as file:
+            for _, r in enumerate(sen_pred):
+                result = json.loads(str(r).replace("\'", "\""))
+                json.dump(result, file)
+                file.write('\n')
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
@@ -127,7 +152,11 @@ def evaluate_hoi(dataset_file, model, postprocessors, data_loader, subject_categ
                                   data_loader.dataset.non_rare_triplets, data_loader.dataset.correct_mat, args=args)
     # elif dataset_file == 'vcoco':
     #     evaluator = VCOCOEvaluator(preds, gts, data_loader.dataset.correct_mat, use_nms_filter=args.use_nms_filter)
-
     stats = evaluator.evaluate()
+
+    # if args.with_sentence_branch:
+    #     sen_eval = SentenceEvaluator(sen_pred, gts, data_loader.dataset.rare_triplets,
+    #                                  data_loader.dataset.non_rare_triplets, args=args)
+    #     sen_eval.evaluate()
 
     return stats

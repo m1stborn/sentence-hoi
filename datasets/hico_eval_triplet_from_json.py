@@ -9,6 +9,37 @@ from util.topk import top_k
 from .hico_text_label import hico_text_label
 
 
+"""
+result.json structure
+{
+    'preds': list[dict] -> dict: {
+        'filename': str,
+        'predictions': list[dict] -> dict: {
+            'bbox': [x1, y1, x2, y2]
+        },
+        'hoi_prediction': list[dict] -> dict :{
+            'subject_id': int, 
+            'object_id': int, 
+            'category_id': int, 
+            'score': float
+        },   
+    },
+    'gts': list[dict] -> dict: {
+        'filename': str,
+        'annotations': list[dict]-> dict: {
+            'bbox': [x1, y1, x2, y2]
+        },
+        'hoi_annotation': list[dict] list[dict] -> dict :{
+            'subject_id': int, 
+            'object_id': int, 
+            'category_id': int, 
+            'score': float
+        }
+    }
+}
+"""
+
+
 class HICOEvaluatorJson:
     def __init__(self, result_json: str, rare_triplets, non_rare_triplets, args):
         self.overlap_iou = 0.5
@@ -58,9 +89,9 @@ class HICOEvaluatorJson:
                 print(f"reformat {result_json}")
             self.preds = result['preds']
 
-        if self.use_nms_filter:
-            print('eval use_nms_filter ...')
-            self.preds = self.triplet_nms_filter(self.preds)
+        # if self.use_nms_filter:
+        #     print('eval use_nms_filter ...')
+        #     self.preds = self.triplet_nms_filter(self.preds)
 
         self.gts = result['gts']
 
@@ -96,8 +127,9 @@ class HICOEvaluatorJson:
                     self.tp[triplet].append(0)
                     self.fp[triplet].append(1)
                     self.score[triplet].append(pred_hoi['score'])
-        m_ap = self.compute_map()
-        return m_ap
+            break
+        # m_ap = self.compute_map()
+        # return m_ap
 
     def compute_map(self):
         ap = defaultdict(lambda: 0)
@@ -206,6 +238,7 @@ class HICOEvaluatorJson:
         vis_tag = np.zeros(len(gt_hois))
         pred_hois.sort(key=lambda k: (k.get('score', 0)), reverse=True)
         if len(pred_hois) != 0:
+            print("compute_fptp:", len(pred_hois))
             for pred_hoi in pred_hois:
                 is_match = 0
                 if len(match_pairs) != 0 and pred_hoi['subject_id'] in pos_pred_ids and pred_hoi[
@@ -237,6 +270,13 @@ class HICOEvaluatorJson:
                     self.fp[triplet].append(1)
                     self.tp[triplet].append(0)
                 self.score[triplet].append(pred_hoi['score'])
+
+            print(self.tp)
+            print(self.fp)
+            count = 0
+            for v in self.tp.values():
+                count += len(v)
+            print(count)
 
     def compute_iou_mat(self, bbox_list1, bbox_list2):
         iou_mat = np.zeros((len(bbox_list1), len(bbox_list2)))
