@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 import util.misc as utils
 from datasets import build_gen_dataset
-from engine_gen import evaluate_hoi
+from engine_gen import evaluate_hoi_fag
 from models.hoitr import build as build_model
 from models.sentence_critreion import SentenceCriterion
 from util.argparser import get_args_parser
@@ -41,8 +41,8 @@ def main(args):
         model.load_state_dict(checkpoint['model'])
         print(f"Load model from Epoch {checkpoint['epoch']}")
 
-    test_stats = evaluate_hoi(args.dataset_file, model, postprocessors, data_loader_val,
-                              args.subject_category_id, device, args, sen_criterion)
+    test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
+                                  args.subject_category_id, device, args, sen_criterion)
     print(test_stats)
     return
 

@@ -8,7 +8,7 @@
 """
 DETR model and criterion classes.
 """
-from typing import Tuple
+from typing import Tuple, Union
 
 import torch
 import torch.nn.functional as F
@@ -24,7 +24,7 @@ from .transformer import build_transformer
 
 from .gen_matcher import build_matcher as build_gen_matcher
 from .gen_set_criterion import SetCriterionHOI as GenSetCriterionHOI
-from .gen_set_criterion import PostProcessHOITriplet
+from .gen_set_criterion import PostProcessHOITriplet, PostProcessHOIFag
 
 num_humans = 2
 
@@ -32,13 +32,14 @@ num_humans = 2
 class HoiTR(nn.Module):
     """ This is the DETR module that performs object detection """
 
-    def __init__(self, backbone, transformer, num_classes, num_actions, num_queries,
-                 aux_loss=False, sentence_branch=False):
+    def __init__(self, backbone, transformer, num_obj_classes, num_verb_classes, num_queries,
+                 aux_loss=False, sentence_branch=False, use_fag_setting=False):
         """ Initializes the model.
         Parameters:
             backbone: torch module of the backbone to be used. See backbone.py
             transformer: torch module of the transformer architecture. See transformer.py
-            num_classes: number of object classes
+            num_obj_classes: number of object classes
+            num_verb_classes: number of verb classes
             num_queries: number of object queries, ie detection slot. This is the maximal number of objects
                          DETR can detect in a single image. For COCO, we recommend 100 queries.
             aux_loss: True if auxiliary decoding losses (loss at each decoder layer) are to be used.
@@ -55,13 +56,16 @@ class HoiTR(nn.Module):
         self.aux_loss = aux_loss
 
         self.human_box_embed = MLP(hidden_dim, hidden_dim, 4, 3)
-        self.object_cls_embed = nn.Linear(hidden_dim, num_classes + 1)
         self.object_box_embed = MLP(hidden_dim, hidden_dim, 4, 3)
-        self.hoi_visual_projection = nn.Linear(hidden_dim, 600)
+        self.object_cls_embed = nn.Linear(hidden_dim, num_obj_classes) if use_fag_setting \
+            else nn.Linear(hidden_dim, num_obj_classes + 1)
+        self.verb_cls_embed = nn.Linear(hidden_dim, num_verb_classes)
+
 
         # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
         # self.human_cls_embed = nn.Linear(hidden_dim, num_humans + 1)
         # self.action_cls_embed = nn.Linear(hidden_dim, num_actions + 1)
+        # self.hoi_visual_projection = nn.Linear(hidden_dim, 600)
 
         self.sentence_branch = sentence_branch
         if sentence_branch:
@@ -91,31 +95,22 @@ class HoiTR(nn.Module):
         hs = self.transformer(self.input_proj(src), mask, self.query_embed.weight, pos[-1])[0]
         # hs: hidden state = torch.Size([num_dec_layer, batch_size, num_query, hidden_dim])=torch.Size([3, 1, 100, 256])
 
-        # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
-        # human_outputs_class = self.human_cls_embed(hs)
-
         human_outputs_coord = self.human_box_embed(hs).sigmoid()
         object_outputs_class = self.object_cls_embed(hs)
         object_outputs_coord = self.object_box_embed(hs).sigmoid()
-        # action_outputs_class = self.action_cls_embed(hs)
+        verb_outputs_class = self.verb_cls_embed(hs)  # torch.Size([dec_layer, batch_size, num_query, num_verb_class+1])
 
-        hoi_outputs_class = self.hoi_visual_projection(hs)
+        # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
+        # human_outputs_class = self.human_cls_embed(hs)
+
+        # hoi_outputs_class = self.hoi_visual_projection(hs)
 
         out = {
-            # 'human_pred_logits': human_outputs_class[-1],
-            # 'human_pred_boxes': human_outputs_coord[-1],
-            # 'object_pred_logits': object_outputs_class[-1],
-            # 'object_pred_boxes': object_outputs_coord[-1],
             'pred_sub_boxes': human_outputs_coord[-1],
             'pred_obj_logits': object_outputs_class[-1],
             'pred_obj_boxes': object_outputs_coord[-1],
-            'pred_hoi_logits': hoi_outputs_class[-1],
-
-            # Deprecated
-            # 'action_pred_logits': action_outputs_class[-1],
-
-            # sentence branch
-            # 'pred_hoi_embeddings': sentence_embedding[-1],
+            # 'pred_hoi_logits': hoi_outputs_class[-1],
+            'pred_verb_logits': verb_outputs_class[-1],
         }
 
         if self.sentence_branch:
@@ -132,8 +127,8 @@ class HoiTR(nn.Module):
                 human_outputs_coord,
                 object_outputs_class,
                 object_outputs_coord,
-                hoi_outputs_class,
-                # action_outputs_class,
+                # hoi_outputs_class,
+                verb_outputs_class,
             )
         return out
 
@@ -142,31 +137,25 @@ class HoiTR(nn.Module):
                       human_outputs_coord,
                       object_outputs_class,
                       object_outputs_coord,
-                      hoi_outputs_class,
-                      # action_outputs_class,
+                      # hoi_outputs_class,
+                      verb_outputs_class,
                       ):
         # this is a workaround to make torchscript happy, as torchscript
         # doesn't support dictionary with non-homogeneous values, such
         # as a dict having both a Tensor and a list.
         return [{
-            # 'human_pred_logits': a,
-            # 'human_pred_boxes': b,
-            # 'object_pred_logits': c,
-            # 'object_pred_boxes': d,
-            # 'action_pred_logits': e,
-            # 'human_pred_logits': human_outputs_class[-1],
             'pred_sub_boxes': a,
             'pred_obj_logits': b,
             'pred_obj_boxes': c,
-            'pred_hoi_logits': d,
-            # 'action_pred_logits': e,
+            # 'pred_hoi_logits': d,
+            'pred_verb_logits': d,
         } for a, b, c, d in
             zip(
                 human_outputs_coord[:-1],
                 object_outputs_class[:-1],
                 object_outputs_coord[:-1],
-                hoi_outputs_class[:-1],
-                # action_outputs_class[:-1],
+                # hoi_outputs_class[:-1],
+                verb_outputs_class[:-1]
             )]
 
 
@@ -185,7 +174,7 @@ class MLP(nn.Module):
         return x
 
 
-def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, PostProcessHOITriplet]:
+def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, Union[PostProcessHOITriplet, PostProcessHOIFag]]:
     assert args.dataset_file in ['hico', 'vcoco', 'hoia'], args.dataset_file
     if args.dataset_file in ['hico']:
         # num_classes = 91   # less
@@ -214,11 +203,12 @@ def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, PostProcessHOITriplet]:
     model = HoiTR(
         backbone,
         transformer,
-        num_classes=num_classes,
-        num_actions=num_actions,
+        num_obj_classes=num_classes,
+        num_verb_classes=num_actions,
         num_queries=args.num_queries,
         aux_loss=args.aux_loss,
-        sentence_branch=args.with_sentence_branch
+        sentence_branch=args.with_sentence_branch,
+        use_fag_setting=args.use_fag_setting
     )
 
     # GenSetCriterion
@@ -232,6 +222,7 @@ def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, PostProcessHOITriplet]:
         weight_dict['loss_hoi_labels'] = args.hoi_loss_coef
         weight_dict['loss_obj_ce'] = args.obj_loss_coef
 
+    weight_dict['loss_verb_ce'] = args.hoi_loss_coef
     weight_dict['loss_sub_bbox'] = args.bbox_loss_coef
     weight_dict['loss_obj_bbox'] = args.bbox_loss_coef
     weight_dict['loss_sub_giou'] = args.giou_loss_coef
@@ -240,23 +231,24 @@ def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, PostProcessHOITriplet]:
     if args.with_sentence_branch:
         weight_dict['loss_sentence_l1'] = args.sentence_l1_loss_coef
 
-    # if args.with_mimic:
-    #     weight_dict['loss_feat_mimic'] = args.mimic_loss_coef
-
     if args.aux_loss:
         aux_weight_dict = {}
         for i in range(args.dec_layers - 1):
             aux_weight_dict.update({k + f'_{i}': v for k, v in weight_dict.items()})
         weight_dict.update(aux_weight_dict)
-    losses = ['hoi_labels', 'obj_labels', 'sub_obj_boxes']
-    # if args.with_mimic:
-    #     losses.append('feats_mimic')
+
+    # TODO: remove
+    # losses = ['hoi_labels', 'obj_labels', 'sub_obj_boxes', 'verb_labels', 'obj_cardinality']
+    losses = ['obj_labels', 'sub_obj_boxes', 'verb_labels', 'obj_cardinality']
 
     criterion = GenSetCriterionHOI(args.num_obj_classes, args.num_queries, args.num_verb_classes, matcher=matcher,
                                    weight_dict=weight_dict, eos_coef=args.eos_coef, losses=losses,
                                    args=args)
     criterion.to(device)
     # postprocessors = {'hoi': PostProcessHOITriplet(args)}
-    postprocessors = PostProcessHOITriplet(args)
-
+    if args.use_fag_setting:
+        postprocessors = PostProcessHOIFag(subject_category_id=args.subject_category_id, no_obj=False)
+        # default subject_category_id = 0, no_obj = False
+    else:
+        postprocessors = PostProcessHOITriplet(args)
     return model, criterion, postprocessors

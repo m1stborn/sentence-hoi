@@ -18,13 +18,13 @@ def create_log_dir(checkpoint='checkpoint', log_path='/data/LOG/train_log'):
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
-    parser.add_argument('--lr', default=5e-5, type=float)
-    parser.add_argument('--lr_backbone', default=5e-6, type=float)
+    parser.add_argument('--lr', default=1e-4, type=float)
+    parser.add_argument('--lr_backbone', default=1e-5, type=float)
     parser.add_argument('--lr_clip', default=1e-5, type=float)
     parser.add_argument('--batch_size', default=16, type=int)
     parser.add_argument('--weight_decay', default=1e-4, type=float)
     parser.add_argument('--epochs', default=150, type=int)
-    parser.add_argument('--lr_drop', default=100, type=int)
+    parser.add_argument('--lr_drop', default=40, type=int)
     parser.add_argument('--clip_max_norm', default=0.1, type=float,
                         help='gradient clipping max norm')
 
@@ -123,8 +123,8 @@ def get_args_parser():
 
     # Loss coefficients
     parser.add_argument('--dice_loss_coef', default=1, type=float)
-    parser.add_argument('--bbox_loss_coef', default=5, type=float)
-    parser.add_argument('--giou_loss_coef', default=2, type=float)
+    parser.add_argument('--bbox_loss_coef', default=2.5, type=float)
+    parser.add_argument('--giou_loss_coef', default=1, type=float)
     parser.add_argument('--eos_coef', default=0.02, type=float,
                         help="Relative classification weight of the no-object class")
 
@@ -135,7 +135,7 @@ def get_args_parser():
 
     parser.add_argument('--obj_loss_coef', default=1, type=float)
     # parser.add_argument('--verb_loss_coef', default=2, type=float)
-    parser.add_argument('--hoi_loss_coef', default=2, type=float)
+    parser.add_argument('--hoi_loss_coef', default=1, type=float)
     # parser.add_argument('--mimic_loss_coef', default=20, type=float)
     parser.add_argument('--alpha', default=0.5, type=float, help='focal loss alpha')
     # parser.add_argument('--eos_coef', default=0.1, type=float,
@@ -170,6 +170,9 @@ def get_args_parser():
     # hoi eval parameters
     parser.add_argument('--use_nms_filter', action='store_true', help='Use pair nms filter, default not use')
     parser.add_argument('--thres_nms', default=0.7, type=float)
+
+    # For Fag setting
+    # parser.add_argument('--thres_nms', default=0.5, type=float)
     parser.add_argument('--nms_alpha', default=1, type=float)
     parser.add_argument('--nms_beta', default=0.5, type=float)
     parser.add_argument('--json_file', default='results.json', type=str)
@@ -194,5 +197,8 @@ def get_args_parser():
     # sentence hoi
     parser.add_argument('--with_sentence_branch', action='store_true', help='Use sentence branch')
     parser.add_argument('--sentence_l1_loss_coef', default=3, type=float)
+
+    parser.add_argument('--use_fag_setting', action='store_true', help='Use Fag setting for evaluator, postprocessor..')
+    parser.add_argument('--no_obj', action='store_true')
 
     return parser

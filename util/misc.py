@@ -183,7 +183,8 @@ class MetricLogger(object):
         # obj_loss = ['loss_obj_ce', 'obj_class_error']  # cross entropy loss, classification error
         loss_to_log = ["loss", 'loss_sub_bbox', 'loss_obj_bbox', 'loss_sub_giou', 'loss_obj_giou',
                        'loss_hoi_labels', 'hoi_class_error', 'loss_sentence_l1', 'loss_obj_ce',
-                       'obj_class_error']
+                       'obj_class_error', 'loss_verb_ce']
+        # loss_to_log = ["loss", 'loss_verb_ce', 'obj_cardinality_error_unscaled']
         loss_str = [f"{name.replace('loss_', '')}: {str(meter)}"
                     for name, meter in self.meters.items() if name in loss_to_log]
         # loss_str = [f"{name}: {str(self.meters[name])}" for name in loss_to_log]

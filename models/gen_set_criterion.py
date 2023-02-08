@@ -19,7 +19,36 @@ def _get_src_permutation_idx(indices):
     return batch_idx, src_idx
 
 
-def _neg_loss(pred, gt, weights=None, alpha=0.25):
+def sigmoid_focal_loss(inputs, targets, num_boxes, alpha: float = 0.25, gamma: float = 2):
+    """
+    Loss used in RetinaNet for dense detection: https://arxiv.org/abs/1708.02002.
+    Args:
+        inputs: A float tensor of arbitrary shape.
+                The predictions for each example.
+        targets: A float tensor with the same shape as inputs. Stores the binary
+                 classification label for each element in inputs
+                (0 for the negative class and 1 for the positive class).
+        alpha: (optional) Weighting factor in range (0,1) to balance
+                positive vs negative examples. Default = -1 (no weighting).
+        gamma: Exponent of the modulating factor (1 - p_t) to
+               balance easy vs hard examples.
+        num_boxes: Number of boxes
+    Returns:
+        Loss tensor
+    """
+    prob = inputs.sigmoid()
+    ce_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction="none")
+    p_t = prob * targets + (1 - prob) * (1 - targets)
+    loss = ce_loss * ((1 - p_t) ** gamma)
+
+    if alpha >= 0:
+        alpha_t = alpha * targets + (1 - alpha) * (1 - targets)
+        loss = alpha_t * loss
+
+    return loss.mean(1).sum() / num_boxes
+
+# def _neg_loss(pred, gt, weights=None, alpha=0.25):
+def _neg_loss(pred, gt):
     """ Modified focal loss. Exactly the same as CornerNet.
       Runs faster and costs a little more memory
     """
@@ -28,11 +57,13 @@ def _neg_loss(pred, gt, weights=None, alpha=0.25):
 
     loss = 0
 
-    pos_loss = alpha * torch.log(pred) * torch.pow(1 - pred, 2) * pos_inds
-    if weights is not None:
-        pos_loss = pos_loss * weights[:-1]
+    # pos_loss = alpha * torch.log(pred) * torch.pow(1 - pred, 2) * pos_inds
+    pos_loss = torch.log(pred) * torch.pow(1 - pred, 2) * pos_inds
+    # if weights is not None:
+    #     pos_loss = pos_loss * weights[:-1]
 
-    neg_loss = (1 - alpha) * torch.log(1 - pred) * torch.pow(pred, 2) * neg_inds
+    # neg_loss = (1 - alpha) * torch.log(1 - pred) * torch.pow(pred, 2) * neg_inds
+    neg_loss = torch.log(1 - pred) * torch.pow(pred, 2) * neg_inds
 
     num_pos = pos_inds.float().sum()
     pos_loss = pos_loss.sum()
@@ -57,12 +88,22 @@ class SetCriterionHOI(nn.Module):
         self.weight_dict = weight_dict
         self.eos_coef = eos_coef
         self.losses = losses
-        empty_weight = torch.ones(self.num_obj_classes + 1)
-        empty_weight[-1] = self.eos_coef
-        self.register_buffer('empty_weight', empty_weight)
+        if not args.use_fag_setting:
+            """
+            if not using fag setting, there uis no_obj in last class
+            """
+            empty_weight = torch.ones(self.num_obj_classes + 1)
+            empty_weight[-1] = self.eos_coef
+            self.register_buffer('empty_weight', empty_weight)
+        self.no_obj = not args.use_fag_setting
+        # empty_weight = torch.ones(self.num_obj_classes + 1)
+        # empty_weight[-1] = self.eos_coef
+        # self.register_buffer('empty_weight', empty_weight)
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        # self.clip_model, _ = clip.load(args.clip_model, device=device)
         self.alpha = args.alpha
+        # Fag set
+        self.focal_alpha = 0.25
+        print(f"Init SetCriterionHOI: set no_obj to {self.no_obj}")
 
     def loss_obj_labels(self, outputs, targets, indices, num_interactions, log=True):
         assert 'pred_obj_logits' in outputs
@@ -73,8 +114,19 @@ class SetCriterionHOI(nn.Module):
         target_classes = torch.full(src_logits.shape[:2], self.num_obj_classes,
                                     dtype=torch.int64, device=src_logits.device)
         target_classes[idx] = target_classes_o
+        if not self.no_obj:
+            target_classes_onehot = torch.zeros([src_logits.shape[0], src_logits.shape[1],
+                                                 src_logits.shape[2] + 1], dtype=src_logits.dtype,
+                                                layout=src_logits.layout, device=src_logits.device)
+            target_classes_onehot.scatter_(2, target_classes.unsqueeze(-1), 1)
 
-        loss_obj_ce = F.cross_entropy(src_logits.transpose(1, 2), target_classes, self.empty_weight)
+            target_classes_onehot = target_classes_onehot[:, :, :-1]
+            loss_obj_ce = sigmoid_focal_loss(src_logits, target_classes_onehot, num_interactions,
+                                             alpha=self.focal_alpha, gamma=2) * src_logits.shape[1]
+        else:
+            loss_obj_ce = F.cross_entropy(src_logits.transpose(1, 2), target_classes, self.empty_weight)
+
+        # loss_obj_ce = F.cross_entropy(src_logits.transpose(1, 2), target_classes, self.empty_weight)
         losses = {'loss_obj_ce': loss_obj_ce}
 
         if log:
@@ -82,30 +134,33 @@ class SetCriterionHOI(nn.Module):
 
         return losses
 
-    # @torch.no_grad()
-    # def loss_obj_cardinality(self, outputs, targets, indices, num_interactions):
-    #     pred_logits = outputs['pred_obj_logits']
-    #     device = pred_logits.device
-    #     tgt_lengths = torch.as_tensor([len(v['obj_labels']) for v in targets], device=device)
-    #     card_pred = (pred_logits.argmax(-1) != pred_logits.shape[-1] - 1).sum(1)
-    #     card_err = F.l1_loss(card_pred.float(), tgt_lengths.float())
-    #     losses = {'obj_cardinality_error': card_err}
-    #     return losses
+    @torch.no_grad()
+    def loss_obj_cardinality(self, outputs, targets, indices, num_interactions):
+        pred_logits = outputs['pred_obj_logits']
+        device = pred_logits.device
+        tgt_lengths = torch.as_tensor([len(v['obj_labels']) for v in targets], device=device)
+        card_pred = (pred_logits.argmax(-1) != pred_logits.shape[-1] - 1).sum(1)
+        card_err = F.l1_loss(card_pred.float(), tgt_lengths.float())
+        losses = {'obj_cardinality_error': card_err}
+        return losses
 
-    # def loss_verb_labels(self, outputs, targets, indices, num_interactions):
-    #     assert 'pred_verb_logits' in outputs
-    #     src_logits = outputs['pred_verb_logits']
-    #
-    #     idx = _get_src_permutation_idx(indices)
-    #     target_classes_o = torch.cat([t['verb_labels'][J] for t, (_, J) in zip(targets, indices)])
-    #     target_classes = torch.zeros_like(src_logits)
-    #     target_classes[idx] = target_classes_o
-    #
-    #     src_logits = src_logits.sigmoid()
-    #     loss_verb_ce = self._neg_loss(src_logits, target_classes, weights=None, alpha=self.alpha)
-    #     losses = {'loss_verb_ce': loss_verb_ce}
-    #     return losses
+    def loss_verb_labels(self, outputs, targets, indices, num_interactions, log=True):
+        assert 'pred_verb_logits' in outputs
+        src_logits = outputs['pred_verb_logits']
 
+        idx = _get_src_permutation_idx(indices)
+        target_classes_o = torch.cat([t['verb_labels'][J] for t, (_, J) in zip(targets, indices)])
+        target_classes = torch.zeros_like(src_logits)
+        target_classes[idx] = target_classes_o
+
+        src_logits = src_logits.sigmoid()
+        # loss_verb_ce = _neg_loss(src_logits, target_classes, weights=None, alpha=self.alpha)
+        loss_verb_ce = _neg_loss(src_logits, target_classes)
+        losses = {'loss_verb_ce': loss_verb_ce}
+
+        return losses
+
+    # TODO: remove
     def loss_hoi_labels(self, outputs, targets, indices, num_interactions, topk=5):
         assert 'pred_hoi_logits' in outputs
         src_logits = outputs['pred_hoi_logits']
@@ -115,7 +170,8 @@ class SetCriterionHOI(nn.Module):
         target_classes = torch.zeros_like(src_logits)
         target_classes[idx] = target_classes_o
         src_logits = _sigmoid(src_logits)
-        loss_hoi_ce = _neg_loss(src_logits, target_classes, weights=None, alpha=self.alpha)
+        # loss_hoi_ce = _neg_loss(src_logits, target_classes, weights=None, alpha=self.alpha)
+        loss_hoi_ce = _neg_loss(src_logits, target_classes)
         losses = {'loss_hoi_labels': loss_hoi_ce}
 
         _, pred = src_logits[idx].topk(topk, 1, True, True)
@@ -165,37 +221,16 @@ class SetCriterionHOI(nn.Module):
 
         return losses
 
-    # def mimic_loss(self, outputs, targets, indices, num_interactions):
-    #     src_feats = outputs['inter_memory']
-    #     src_feats = torch.mean(src_feats, dim=1)
-    #
-    #     target_clip_inputs = torch.cat([t['clip_inputs'].unsqueeze(0) for t in targets])
-    #     with torch.no_grad():
-    #         target_clip_feats = self.clip_model.encode_image(target_clip_inputs)
-    #     loss_feat_mimic = F.l1_loss(src_feats, target_clip_feats)
-    #     losses = {'loss_feat_mimic': loss_feat_mimic}
-    #     return losses
-
     def get_loss(self, loss, outputs, targets, indices, num, **kwargs):
         loss_map = {
-            'hoi_labels': self.loss_hoi_labels,
+            # TODO: remove
+            # 'hoi_labels': self.loss_hoi_labels,
             'obj_labels': self.loss_obj_labels,
+            'verb_labels': self.loss_verb_labels,
             'sub_obj_boxes': self.loss_sub_obj_boxes,
+            'obj_cardinality': self.loss_obj_cardinality,
         }
-        # if 'pred_hoi_logits' in outputs.keys():
-        #     loss_map = {
-        #         'hoi_labels': self.loss_hoi_labels,
-        #         'obj_labels': self.loss_obj_labels,
-        #         'sub_obj_boxes': self.loss_sub_obj_boxes,
-        #         # 'feats_mimic': self.mimic_loss
-        #     }
-        # else:
-        #     loss_map = {
-        #         'obj_labels': self.loss_obj_labels,
-        #         'obj_cardinality': self.loss_obj_cardinality,
-        #         'verb_labels': self.loss_verb_labels,
-        #         'sub_obj_boxes': self.loss_sub_obj_boxes,
-        #     }
+
         assert loss in loss_map, f'do you really want to compute {loss} loss?'
         return loss_map[loss](outputs, targets, indices, num, **kwargs)
 
@@ -226,7 +261,6 @@ class SetCriterionHOI(nn.Module):
         losses = {}
         for loss in self.losses:
             result = self.get_loss(loss, outputs, targets, indices, num_interactions)
-            # print(f"loss:{loss}, {result}")
             losses.update(result)
 
         # In case of auxiliary losses, we repeat this process with the output of each intermediate layer.
@@ -274,8 +308,8 @@ class PostProcessHOITriplet(nn.Module):
 
         results = []
         for index in range(len(hoi_scores)):
-            hs, os, ol, sb, ob = hoi_scores[index], obj_scores[index], obj_labels[index], sub_boxes[index], obj_boxes[
-                index]
+            hs, os, ol, sb, ob = hoi_scores[index], obj_scores[index], \
+                obj_labels[index], sub_boxes[index], obj_boxes[index]
             sl = torch.full_like(ol, self.subject_category_id)
             l = torch.cat((sl, ol))
             b = torch.cat((sb, ob))
@@ -285,5 +319,65 @@ class PostProcessHOITriplet(nn.Module):
 
             results[-1].update({'hoi_scores': hs.to('cpu'), 'obj_scores': os.to('cpu'),
                                 'sub_ids': ids[:ids.shape[0] // 2], 'obj_ids': ids[ids.shape[0] // 2:]})
+
+        return results
+
+
+class PostProcessHOIFag(nn.Module):
+
+    def __init__(self, subject_category_id, no_obj=False):
+        super().__init__()
+        self.subject_category_id = subject_category_id
+        self.no_obj = no_obj
+
+    @torch.no_grad()
+    def forward(self, outputs, target_sizes):
+        out_obj_logits, out_verb_logits, out_sub_boxes, out_obj_boxes = outputs['pred_obj_logits'], \
+            outputs['pred_verb_logits'], \
+            outputs['pred_sub_boxes'], \
+            outputs['pred_obj_boxes']
+
+        assert len(out_obj_logits) == len(target_sizes)
+        assert target_sizes.shape[1] == 2
+
+        obj_prob = F.softmax(out_obj_logits, -1)
+        verb_scores = out_verb_logits.sigmoid()
+        num_verb_classes = verb_scores.shape[-1]
+
+        # top 100
+        obj_prob_class_all = obj_prob[:, :, :-1] if self.no_obj else obj_prob
+        num_obj_classes = obj_prob_class_all.shape[-1]
+
+        topk_values, topk_indexes = torch.topk(obj_prob_class_all.flatten(1), 100, dim=1)
+        obj_scores = topk_values
+        topk_boxes = topk_indexes // num_obj_classes
+        obj_labels = topk_indexes % num_obj_classes
+
+        # top 100
+        verb_scores = torch.gather(verb_scores, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, num_verb_classes))
+        out_obj_boxes = torch.gather(out_obj_boxes, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, 4))
+        out_sub_boxes = torch.gather(out_sub_boxes, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, 4))
+
+        img_h, img_w = target_sizes.unbind(1)
+        scale_fct = torch.stack([img_w, img_h, img_w, img_h], dim=1).to(verb_scores.device)
+        sub_boxes = box_cxcywh_to_xyxy(out_sub_boxes)
+        obj_boxes = box_cxcywh_to_xyxy(out_obj_boxes)
+
+        sub_boxes = sub_boxes * scale_fct[:, None, :]
+        obj_boxes = obj_boxes * scale_fct[:, None, :]
+
+        results = []
+        for os, ol, vs, sb, ob in zip(obj_scores, obj_labels, verb_scores, sub_boxes, obj_boxes):
+            sl = torch.full_like(ol, self.subject_category_id)
+            l = torch.cat((sl, ol))
+            b = torch.cat((sb, ob))
+            results.append({'labels': l.to('cpu'), 'boxes': b.to('cpu')})
+
+            vs = vs * os.unsqueeze(1)
+
+            ids = torch.arange(b.shape[0])
+
+            results[-1].update({'verb_scores': vs.to('cpu'), 'sub_ids': ids[:ids.shape[0] // 2],
+                                'obj_ids': ids[ids.shape[0] // 2:]})
 
         return results

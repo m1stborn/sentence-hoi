@@ -1,9 +1,15 @@
+# ------------------------------------------------------------------------
+# QAHOI
+# Copyright (c) 2021 Junwen Chen. All Rights Reserved.
+# Licensed under the Apache License, Version 2.0 [see LICENSE for details]
+# ------------------------------------------------------------------------
+# Modified from QPIC (https://github.com/hitachi-rd-cv/qpic)
+# Copyright (c) Hitachi, Ltd. All Rights Reserved.
+# ------------------------------------------------------------------------
 """
 HICO detection dataset.
 """
 from pathlib import Path
-
-import torchvision.transforms
 from PIL import Image
 import json
 from collections import defaultdict
@@ -11,27 +17,73 @@ import numpy as np
 
 import torch
 import torch.utils.data
-# import clip
+import torchvision
+import math
 
 import datasets.transforms as T
-from .hico_text_label import hico_text_label, hico_unseen_index
+
+
+def gaussian_2d(shape, sigma=1):
+    m, n = [(ss - 1.) / 2. for ss in shape]
+    y, x = np.ogrid[-m:m + 1, -n:n + 1]
+
+    h = np.exp(-(x * x + y * y) / (2 * sigma * sigma))
+    h[h < np.finfo(h.dtype).eps * h.max()] = 0
+    return h
+
+
+def gaussian_radius(det_size, min_overlap=0.7):
+    height, width = det_size
+
+    a1 = 1
+    b1 = (height + width)
+    c1 = width * height * (1 - min_overlap) / (1 + min_overlap)
+    sq1 = np.sqrt(b1 ** 2 - 4 * a1 * c1)
+    r1 = (b1 + sq1) / 2
+
+    a2 = 4
+    b2 = 2 * (height + width)
+    c2 = (1 - min_overlap) * width * height
+    sq2 = np.sqrt(b2 ** 2 - 4 * a2 * c2)
+    r2 = (b2 + sq2) / 2
+
+    a3 = 4 * min_overlap
+    b3 = -2 * min_overlap * (height + width)
+    c3 = (min_overlap - 1) * width * height
+    sq3 = np.sqrt(b3 ** 2 - 4 * a3 * c3)
+    r3 = (b3 + sq3) / 2
+    return min(r1, r2, r3)
+
+
+def draw_umich_gaussian(heatmap, center, radius, k=1):
+    diameter = 2 * radius + 1
+    gaussian = gaussian_2d((diameter, diameter), sigma=diameter / 6)
+
+    x, y = int(center[0]), int(center[1])
+
+    height, width = heatmap.shape[0:2]
+
+    left, right = min(x, radius), min(width - x, radius + 1)
+    top, bottom = min(y, radius), min(height - y, radius + 1)
+
+    masked_heatmap = heatmap[y - top:y + bottom, x - left:x + right]
+    masked_gaussian = gaussian[radius - top:radius + bottom, radius - left:radius + right]
+    if min(masked_gaussian.shape) > 0 and min(masked_heatmap.shape) > 0:  # TODO debug
+        np.maximum(masked_heatmap, masked_gaussian * k, out=masked_heatmap)
+    return heatmap
 
 
 class HICODetection(torch.utils.data.Dataset):
-    def __init__(self, img_set, img_folder, anno_file, clip_feats_folder, transforms, num_queries, args):
-        self.rare_triplets = None
-        self.non_rare_triplets = None
-        self.correct_mat = None
+
+    def __init__(self, img_set, img_folder, anno_file, transforms, num_queries):
         self.img_set = img_set
         self.img_folder = img_folder
-        # self.clip_feates_folder = clip_feats_folder
         with open(anno_file, 'r') as f:
             self.annotations = json.load(f)
         self._transforms = transforms
 
         self.num_queries = num_queries
 
-        self.unseen_index = hico_unseen_index.get(args.zero_shot_type, [])
         self._valid_obj_ids = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13,
                                14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
                                24, 25, 27, 28, 31, 32, 33, 34, 35, 36,
@@ -42,46 +94,17 @@ class HICODetection(torch.utils.data.Dataset):
                                82, 84, 85, 86, 87, 88, 89, 90)
         self._valid_verb_ids = list(range(1, 118))
 
-        self.pair2text = hico_text_label
-        self.text_label_ids = list(self.pair2text.keys())
-
-        self.num_object = len(self._valid_obj_ids)
-        self.num_action = len(self._valid_verb_ids)
-        self.num_hoi = len(hico_text_label)
-
-        if img_set == 'train' and len(self.unseen_index) != 0 and args.del_unseen:
-            tmp = []
-            for idx, k in enumerate(self.text_label_ids):
-                if idx in self.unseen_index:
-                    continue
-                else:
-                    tmp.append(k)
-            self.text_label_ids = tmp
-
         if img_set == 'train':
             self.ids = []
             for idx, img_anno in enumerate(self.annotations):
-                new_img_anno = []
-                skip_pair = []
-                for hoi in img_anno['hoi_annotation']:
-                    if hoi['hoi_category_id'] - 1 in self.unseen_index:
-                        skip_pair.append((hoi['subject_id'], hoi['object_id']))
                 for hoi in img_anno['hoi_annotation']:
                     if hoi['subject_id'] >= len(img_anno['annotations']) or hoi['object_id'] >= len(
                             img_anno['annotations']):
-                        new_img_anno = []
                         break
-                    if (hoi['subject_id'], hoi['object_id']) not in skip_pair:
-                        new_img_anno.append(hoi)
-                if len(new_img_anno) > 0:
+                else:
                     self.ids.append(idx)
-                    img_anno['hoi_annotation'] = new_img_anno
         else:
             self.ids = list(range(len(self.annotations)))
-        print("{} contains {} images".format(img_set, len(self.ids)))
-
-        # device = "cuda" if torch.cuda.is_available() else "cpu"
-        # _, self.clip_preprocess = clip.load(args.clip_model, device)
 
     def __len__(self):
         return len(self.ids)
@@ -122,8 +145,7 @@ class HICODetection(torch.utils.data.Dataset):
             target['area'] = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
 
             if self._transforms is not None:
-                img_0, target_0 = self._transforms[0](img, target)
-                img, target = self._transforms[1](img_0, target_0)
+                img, target = self._transforms(img, target)
 
             kept_box_indices = [label[0] for label in target['labels']]
 
@@ -131,88 +153,50 @@ class HICODetection(torch.utils.data.Dataset):
 
             obj_labels, verb_labels, sub_boxes, obj_boxes = [], [], [], []
             sub_obj_pairs = []
-            hoi_labels = []
-            hoi_sentences = []
-            # hoi_sentences_candidate = []
-
-            # For hoi.csv generation
-            # hoi_pair = []
-
+            verb_label_enc = [0 for _ in range(len(self._valid_verb_ids))]
             for hoi in img_anno['hoi_annotation']:
                 if hoi['subject_id'] not in kept_box_indices or hoi['object_id'] not in kept_box_indices:
                     continue
-                verb_obj_pair = (self._valid_verb_ids.index(hoi['category_id']),
-                                 target['labels'][kept_box_indices.index(hoi['object_id'])])
-                if verb_obj_pair not in self.text_label_ids:
-                    continue
-
-                # hoi_pair.append(verb_obj_pair)
-
-                pair = (self._valid_verb_ids.index(hoi['category_id']),
-                        target['labels'][kept_box_indices.index(hoi['object_id'])].item())
-                # hoi_sentences_candidate.append(self.pair2text[pair])
-
                 sub_obj_pair = (hoi['subject_id'], hoi['object_id'])
-                # hoi_pair.append(sub_obj_pair)
+                verb_label_enc[self._valid_verb_ids.index(hoi['category_id'])] = 1
                 if sub_obj_pair in sub_obj_pairs:
                     verb_labels[sub_obj_pairs.index(sub_obj_pair)][self._valid_verb_ids.index(hoi['category_id'])] = 1
-                    hoi_labels[sub_obj_pairs.index(sub_obj_pair)][self.text_label_ids.index(verb_obj_pair)] = 1
                 else:
                     sub_obj_pairs.append(sub_obj_pair)
                     obj_labels.append(target['labels'][kept_box_indices.index(hoi['object_id'])])
                     verb_label = [0 for _ in range(len(self._valid_verb_ids))]
-                    hoi_label = [0] * len(self.text_label_ids)
-                    hoi_label[self.text_label_ids.index(verb_obj_pair)] = 1
                     verb_label[self._valid_verb_ids.index(hoi['category_id'])] = 1
                     sub_box = target['boxes'][kept_box_indices.index(hoi['subject_id'])]
                     obj_box = target['boxes'][kept_box_indices.index(hoi['object_id'])]
+
                     verb_labels.append(verb_label)
-                    hoi_labels.append(hoi_label)
                     sub_boxes.append(sub_box)
                     obj_boxes.append(obj_box)
-
-                    hoi_sentences.append(self.pair2text[pair])
-
-            target['filename'] = img_anno['file_name']
-
-            target['hoi_sentence'] = hoi_sentences if len(hoi_sentences) != 0 else ['A photo of a person.']
-            # target['hoi_candidate'] = hoi_sentences_candidate
-            # target['hoi_pair'] = hoi_pair
-
-            # print('sub_obj_pairs: ', hoi_sentences)
-            # print(hoi_labels)
-
             if len(sub_obj_pairs) == 0:
                 target['obj_labels'] = torch.zeros((0,), dtype=torch.int64)
                 target['verb_labels'] = torch.zeros((0, len(self._valid_verb_ids)), dtype=torch.float32)
-                target['hoi_labels'] = torch.zeros((0, len(self.text_label_ids)), dtype=torch.float32)
                 target['sub_boxes'] = torch.zeros((0, 4), dtype=torch.float32)
                 target['obj_boxes'] = torch.zeros((0, 4), dtype=torch.float32)
+                target['verb_label_enc'] = torch.zeros(len(self._valid_verb_ids), dtype=torch.float32)
             else:
                 target['obj_labels'] = torch.stack(obj_labels)
                 target['verb_labels'] = torch.as_tensor(verb_labels, dtype=torch.float32)
-                target['hoi_labels'] = torch.as_tensor(hoi_labels, dtype=torch.float32)
                 target['sub_boxes'] = torch.stack(sub_boxes)
                 target['obj_boxes'] = torch.stack(obj_boxes)
+                target['verb_label_enc'] = torch.as_tensor(verb_label_enc, dtype=torch.float32)
         else:
-            target['filename'] = img_anno['file_name']
             target['boxes'] = boxes
             target['labels'] = classes
             target['id'] = idx
+            target['file_name'] = img_anno['file_name']
 
             if self._transforms is not None:
                 img, _ = self._transforms(img, None)
 
             hois = []
-            hoi_sentences = []
             for hoi in img_anno['hoi_annotation']:
                 hois.append((hoi['subject_id'], hoi['object_id'], self._valid_verb_ids.index(hoi['category_id'])))
-
-                pair = (self._valid_verb_ids.index(hoi['category_id']), hoi['object_id'])
-                hoi_sentences.append(self.pair2text.get(pair, "A photo of a person."))
-
             target['hois'] = torch.as_tensor(hois, dtype=torch.int64)
-            target['hoi_sentence'] = hoi_sentences
 
         return img, target
 
@@ -220,40 +204,22 @@ class HICODetection(torch.utils.data.Dataset):
         with open(anno_file, 'r') as f:
             annotations = json.load(f)
 
-        if len(self.unseen_index) == 0:
-            # no unseen categoruy, use rare to evaluate
-            counts = defaultdict(lambda: 0)
-            for img_anno in annotations:
-                hois = img_anno['hoi_annotation']
-                bboxes = img_anno['annotations']
-                for hoi in hois:
-                    triplet = (self._valid_obj_ids.index(bboxes[hoi['subject_id']]['category_id']),
-                               self._valid_obj_ids.index(bboxes[hoi['object_id']]['category_id']),
-                               self._valid_verb_ids.index(hoi['category_id']))
-                    counts[triplet] += 1
-            self.rare_triplets = []
-            self.non_rare_triplets = []
-            for triplet, count in counts.items():
-                if count < 10:
-                    self.rare_triplets.append(triplet)
-                else:
-                    self.non_rare_triplets.append(triplet)
-            print("rare:{}, non-rare:{}".format(len(self.rare_triplets), len(self.non_rare_triplets)))
-        else:
-            self.rare_triplets = []
-            self.non_rare_triplets = []
-            for img_anno in annotations:
-                hois = img_anno['hoi_annotation']
-                bboxes = img_anno['annotations']
-                for hoi in hois:
-                    triplet = (self._valid_obj_ids.index(bboxes[hoi['subject_id']]['category_id']),
-                               self._valid_obj_ids.index(bboxes[hoi['object_id']]['category_id']),
-                               self._valid_verb_ids.index(hoi['category_id']))
-                    if hoi['hoi_category_id'] - 1 in self.unseen_index:
-                        self.rare_triplets.append(triplet)
-                    else:
-                        self.non_rare_triplets.append(triplet)
-            print("unseen:{}, seen:{}".format(len(self.rare_triplets), len(self.non_rare_triplets)))
+        counts = defaultdict(lambda: 0)
+        for img_anno in annotations:
+            hois = img_anno['hoi_annotation']
+            bboxes = img_anno['annotations']
+            for hoi in hois:
+                triplet = (self._valid_obj_ids.index(bboxes[hoi['subject_id']]['category_id']),
+                           self._valid_obj_ids.index(bboxes[hoi['object_id']]['category_id']),
+                           self._valid_verb_ids.index(hoi['category_id']))
+                counts[triplet] += 1
+        self.rare_triplets = []
+        self.non_rare_triplets = []
+        for triplet, count in counts.items():
+            if count < 10:
+                self.rare_triplets.append(triplet)
+            else:
+                self.non_rare_triplets.append(triplet)
 
     def load_correct_mat(self, path):
         self.correct_mat = np.load(path)
@@ -269,7 +235,7 @@ def make_hico_transforms(image_set):
     # scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
 
     if image_set == 'train':
-        return [T.Compose([
+        return T.Compose([
             T.RandomHorizontalFlip(),
             T.ColorJitter(.4, .4, .4),
             T.RandomSelect(
@@ -278,10 +244,10 @@ def make_hico_transforms(image_set):
                     T.RandomResize([400, 500, 600]),
                     T.RandomSizeCrop(384, 600),
                     T.RandomResize(scales, max_size=900),
-                ]))]
-        ),
-            normalize
-        ]
+                ])
+            ),
+            normalize,
+        ])
 
     if image_set == 'val':
         return T.Compose([
@@ -296,18 +262,16 @@ def build(image_set, args):
     root = Path(args.hoi_path)
     assert root.exists(), f'provided HOI path {root} does not exist'
     paths = {
-        'train': (root / 'images' / 'train2015', root / 'annotations' / 'trainval_hico.json',
-                  root / 'clip_feats_pool' / 'train2015'),
-        'val': (
-            root / 'images' / 'test2015', root / 'annotations' / 'test_hico.json',
-            root / 'clip_feats_pool' / 'test2015')
+        'train': (root / 'images' / 'train2015', root / 'annotations' / 'trainval_hico.json'),
+        # 'train': (root / 'images' / 'train', root / 'annotations' / 'trainval_hico.json'),
+        # 'val': (root / 'images' / 'test', root / 'annotations' / 'test_hico.json')
+        'val': (root / 'images' / 'test2015', root / 'annotations' / 'test_hico.json')
     }
     correct_mat_path = root / 'annotations' / 'corre_hico.npy'
 
-    img_folder, anno_file, clip_feats_folder = paths[image_set]
-    dataset = HICODetection(image_set, img_folder, anno_file, clip_feats_folder,
-                            transforms=make_hico_transforms(image_set),
-                            num_queries=args.num_queries, args=args)
+    img_folder, anno_file = paths[image_set]
+    dataset = HICODetection(image_set, img_folder, anno_file, transforms=make_hico_transforms(image_set),
+                            num_queries=args.num_queries)
     if image_set == 'val':
         dataset.set_rare_hois(paths['train'][1])
         dataset.load_correct_mat(correct_mat_path)

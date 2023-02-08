@@ -88,8 +88,8 @@ python main.py \
 #        >> "./checkpoint/tmp_stdout.txt"
 #        --dev \
 
-# checkpoint p_202301261744
-# epoch 70 "test_mAP": 0.24306954216542398
-
 # move tmep logfile to folder create by main_gen.py
 mv "./checkpoint/tmp_stdout.txt" "$(ls -td ./checkpoint/*/ | head -1)stdout.txt"
+
+# checkpoint p_202301261744
+# epoch 70 "test_mAP": 0.24306954216542398

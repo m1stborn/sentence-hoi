@@ -1,5 +1,9 @@
+import json
+from itertools import product
+
 import torch
 import torch.nn.functional as F
+from transformers import CLIPTokenizer, CLIPTextModelWithProjection
 
 from dataclasses import dataclass
 from models.sentence_critreion import SentenceCriterion
@@ -17,27 +21,40 @@ class LabelCompose:
     top_k: int = 3
 
 
+def main():
+    # config
+    clip_model = "openai/clip-vit-base-patch32"
+    special_sentence = "A photo of a person."
+    template = "A photo of a person verb obj."
+    # Load verb choice
+    with open("./data/similar_word/similar_verb_google.json", encoding='utf-8') as file:
+        sim_verb = json.load(file)
+
+    # Load obj choice
+    with open("./data/similar_word/similar_obj_google.json", encoding='utf-8') as file:
+        sim_obj = json.load(file)
+
+    synth_pair = []
+    for verb, alter_verb in sim_verb.items():
+        alter_verb = [k for k, v in alter_verb.items() if v > 0.8]
+        for obj, alter_obj in sim_obj.items():
+            synth_pair.append((verb, obj))  # real
+            alter_obj = [k for k, v in alter_obj.items() if v > 0.8]
+            prods = list(product(alter_verb, alter_obj))
+            synth_pair.extend(prods)
+
+    print(len(synth_pair))  # 29804
+    # text2tensor = {}
+    # tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+    # model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+    # print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
+    # for i, text in enumerate(text2pair.keys()):
+    #     inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
+    #     outputs = model_proj(**inputs)
+    #     text2tensor[text] = outputs.text_embeds
+    #     # text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
+    # torch.save(text2tensor, "./checkpoint/hoi_clip_embedding.pth")
+
+
 if __name__ == '__main__':
-    se = SentenceCriterion()
-    text_embedding = torch.cat(list(se.text2tensor.values()))
-    text_embedding_norm = F.normalize(text_embedding, dim=-1)
-    sim_matrix = torch.mm(text_embedding_norm, text_embedding_norm.t())
-
-    # top_k = torch.topk(sim_matrix, k=5, dim=-1).indices
-    # print(torch.topk(sim_matrix, k=5, dim=-1).indices[0])
-    #
-    # print(text_embedding[top_k[0]].size())
-    # print(((torch.topk(sim_matrix, k=10, dim=-1).values > 0.7) == 0).nonzero().size())  # number < 0.7: 1
-    # print(list(se.text2tensor.keys())[:20])
-
-    # rand_idx = torch.randint(1, 10, (1, 1))[0, 0]
-    # print(text_embedding[rand_idx], rand_idx)
-
-    target = ['a photo of a person lassoing a cow'] * 3
-    pred = torch.rand(3, 512, requires_grad=True)
-
-    import time
-    start_time = time.time()
-    kl_loss = se.batch_l1_loss({"pred_hoi_embeddings": pred}, {"hoi_sentence": target})
-    total_time = time.time() - start_time
-    print('Training time {}'.format(total_time))
+    main()
