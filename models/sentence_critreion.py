@@ -7,6 +7,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from transformers import CLIPTokenizer, CLIPTextModelWithProjection
+import random
 
 from util.topk import top_k
 from .hico_text_label import hico_text_label
@@ -17,7 +18,8 @@ from .hico_text_label import hico_text_label
 
 class SentenceCriterion:
     def __init__(self,
-                 embedding_file="./checkpoint/hoi_clip_embedding.pth",
+                 # embedding_file="./checkpoint/hoi_clip_embedding.pth",
+                 embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
                  clip_model="openai/clip-vit-base-patch32", device="cuda"):
         super().__init__()
         self.device = device
@@ -25,21 +27,6 @@ class SentenceCriterion:
         # pair example: (action_id, object_id)
         self.pair2text = hico_text_label
         self.text2pair = {v: k for k, v in hico_text_label.items()}
-
-        if embedding_file is not None:
-            print("load hoi_clip_embedding from pretrained.")
-            self.text2tensor = torch.load(embedding_file)
-        else:
-            text2tensor = {}
-            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
-            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
-            print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
-            for i, text in enumerate(self.text2pair.keys()):
-                inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
-                outputs = model_proj(**inputs)
-                text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
-            self.text2tensor = text2tensor
-            torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
 
         # special sentence
         self.special_sentence = "A photo of a person."
@@ -54,7 +41,7 @@ class SentenceCriterion:
         else:
             self.special_sentence_tensor = torch.load("./checkpoint/special_sentence_tensor.pth")[self.special_sentence]
             print("load special sentence tensor from pretrained.", self.special_sentence_tensor.size())
-            self.special_sentence_tensor.to(self.device)
+            # self.special_sentence_tensor
 
         self.verb2text = {}
         self.text2verb = {}
@@ -62,21 +49,54 @@ class SentenceCriterion:
         self.l1_loss = nn.L1Loss()
         # When using pretrained weight "./checkpoint/hoi_clip_embedding.pth"
 
-        self.kl_loss = nn.KLDivLoss(reduction="batchmean", log_target=True)
+        # self.kl_loss = nn.KLDivLoss(reduction="batchmean", log_target=True)
         # When using pretrained weight "./checkpoint/hoi_clip_embedding_log_space.pth"
 
         # label composition
         self.p_v = 0.6  # 0.6 to change, 0.4 to not change
-        self.k = 10
-        self.text_embeddings = torch.cat(list(self.text2tensor.values())).to(self.device)  # torch.Size([600, 512])
+        self.k = 30
 
-        self.text_embedding_norm = F.normalize(self.text_embeddings, dim=-1).to(self.device)
+        if embedding_file is not None:
+            print("Load hoi_clip_embedding from pretrained.")
+            self.text2tensor = torch.load(embedding_file)
+            # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
+
+        else:
+            text2tensor = {}
+            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+            print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
+            for i, text in enumerate(self.text2pair.keys()):
+                inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
+                outputs = model_proj(**inputs)
+                text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
+            self.text2tensor = text2tensor
+            torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
+            # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
+
+        if "ckpt" in embedding_file:
+            ckpt = torch.load(embedding_file)
+            self.text_embeddings = ckpt["text_tensor"]
+            self.text2idx = ckpt["sentence2tensor_id"]
+            self.idx2text = {v: k for k, v in self.text2idx.items()}
+            self.real2synth_tensor_id = ckpt['real2synth_tensor_id']
+            self.real2synth_tensor_id = {k: torch.tensor(v) for k, v in self.real2synth_tensor_id.items()}
+
+        else:
+            self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
+            self.list_text2tensor = list(self.text2tensor)
+            self.text2idx = {text: self.list_text2tensor.index(text) for text in self.text2pair.keys()}
+            self.idx2text = {v: k for k, v in self.text2idx.items()}
+            self.real2synth_tensor_id = None
+
+        self.text_embedding_norm = F.normalize(self.text_embeddings, dim=-1)
         sim_matrix = torch.mm(self.text_embedding_norm, self.text_embedding_norm.t())
-        self.top_k_index = torch.topk(sim_matrix, k=self.k, dim=-1).indices
 
-        self.list_text2tensor = list(self.text2tensor)
-        self.text2idx = {text: self.list_text2tensor.index(text) for text in self.text2pair.keys()}
-        self.idx2text = {v: k for k, v in self.text2idx.items()}
+        print(f"Similarity Matrix Size: {sim_matrix.size()}")
+
+        top_k_result = torch.topk(sim_matrix, k=self.k, dim=-1)
+        self.top_k_index = top_k_result.indices
+        self.top_k_score = top_k_result.values
 
         # self.max_hoi = 100
 
@@ -114,7 +134,7 @@ class SentenceCriterion:
             text = t['hoi_sentence'][0]
             if text == self.special_sentence:
                 # collate_query_hoi_embeddings = [self.special_sentence_tensor for i in range(100)]
-                collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1).to(self.device)
+                collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
                 # print(collate_query_hoi_embeddings.size())
             else:
                 embedding_idx = self.text2idx[text]
@@ -156,7 +176,7 @@ class SentenceCriterion:
 
         return losses
 
-    def batch_kl_loss(self, outputs, targets):
+    def batch_l1_con_loss(self, outputs, targets):
         """
         :param outputs: dict {
             'pred_sub_boxes': torch.Size([3, 64, 4]) = human_pred_boxes,
@@ -164,27 +184,52 @@ class SentenceCriterion:
             'pred_obj_boxes': torch.Size([3, 64, 4]) = object_pred_boxes,
             'pred_hoi_logits': torch.Size([3, 64, 600]) = [batch_size, num_queries, classes],
             'action_pred_logits': action_outputs_class[-1],
-            # TODO: modify for torch.Size([batch_size, **num_query**, 512])
-            'pred_hoi_embedding': torch.Size([batch_size, 512])
+            'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
         }
-        :param targets: dict {
-            'hoi_sentence': list of hoi text label,   ex: ["a photo of a person lassoing a cow", ]
+        # :param targets: dict {
+        #     'hoi_sentence': List[str],  list of hoi text, ex: ["a photo of a person lassoing a cow", ...].
+        #                     len = batch size
+        # }
+        :param targets: List[dict] {
+            'hoi_sentence: ["a photo of a person lassoing a cow", ...]
         }
 
         :return losses: dict {
-
+            'l1_loss': tensor
         }
         """
         assert 'pred_hoi_embeddings' in outputs
-        assert 'hoi_sentence' in targets
+        # assert 'hoi_sentence' in targets
         pred_hoi_embeddings = outputs['pred_hoi_embeddings']
-
-        # KL loss
+        device = pred_hoi_embeddings.device
         losses = {}
-        collate_hoi_text = [self.text2tensor[text] for text in targets['hoi_sentence']]
-        collate_hoi_embedding = torch.cat(collate_hoi_text, dim=0)
 
-        losses['kl_div'] = self.kl_loss(F.log_softmax(pred_hoi_embeddings, dim=1), collate_hoi_embedding)
+        # label composition
+        collate_hoi_embeddings = []
+        for i, t in enumerate(targets):
+            # text = t['hoi_sentence'][0]
+            text = random.choice(t['hoi_sentence'])
+            if text == self.special_sentence:
+                # collate_query_hoi_embeddings = [self.special_sentence_tensor for i in range(100)]
+                collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
+                # print(collate_query_hoi_embeddings.size())
+            else:
+                embedding_idx = self.text2idx[text]
+                # top_k_indices = self.top_k_index[embedding_idx]
+                top_k_indices = self.real2synth_tensor_id[embedding_idx]
+                # tensor([101, 104, 103,  98,  96, 105, 106,  97, 100, 102]) first one is original, e.g. 101
+
+                mask = torch.rand(100) > self.p_v
+                rand_idxs = torch.randint(1, len(top_k_indices), size=(1, 100))[0]
+                rand_idxs[mask] = 0  # keep original embedding
+                rand_similar_label = top_k_indices[rand_idxs]
+
+                collate_query_hoi_embeddings = self.text_embeddings[rand_similar_label].unsqueeze(0)
+
+            collate_hoi_embeddings.append(collate_query_hoi_embeddings)
+
+        collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
+        losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
 
         return losses
 
@@ -274,12 +319,31 @@ if __name__ == '__main__':
     # print(pred)
     # print(target)
 
-    target = [{'hoi_sentence': ['a photo of a person lassoing a cow']}] * 3
-    pred = torch.rand(3, 100, 512, requires_grad=True)
-    # kl_loss = criterion.batch_kl_loss({"pred_hoi_embeddings": pred}, {"hoi_sentence": target})
-    l1_loss = criterion.batch_l1_loss({"pred_hoi_embeddings": pred}, target)
-    print(l1_loss)
+    # target = [{'hoi_sentence': ['a photo of a person lassoing a cow']}] * 3
+    # pred = torch.rand(3, 100, 512, requires_grad=True)
+    # # kl_loss = criterion.batch_kl_loss({"pred_hoi_embeddings": pred}, {"hoi_sentence": target})
+    #
+    # start_time = time.time()
+    #
+    # l1_loss = criterion.batch_l1_loss({"pred_hoi_embeddings": pred}, target)
+    #
+    # total_time = time.time() - start_time
+    # print(f'Training time {total_time}')
+    # print(l1_loss)
     # criterion.inference({"pred_hoi_embeddings": pred})
+
+    # target = [{'hoi_pair': [(4, 4)]}] * 16
+    target = [{'hoi_sentence': ['a photo of a person lassoing a cow']}] * 16
+    pred = torch.rand(16, 100, 512, requires_grad=True)
+
+    start_time = time.time()
+
+    l1_loss = criterion.batch_l1_con_loss({"pred_hoi_embeddings": pred}, target)
+
+    total_time = time.time() - start_time
+    print(f'Training time {total_time}')
+    # Training time 0.011998176574707031
+    print(l1_loss)
 
     # a = torch.log_softmax(torch.randn(64, 81), dim=1)
     # b = torch.softmax(torch.randn(64, 81), dim=1)

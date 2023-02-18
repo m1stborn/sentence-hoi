@@ -1,12 +1,10 @@
-# ------------------------------------------------------------------------
-# QAHOI
-# Copyright (c) 2021 Junwen Chen. All Rights Reserved.
-# Licensed under the Apache License, Version 2.0 [see LICENSE for details]
-# ------------------------------------------------------------------------
 import numpy as np
 import os
 import gzip
 import json
+
+from util.topk import top_k
+from .hico_text_label import hico_text_label
 
 
 class NumpyAwareJSONEncoder(json.JSONEncoder):
@@ -169,7 +167,7 @@ def compute_large_area(bbox1, bbox2, img_h, img_w, invalid=0.0):
     return area
 
 
-class HICOFagEvaluator:
+class HICOHoiHeadEvaluator:
     def __init__(self, preds, gts, dataset_path, out_dir, epoch, bins_num=10, use_nms=True, nms_thresh=0.5):
         self.out_dir = out_dir
         self.epoch = epoch
@@ -207,13 +205,31 @@ class HICOFagEvaluator:
         self.thres_nms = 0.7
         self.use_nms = use_nms
         self.max_hois = 100
+
+        self.hoi_obj_list = []
+        self.hico_triplet_labels = list(hico_text_label.keys())
+        for hoi_pair in self.hico_triplet_labels:
+            self.hoi_obj_list.append(hoi_pair[1])
+
+        # Check label
+        self.mapping = {}
+        for idx, (item, (v_id, o_id)) in enumerate(zip(self.hoi_list, self.hico_triplet_labels)):
+            # print(f"obj {o_id}, verb {v_id}, {item['object_cat'], item['verb_id'] } ")
+            assert item['object_index'] == o_id
+            assert item['verb_id'] - 1 == v_id
+            self.mapping[idx] = item["id"]
+
         # Using GGNet evaluation: https://github.com/SherlockHolmes221/GGNet/blob/main/src/lib/eval/hico_eval_de_ko.py
         print("Convert preds...")
+        count = 0
         for img_preds, img_gts in zip(preds, gts):
             img_preds = {k: v.to('cpu').numpy() for k, v in img_preds.items()}
             bboxes = [{'bbox': bbox, 'category_id': self.valid_obj_ids[label]} for bbox, label in
                       zip(img_preds['boxes'], img_preds['labels'])]
-            hoi_scores = img_preds['verb_scores']  # 100, 117
+            # hoi_scores = img_preds['verb_scores']  # 100, 117
+            obj_scores = img_preds['obj_scores'] * img_preds['obj_scores']
+            hoi_scores = img_preds['hoi_scores'] + obj_scores[:, self.hoi_obj_list]
+
             verb_labels = np.tile(np.arange(hoi_scores.shape[1]), (hoi_scores.shape[0], 1))  # [0 1 ... 117 1 2 ...]
             subject_ids = np.tile(img_preds['sub_ids'], (hoi_scores.shape[1], 1)).T
             object_ids = np.tile(img_preds['obj_ids'], (hoi_scores.shape[1], 1)).T
@@ -223,26 +239,21 @@ class HICOFagEvaluator:
             subject_ids = subject_ids.ravel()
             object_ids = object_ids.ravel()
 
-            # print(len(bboxes))
-            # print(hoi_scores[:200], verb_labels[:200], subject_ids[:200], object_ids[:200])
-            # print(hoi_scores.shape, verb_labels.shape, subject_ids.shape, object_ids.shape)
-            # (11700,) (11700,) (11700,) (11700,)
-            # print(hoi_scores.shape, img_preds['sub_ids'])
+            topk_hoi_scores = top_k(list(hoi_scores), self.max_hois)
+            topk_indexes = np.array([np.where(hoi_scores == score)[0][0] for score in topk_hoi_scores])
 
             if len(subject_ids) > 0:
-                object_labels = np.array(
-                    [self.valid_obj_ids.index(bboxes[object_id]['category_id']) for object_id in object_ids])
-                masks = self.correct_mat[verb_labels, object_labels]
-                hoi_scores *= masks
-
-                hois = [
-                    {'subject_id': subject_id, 'object_id': object_id, 'category_id': self.valid_verb_ids[category_id],
-                     'score': score} for
-                    subject_id, object_id, category_id, score in zip(subject_ids, object_ids, verb_labels, hoi_scores)]
-                hois.sort(key=lambda k: (k.get('score', 0)), reverse=True)
+                hois = [{'subject_id': subject_id, 'object_id': object_id, 'category_id': category_id, 'score': score}
+                        for subject_id, object_id, category_id, score in
+                        zip(subject_ids[topk_indexes],
+                            object_ids[topk_indexes],
+                            verb_labels[topk_indexes],
+                            topk_hoi_scores)]
                 hois = hois[:self.max_hois]
             else:
                 hois = []
+
+            count += 1
 
             # filename = img_gts["file_name"].split('.')[0]
             filename = img_gts['filename'].split('.')[0]
@@ -267,12 +278,8 @@ class HICOFagEvaluator:
                 obj_bbox = bboxes[hoi['object_id']]['bbox']
                 sub_bbox = bboxes[hoi['subject_id']]['bbox']
                 score = hoi['score']
-                verb_id = hoi['category_id']
-
-                hoi_id = '0'
-                for item in self.hoi_list:
-                    if item['object_cat'] == obj_id and item['verb_id'] == verb_id:
-                        hoi_id = item['id']
+                verb_id = hoi['category_id']  # 0-599
+                hoi_id = self.mapping[verb_id]
                 assert int(hoi_id) > 0
 
                 data = np.array([sub_bbox[0], sub_bbox[1], sub_bbox[2], sub_bbox[3],
@@ -345,9 +352,6 @@ class HICOFagEvaluator:
         for hoi in self.hoi_list:
             o = self.eval_hoi(hoi['id'], self.global_ids, self.annotations, self.pred_anno, self.out_dir)
             outputs.append(o)
-        # self.global_ids = List[str: image filename]
-        # self.pred_anno = Dict[str: image filename, Dict[str: hoi_id]]
-        # print(f"evaluation_default", len(outputs), self.pred_anno)
 
         m_ap = {
             'AP': {},
@@ -650,10 +654,10 @@ class HICOFagEvaluator:
         return keep_inds
 
 
-if __name__ == "__main__":
-    import torch
-
-    preds = torch.load("../preds.pt")
-    gts = torch.load("../gts.pt")
-    evaluator = HICOFagEvaluator(preds, gts, "../data/hico_20160224_det/", "../", -1)
-    evaluator.evaluation_extra()
+# if __name__ == "__main__":
+#     import torch
+#
+#     preds = torch.load("../preds.pt")
+#     gts = torch.load("../gts.pt")
+#     evaluator = HICOHoiHeadEvaluator(preds, gts, "../data/hico_20160224_det/", "../", -1)
+#     evaluator.evaluation_extra()

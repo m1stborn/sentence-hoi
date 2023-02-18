@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 
 import util.misc as utils
 from datasets import build_gen_dataset
+from datasets import build_fag_dataset
 from engine_gen import evaluate_hoi_fag
 from models.hoitr import build as build_model
 from models.sentence_critreion import SentenceCriterion
@@ -15,6 +16,11 @@ from util.argparser import get_args_parser
 
 
 def main(args):
+    checkpoint = torch.load(args.resume, map_location='cpu')
+    # overwrite args
+    args = checkpoint['args']
+    print(f"Load model from Epoch {checkpoint['epoch']}")
+
     # Fix the seed for reproducibility.
     device = torch.device(args.device)
     seed = args.seed + utils.get_rank()
@@ -22,27 +28,25 @@ def main(args):
     np.random.seed(seed)
     random.seed(seed)
 
-    # GEN-VL-KT dataset
-    dataset_val = build_gen_dataset(image_set='val', args=args)
-    sampler_val = torch.utils.data.SequentialSampler(dataset_val)
+    if args.use_fag_setting:
+        # FG dataset
+        dataset_val = build_fag_dataset(image_set="val", args=args)
+    else:
+        # GEN-VL-KT dataset
+        dataset_val = build_gen_dataset(image_set='val', args=args)
 
+    sampler_val = torch.utils.data.SequentialSampler(dataset_val)
     data_loader_val = DataLoader(dataset_val, 8, sampler=sampler_val,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
-    model, criterion, postprocessors = build_model(args)
+    model, _, postprocessors = build_model(args)
     model.to(device)
 
-    sen_criterion = None
-    if args.with_sentence_branch:
-        sen_criterion = SentenceCriterion(device=device)
-
-    if args.resume:
-        checkpoint = torch.load(args.resume, map_location='cpu')
-        model.load_state_dict(checkpoint['model'], strict=False)
-        print(f"Load model from Epoch {checkpoint['epoch']}")
+    model.load_state_dict(checkpoint['model'])
+    print(f"Load model from Epoch {checkpoint['epoch']}")
 
     test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
-                                  args.subject_category_id, device, args, sen_criterion)
+                                  args.subject_category_id, device, args)
     print(test_stats)
     return
 

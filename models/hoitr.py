@@ -59,9 +59,10 @@ class HoiTR(nn.Module):
         self.object_box_embed = MLP(hidden_dim, hidden_dim, 4, 3)
         self.object_cls_embed = nn.Linear(hidden_dim, num_obj_classes) if use_fag_setting \
             else nn.Linear(hidden_dim, num_obj_classes + 1)
-        self.verb_cls_embed = nn.Linear(hidden_dim, num_verb_classes)
 
-
+        self.use_fag_setting = use_fag_setting
+        print(f"Interaction action head setting: {'fag' if self.use_fag_setting else 'gen'}")
+        self.verb_cls_embed = nn.Linear(hidden_dim, num_verb_classes if self.use_fag_setting else 600)
         # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
         # self.human_cls_embed = nn.Linear(hidden_dim, num_humans + 1)
         # self.action_cls_embed = nn.Linear(hidden_dim, num_actions + 1)
@@ -70,6 +71,8 @@ class HoiTR(nn.Module):
         self.sentence_branch = sentence_branch
         if sentence_branch:
             self.sentence_embed = MLP(hidden_dim, hidden_dim, 512, 4)
+
+        self.hoi_concept = 'pred_verb_logits' if self.use_fag_setting else 'pred_hoi_logits'
 
     def forward(self, samples: NestedTensor):
         """ The forward expects a NestedTensor, which consists of:
@@ -98,11 +101,10 @@ class HoiTR(nn.Module):
         human_outputs_coord = self.human_box_embed(hs).sigmoid()
         object_outputs_class = self.object_cls_embed(hs)
         object_outputs_coord = self.object_box_embed(hs).sigmoid()
-        verb_outputs_class = self.verb_cls_embed(hs)  # torch.Size([dec_layer, batch_size, num_query, num_verb_class+1])
+        verb_outputs_class = self.verb_cls_embed(hs)
 
         # Deprecated layer, the old checkpoint has it. Can be removed after a fresh train.
         # human_outputs_class = self.human_cls_embed(hs)
-
         # hoi_outputs_class = self.hoi_visual_projection(hs)
 
         out = {
@@ -110,18 +112,20 @@ class HoiTR(nn.Module):
             'pred_obj_logits': object_outputs_class[-1],
             'pred_obj_boxes': object_outputs_coord[-1],
             # 'pred_hoi_logits': hoi_outputs_class[-1],
-            'pred_verb_logits': verb_outputs_class[-1],
+            self.hoi_concept: verb_outputs_class[-1],
         }
+        # if self.use_fag_setting:
+        #     verb_outputs_class = self.verb_cls_embed(hs)
+        #     # torch.Size([dec_layer, batch_size, num_query, num_verb_class+1])
+        #     out['pred_verb_logits'] = verb_outputs_class[-1]
+        # else:
+        #     verb_outputs_class = self.hoi_visual_projection(hs)
+        #     out['pred_hoi_logits'] = verb_outputs_class[-1]
 
         if self.sentence_branch:
             sentence_embedding = self.sentence_embed(hs)
-            # print(f"{hs.size()}, sentence_embedding: {sentence_embedding[-1].size()}")
-            # print(human_outputs_coord[-1].size())
-            # hoi_scores = hoi_outputs_class[-1].sigmoid()
-            # print("hoi_scores", hoi_scores.size())
             out['pred_hoi_embeddings'] = sentence_embedding[-1]
 
-        # TODO: check aux outputs require sentence
         if self.aux_loss:
             out['aux_outputs'] = self._set_aux_loss(
                 human_outputs_coord,
@@ -143,12 +147,14 @@ class HoiTR(nn.Module):
         # this is a workaround to make torchscript happy, as torchscript
         # doesn't support dictionary with non-homogeneous values, such
         # as a dict having both a Tensor and a list.
+        # hoi_concept = 'pred_verb_logits' if self.use_fag_setting else 'pred_hoi_logits'
         return [{
             'pred_sub_boxes': a,
             'pred_obj_logits': b,
             'pred_obj_boxes': c,
             # 'pred_hoi_logits': d,
-            'pred_verb_logits': d,
+            # 'pred_verb_logits': d,
+            self.hoi_concept: d,
         } for a, b, c, d in
             zip(
                 human_outputs_coord[:-1],
@@ -239,7 +245,10 @@ def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, Union[PostProcessHOITriplet,
 
     # TODO: remove
     # losses = ['hoi_labels', 'obj_labels', 'sub_obj_boxes', 'verb_labels', 'obj_cardinality']
-    losses = ['obj_labels', 'sub_obj_boxes', 'verb_labels', 'obj_cardinality']
+    if args.use_fag_setting:
+        losses = ['obj_labels', 'sub_obj_boxes', 'verb_labels', 'obj_cardinality']
+    else:
+        losses = ['hoi_labels', 'obj_labels', 'sub_obj_boxes', 'obj_cardinality']
 
     criterion = GenSetCriterionHOI(args.num_obj_classes, args.num_queries, args.num_verb_classes, matcher=matcher,
                                    weight_dict=weight_dict, eos_coef=args.eos_coef, losses=losses,

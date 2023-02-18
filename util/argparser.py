@@ -1,7 +1,9 @@
+import json
 import os
 import getpass
 import argparse
 import datetime
+from pathlib import Path
 
 
 def create_log_dir(checkpoint='checkpoint', log_path='/data/LOG/train_log'):
@@ -32,7 +34,7 @@ def get_args_parser():
     parser.add_argument('--frozen_weights', type=str, default=None,
                         help="Path to the pretrained model. If set, only the mask head will be trained")
     # Backbone
-    parser.add_argument('--backbone', choices=['resnet50', 'resnet101', 'swin'], required=True,
+    parser.add_argument('--backbone', choices=['resnet50', 'resnet101', 'swin'],
                         help="Name of the convolutional backbone to use")
     parser.add_argument('--position_embedding', default='sine', type=str, choices=('sine', 'learned'),
                         help="Type of positional embedding to use on top of the image features")
@@ -169,7 +171,7 @@ def get_args_parser():
 
     # hoi eval parameters
     parser.add_argument('--use_nms_filter', action='store_true', help='Use pair nms filter, default not use')
-    parser.add_argument('--thres_nms', default=0.7, type=float)
+    parser.add_argument('--thres_nms', default=0.5, type=float)
 
     # For Fag setting
     # parser.add_argument('--thres_nms', default=0.5, type=float)
@@ -196,9 +198,31 @@ def get_args_parser():
 
     # sentence hoi
     parser.add_argument('--with_sentence_branch', action='store_true', help='Use sentence branch')
-    parser.add_argument('--sentence_l1_loss_coef', default=3, type=float)
+    parser.add_argument('--sentence_l1_loss_coef', default=0.3, type=float)
 
     parser.add_argument('--use_fag_setting', action='store_true', help='Use Fag setting for evaluator, postprocessor..')
     parser.add_argument('--no_obj', action='store_true')
 
     return parser
+
+
+def save_args(filepath):
+    with open(os.path.join(filepath, "args.json"), 'wt') as f:
+        json.dump(vars(args), f, indent=4)
+
+
+def load_args(filepath):
+    with open(os.path.join(filepath, "args.json"), 'rt') as f:
+        t_args = argparse.Namespace()
+        t_args.__dict__.update(json.load(f))
+        arg = parser.parse_args(namespace=t_args)
+
+    return args
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser('SentenceHOI training and evaluation script', parents=[get_args_parser()])
+    args = parser.parse_args()
+    if args.output_dir:
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)

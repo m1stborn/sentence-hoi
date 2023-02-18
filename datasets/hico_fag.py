@@ -21,6 +21,7 @@ import torchvision
 import math
 
 import datasets.transforms as T
+from datasets.hico_text_label import hico_text_label
 
 
 def gaussian_2d(shape, sigma=1):
@@ -94,6 +95,8 @@ class HICODetection(torch.utils.data.Dataset):
                                82, 84, 85, 86, 87, 88, 89, 90)
         self._valid_verb_ids = list(range(1, 118))
 
+        self.pair2text = hico_text_label
+
         if img_set == 'train':
             self.ids = []
             for idx, img_anno in enumerate(self.annotations):
@@ -154,9 +157,19 @@ class HICODetection(torch.utils.data.Dataset):
             obj_labels, verb_labels, sub_boxes, obj_boxes = [], [], [], []
             sub_obj_pairs = []
             verb_label_enc = [0 for _ in range(len(self._valid_verb_ids))]
+
+            # For hoi.csv generation
+            hoi_pair = []
+            hoi_sentences = []
+
             for hoi in img_anno['hoi_annotation']:
                 if hoi['subject_id'] not in kept_box_indices or hoi['object_id'] not in kept_box_indices:
                     continue
+
+                pair = (self._valid_verb_ids.index(hoi['category_id']),
+                        target['labels'][kept_box_indices.index(hoi['object_id'])].item())
+                hoi_pair.append(pair)
+
                 sub_obj_pair = (hoi['subject_id'], hoi['object_id'])
                 verb_label_enc[self._valid_verb_ids.index(hoi['category_id'])] = 1
                 if sub_obj_pair in sub_obj_pairs:
@@ -172,6 +185,8 @@ class HICODetection(torch.utils.data.Dataset):
                     verb_labels.append(verb_label)
                     sub_boxes.append(sub_box)
                     obj_boxes.append(obj_box)
+
+                    hoi_sentences.append(self.pair2text[pair])
             if len(sub_obj_pairs) == 0:
                 target['obj_labels'] = torch.zeros((0,), dtype=torch.int64)
                 target['verb_labels'] = torch.zeros((0, len(self._valid_verb_ids)), dtype=torch.float32)
@@ -184,11 +199,17 @@ class HICODetection(torch.utils.data.Dataset):
                 target['sub_boxes'] = torch.stack(sub_boxes)
                 target['obj_boxes'] = torch.stack(obj_boxes)
                 target['verb_label_enc'] = torch.as_tensor(verb_label_enc, dtype=torch.float32)
+
+            target['hoi_sentence'] = hoi_sentences if len(hoi_sentences) != 0 else ['A photo of a person.']
+            target['hoi_pairs'] = hoi_pair
+            target['filename'] = img_anno['file_name']
+
         else:
             target['boxes'] = boxes
             target['labels'] = classes
             target['id'] = idx
-            target['file_name'] = img_anno['file_name']
+            target['filename'] = img_anno['file_name']
+            # target['filename'] = img_anno['file_name']
 
             if self._transforms is not None:
                 img, _ = self._transforms(img, None)
@@ -251,7 +272,7 @@ def make_hico_transforms(image_set):
 
     if image_set == 'val':
         return T.Compose([
-            T.RandomResize([800], max_size=1333),
+            T.RandomResize([800], max_size=900),
             normalize,
         ])
 

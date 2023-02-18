@@ -320,7 +320,7 @@ class HICOEvaluator:
         # computing the sum_area
         sum_area = S_rec1 + S_rec2
 
-        # find the each edge of intersect rectangle
+        # find the edge of intersect rectangle
         left_line = max(rec1[1], rec2[1])
         right_line = min(rec1[3], rec2[3])
         top_line = max(rec1[0], rec2[0])

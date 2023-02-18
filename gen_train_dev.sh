@@ -12,16 +12,16 @@ python main_fag.py \
         --with_obj_clip_label \
         --use_nms_filter \
         --use_fag_setting \
-        --resume checkpoint/p_202302052038/checkpoint_best.pth \
-#        --with_sentence_branch \
-#        --dev \
+        --dev \
+        --with_sentence_branch \
+#        --resume checkpoint/p_202302062134/checkpoint_best.pth \
 #        >> "./checkpoint/tmp_stdout.txt"
 
 # move tmep logfile to folder create by main_gen.py
 #mv "./checkpoint/tmp_stdout.txt" "$(ls -td ./checkpoint/*/ | head -1)stdout.txt"
 
-# checkpoint p_202301312224
-# epoch 70 "test_mAP": "test_mAP": 0.2709412762652168
+# checkpoint p_202302062134
+# epoch 123 "test_mAP_def": 0.23368687085219425
 
 # TODO: label composition by word2vec, then encoding by clip
 # TODO: calculate sentence metric

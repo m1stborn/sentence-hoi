@@ -1,26 +1,25 @@
-import os
-from collections import defaultdict
 import argparse
 import datetime
 import json
+import os
 import random
 import time
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 import torch
-from torch.utils.data import DataLoader, DistributedSampler
+from accelerate import Accelerator
+from torch.utils.data import DataLoader
+from transformers import (
+    get_scheduler,
+)
 
 import util.misc as utils
-from datasets import build_dataset, build_gen_dataset, build_fag_dataset
-from engine_gen import train_one_epoch, evaluate_hoi_fag, evaluate_hoi
+from datasets import build_gen_dataset, build_fag_dataset
+from engine_gen import train_one_epoch, evaluate_hoi_fag
 from models.hoitr import build as build_model
 from models.sentence_critreion import SentenceCriterion
 from util.argparser import get_args_parser
-
-# from datasets.hico_eval_triplet_from_json import HICOEvaluatorJson
-
 
 """
 model output:
@@ -84,6 +83,8 @@ Fag dataset structure:
         
         verb_label_enc : torch.Size([117])
         
+        hoi_pairs: List[(verb, obj)] # can be map by obj2id.json and verb2id.json
+        
         # compare to gen dataset
         orig_size : torch.Size([2])
         size : torch.Size([2])
@@ -111,9 +112,14 @@ def main(args):
     np.random.seed(seed)
     random.seed(seed)
 
-    # GEN-VL-KT dataset
-    dataset_train = build_gen_dataset(image_set='train', args=args)
-    dataset_val = build_gen_dataset(image_set='val', args=args)
+    if args.use_fag_setting:
+        # FG dataset
+        dataset_train = build_fag_dataset(image_set="train", args=args)
+        dataset_val = build_fag_dataset(image_set="val", args=args)
+    else:
+        # GEN-VL-KT dataset
+        dataset_train = build_gen_dataset(image_set='train', args=args)
+        dataset_val = build_gen_dataset(image_set='val', args=args)
 
     sampler_train = torch.utils.data.RandomSampler(dataset_train)
     sampler_val = torch.utils.data.SequentialSampler(dataset_val)
@@ -189,21 +195,32 @@ def main(args):
 
     # Optimizer
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr, weight_decay=args.weight_decay)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.25)
+    # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
+    lr_scheduler = get_scheduler(
+        name="cosine",
+        optimizer=optimizer,
+        num_warmup_steps=0,
+        num_training_steps=args.epochs * len(data_loader_train),
+    )
 
+    print(f"Num training steps: {args.epochs * len(data_loader_train)}")
     if args.resume:
         checkpoint = torch.load(args.resume, map_location='cpu')
         model.load_state_dict(checkpoint['model'], strict=False)
-        if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint and 'epoch' in checkpoint:
-            # TODO: require fix
-            # optimizer.load_state_dict(checkpoint['optimizer'])
-            # lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
-            args.start_epoch = checkpoint['epoch'] + 1
+        if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint \
+                and 'epoch' in checkpoint and not args.with_sentence_branch:
+            optimizer.load_state_dict(checkpoint['optimizer'])
+            lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
 
-    # Dev model
-    # output = model(torch.rand((1, 3, 512, 560)).to(args.device))
-    # targets = [{k: v.to(device) if torch.is_tensor(v) else v for k, v in t.items()} for t in [anno_dict]]
-    # losses = criterion(output, targets)
+        args.start_epoch = checkpoint['epoch'] + 1
+        print(f"Load model from Epoch {checkpoint['epoch']}")
+
+    accelerator = Accelerator()
+
+    # Prepare everything with our `accelerator`.
+    model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion = accelerator.prepare(
+        model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion
+    )
 
     # Train
     print("Start training")
@@ -211,8 +228,9 @@ def main(args):
     best_performance = 0
     for epoch in range(args.start_epoch, args.epochs):
         train_stats = train_one_epoch(
-            model, criterion, data_loader_train, optimizer, device, args, epoch, sen_criterion, args.clip_max_norm)
-        lr_scheduler.step()
+            model, criterion, data_loader_train, optimizer, device,
+            args, epoch, lr_scheduler, sen_criterion, args.clip_max_norm)
+        # lr_scheduler.step()
 
         if epoch == args.epochs - 1:
             checkpoint_path = os.path.join(args.output_dir, 'checkpoint_last.pth')
@@ -226,18 +244,13 @@ def main(args):
 
         if epoch < 100 and epoch % 2 != 0:  # eval every 5 epoch before lr_drop
             continue
-        if args.use_fag_setting:
-            test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
-                                          args.subject_category_id, device, args, sen_criterion)
-        else:
-            test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
-                                          args.subject_category_id, device, args, sen_criterion)
+
+        test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
+                                      args.subject_category_id, device, args)
+
         performance = None
         if args.dataset_file == 'hico':
-            if args.use_fag_setting:
-                performance = test_stats['mAP_def']
-            else:
-                performance = test_stats['mAP']
+            performance = test_stats['mAP_def']
         # elif args.dataset_file == 'vcoco':
         #     performance = test_stats['mAP_all']
         # elif args.dataset_file == 'hoia':

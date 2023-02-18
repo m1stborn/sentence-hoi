@@ -47,6 +47,7 @@ def sigmoid_focal_loss(inputs, targets, num_boxes, alpha: float = 0.25, gamma: f
 
     return loss.mean(1).sum() / num_boxes
 
+
 # def _neg_loss(pred, gt, weights=None, alpha=0.25):
 def _neg_loss(pred, gt):
     """ Modified focal loss. Exactly the same as CornerNet.
@@ -104,6 +105,7 @@ class SetCriterionHOI(nn.Module):
         # Fag set
         self.focal_alpha = 0.25
         print(f"Init SetCriterionHOI: set no_obj to {self.no_obj}")
+        self.use_fag_setting = args.use_fag_setting
 
     def loss_obj_labels(self, outputs, targets, indices, num_interactions, log=True):
         assert 'pred_obj_logits' in outputs
@@ -160,7 +162,6 @@ class SetCriterionHOI(nn.Module):
 
         return losses
 
-    # TODO: remove
     def loss_hoi_labels(self, outputs, targets, indices, num_interactions, topk=5):
         assert 'pred_hoi_logits' in outputs
         src_logits = outputs['pred_hoi_logits']
@@ -223,13 +224,16 @@ class SetCriterionHOI(nn.Module):
 
     def get_loss(self, loss, outputs, targets, indices, num, **kwargs):
         loss_map = {
-            # TODO: remove
             # 'hoi_labels': self.loss_hoi_labels,
+            # 'verb_labels': self.loss_verb_labels,
             'obj_labels': self.loss_obj_labels,
-            'verb_labels': self.loss_verb_labels,
             'sub_obj_boxes': self.loss_sub_obj_boxes,
             'obj_cardinality': self.loss_obj_cardinality,
         }
+        if self.use_fag_setting:
+            loss_map['verb_labels'] = self.loss_verb_labels
+        else:
+            loss_map['hoi_labels'] = self.loss_hoi_labels
 
         assert loss in loss_map, f'do you really want to compute {loss} loss?'
         return loss_map[loss](outputs, targets, indices, num, **kwargs)
@@ -250,7 +254,7 @@ class SetCriterionHOI(nn.Module):
         # Retrieve the matching between the outputs of the last layer and the targets
         indices = self.matcher(outputs_without_aux, targets)
 
-        num_interactions = sum(len(t['hoi_labels']) for t in targets)
+        num_interactions = sum(len(t['obj_labels']) for t in targets)
         num_interactions = torch.as_tensor([num_interactions], dtype=torch.float,
                                            device=next(iter(outputs.values())).device)
         # if is_dist_avail_and_initialized():
@@ -280,7 +284,6 @@ class SetCriterionHOI(nn.Module):
 
 
 class PostProcessHOITriplet(nn.Module):
-
     def __init__(self, args):
         super().__init__()
         self.subject_category_id = args.subject_category_id
