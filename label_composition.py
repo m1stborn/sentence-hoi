@@ -114,28 +114,28 @@ def main():
     text_tensor = []
     pair2tensor_id = {}
     idx = 0
-    # for i, (verb, obj) in enumerate(synth_pair_pool):
-    #     pair = (verb2id[verb], obj2id[obj])
-    #     if pair in pair2tensor_id:
-    #         continue
-    #     pair2tensor_id[pair] = idx
-    #
-    #     if pair in hico_text_label:
-    #         print(pair)
-    #         text = hico_text_label[pair]
-    #     else:
-    #         v_ing = ing_form(verb) if '_' not in verb else ing_form(verb.split('_')[0]) + ' ' + verb.split('_')[1]
-    #         v_ing = v_ing.replace('noing interaction', 'and')
-    #         text = f"a photo of a person {v_ing} {'an' if obj[0] in 'aeiou' else 'a'}" \
-    #                f" {obj.replace('_', ' ')}."
-    #     # verb = verb.replace('no_interaction', 'and')
-    #     # text = f"A photo of a person {verb.replace('_', ' ')} {obj.replace('_', ' ')}."
-    #     # pair2tensor_id[pair] = idx
-    #
-    #     inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=16)
-    #     outputs = model_proj(**inputs)
-    #     idx += 1
-    #     text_tensor.append(outputs.text_embeds)
+    for i, (verb, obj) in enumerate(synth_pair_pool):
+        pair = (verb2id[verb], obj2id[obj])
+        if pair in pair2tensor_id:
+            continue
+        pair2tensor_id[pair] = idx
+
+        if pair in hico_text_label:
+            print(pair)
+            text = hico_text_label[pair]
+        else:
+            v_ing = ing_form(verb) if '_' not in verb else ing_form(verb.split('_')[0]) + ' ' + verb.split('_')[1]
+            v_ing = v_ing.replace('noing interaction', 'and')
+            text = f"a photo of a person {v_ing} {'an' if obj[0] in 'aeiou' else 'a'}" \
+                   f" {obj.replace('_', ' ')}."
+        # verb = verb.replace('no_interaction', 'and')
+        # text = f"A photo of a person {verb.replace('_', ' ')} {obj.replace('_', ' ')}."
+        # pair2tensor_id[pair] = idx
+
+        # inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=16)
+        # outputs = model_proj(**inputs)
+        # idx += 1
+        # text_tensor.append(outputs.text_embeds)
 
     # text_tensor = torch.cat(text_tensor)
     # print(text_tensor.size())

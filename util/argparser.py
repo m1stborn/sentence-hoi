@@ -25,7 +25,7 @@ def get_args_parser():
     parser.add_argument('--lr_clip', default=1e-5, type=float)
     parser.add_argument('--batch_size', default=16, type=int)
     parser.add_argument('--weight_decay', default=1e-4, type=float)
-    parser.add_argument('--epochs', default=150, type=int)
+    parser.add_argument('--epochs', default=180, type=int)
     parser.add_argument('--lr_drop', default=40, type=int)
     parser.add_argument('--clip_max_norm', default=0.1, type=float,
                         help='gradient clipping max norm')
@@ -206,9 +206,9 @@ def get_args_parser():
     return parser
 
 
-def save_args(filepath):
-    with open(os.path.join(filepath, "args.json"), 'wt') as f:
-        json.dump(vars(args), f, indent=4)
+def save_args(arg):
+    with open(os.path.join(arg.output_dir, "args.json"), 'wt') as f:
+        json.dump(vars(arg), f, indent=4)
 
 
 def load_args(filepath):

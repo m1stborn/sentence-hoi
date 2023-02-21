@@ -16,10 +16,10 @@ from transformers import (
 
 import util.misc as utils
 from datasets import build_gen_dataset, build_fag_dataset
-from engine_gen import train_one_epoch, evaluate_hoi_fag
+from engine import train_one_epoch, evaluate_hoi_fag
 from models.hoitr import build as build_model
 from models.sentence_critreion import SentenceCriterion
-from util.argparser import get_args_parser
+from util.argparser import get_args_parser, save_args
 
 """
 model output:
@@ -111,6 +111,7 @@ def main(args):
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
+    save_args(args)
 
     if args.use_fag_setting:
         # FG dataset
@@ -206,14 +207,22 @@ def main(args):
     print(f"Num training steps: {args.epochs * len(data_loader_train)}")
     if args.resume:
         checkpoint = torch.load(args.resume, map_location='cpu')
-        model.load_state_dict(checkpoint['model'], strict=False)
-        if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint \
-                and 'epoch' in checkpoint and not args.with_sentence_branch:
-            optimizer.load_state_dict(checkpoint['optimizer'])
-            lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
-
-        args.start_epoch = checkpoint['epoch'] + 1
         print(f"Load model from Epoch {checkpoint['epoch']}")
+        if "hoi_visual_projection.weight" in checkpoint['model']:
+            print(f"Try to load old version of hoi_visual_projection, covert parameter.")
+            my_model_dict = model.state_dict()
+            pretrain_dict = {k: v for k, v in checkpoint['model'].items() if k in my_model_dict}
+            pretrain_dict['verb_cls_embed.weight'] = checkpoint['model']['hoi_visual_projection.weight'].clone()
+            pretrain_dict['verb_cls_embed.bias'] = checkpoint['model']['hoi_visual_projection.bias'].clone()
+            model.load_state_dict(pretrain_dict, strict=False)
+        else:
+            model.load_state_dict(checkpoint['model'], strict=False)
+            if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint \
+                    and 'epoch' in checkpoint and not args.with_sentence_branch:
+                optimizer.load_state_dict(checkpoint['optimizer'])
+                lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
+
+            args.start_epoch = checkpoint['epoch'] + 1
 
     accelerator = Accelerator()
 
@@ -242,7 +251,7 @@ def main(args):
                 'args': args,
             }, checkpoint_path)
 
-        if epoch < 100 and epoch % 2 != 0:  # eval every 5 epoch before lr_drop
+        if epoch < 100 and epoch % 2 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
             continue
 
         test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,

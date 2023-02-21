@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader, DistributedSampler
 
 import util.misc as utils
 from datasets import build_dataset, build_gen_dataset
-from engine_gen import train_one_epoch, evaluate_hoi
+from engine import train_one_epoch, evaluate_hoi
 from models.hoitr import build as build_model
 from models.sentence_critreion import SentenceCriterion
 from util.argparser import get_args_parser

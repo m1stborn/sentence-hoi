@@ -1,8 +1,3 @@
-# ------------------------------------------------------------------------
-# QAHOI
-# Copyright (c) 2021 Junwen Chen. All Rights Reserved.
-# Licensed under the Apache License, Version 2.0 [see LICENSE for details]
-# ------------------------------------------------------------------------
 import numpy as np
 import os
 import gzip

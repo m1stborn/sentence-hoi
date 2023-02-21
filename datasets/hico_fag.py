@@ -161,7 +161,7 @@ class HICODetection(torch.utils.data.Dataset):
             # For hoi.csv generation
             hoi_pair = []
             hoi_sentences = []
-
+            valid_pair = []
             for hoi in img_anno['hoi_annotation']:
                 if hoi['subject_id'] not in kept_box_indices or hoi['object_id'] not in kept_box_indices:
                     continue
@@ -187,6 +187,8 @@ class HICODetection(torch.utils.data.Dataset):
                     obj_boxes.append(obj_box)
 
                     hoi_sentences.append(self.pair2text[pair])
+                    valid_pair.append(pair)
+
             if len(sub_obj_pairs) == 0:
                 target['obj_labels'] = torch.zeros((0,), dtype=torch.int64)
                 target['verb_labels'] = torch.zeros((0, len(self._valid_verb_ids)), dtype=torch.float32)
@@ -203,6 +205,7 @@ class HICODetection(torch.utils.data.Dataset):
             target['hoi_sentence'] = hoi_sentences if len(hoi_sentences) != 0 else ['A photo of a person.']
             target['hoi_pairs'] = hoi_pair
             target['filename'] = img_anno['file_name']
+            target['valid_pairs'] = valid_pair if len(hoi_pair) != 0 else [(0, 0)]
 
         else:
             target['boxes'] = boxes

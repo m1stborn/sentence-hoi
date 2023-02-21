@@ -1,3 +1,4 @@
+import math
 import os
 import time
 from typing import List
@@ -9,17 +10,19 @@ from torch import nn
 from transformers import CLIPTokenizer, CLIPTextModelWithProjection
 import random
 
-from util.topk import top_k
-from .hico_text_label import hico_text_label
-
-# from topk import top_k
-# from hico_text_label import hico_text_label
+try:
+    from util.topk import top_k
+    from .hico_text_label import hico_text_label
+except ModuleNotFoundError:
+    from topk import top_k
+    from hico_text_label import hico_text_label
 
 
 class SentenceCriterion:
     def __init__(self,
                  # embedding_file="./checkpoint/hoi_clip_embedding.pth",
-                 embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
+                 # embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
+                 embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
                  clip_model="openai/clip-vit-base-patch32", device="cuda"):
         super().__init__()
         self.device = device
@@ -54,6 +57,10 @@ class SentenceCriterion:
 
         # label composition
         self.p_v = 0.6  # 0.6 to change, 0.4 to not change
+
+        self.p_verb = 0.8  # 0.2 to change verb, 0.8 to not change
+        self.p_obj = 0.2  # 0.8 to change verb, 0.2 to not change
+
         self.k = 30
 
         if embedding_file is not None:
@@ -78,9 +85,14 @@ class SentenceCriterion:
             ckpt = torch.load(embedding_file)
             self.text_embeddings = ckpt["text_tensor"]
             self.text2idx = ckpt["sentence2tensor_id"]
+            self.pair2tensor_id = ckpt["pair2tensor_id"]
+            self.pair2tensor_id_narrow = {k: v for k, v in self.pair2tensor_id.items() if k in hico_text_label}
+            print(f"Len of pair2tensor_id_narrow {len(self.pair2tensor_id_narrow)}")
             self.idx2text = {v: k for k, v in self.text2idx.items()}
             self.real2synth_tensor_id = ckpt['real2synth_tensor_id']
             self.real2synth_tensor_id = {k: torch.tensor(v) for k, v in self.real2synth_tensor_id.items()}
+
+            self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
 
         else:
             self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
@@ -151,26 +163,8 @@ class SentenceCriterion:
                 #                                 for idx in rand_similar_label]
                 collate_query_hoi_embeddings = self.text_embeddings[rand_similar_label].unsqueeze(0)
 
-            # collate_query_hoi_embeddings = torch.stack(collate_query_hoi_embeddings, dim=1)
-            # torch.Size([1, num_query, 512]) = torch.Size([1, 100, 512])
-
-            # if torch.rand(1) < self.p_v:
-            #     # random pick embeddings from top k neighbor
-            #     embedding_idx = self.text2idx[text]
-            #     # embedding_idx = self.list_text2tensor.index(text)
-            #     top_k_indices = self.top_k_index[embedding_idx]
-            #     rand_idx = torch.randint(1, self.k, (1, 1))[0, 0]
-            #     rand_embedding_idx = top_k_indices[rand_idx]
-            #
-            #     # print(f"embedding_idx: {embedding_idx}")
-            #     # print(f"top_k_indices: {top_k_indices}")
-            #     # print(f"rand_idx {rand_idx} rand_embedding_idx {rand_embedding_idx}")
-            #
-            #     collate_hoi_embeddings.append(self.text_embeddings[rand_embedding_idx].view(1, -1))
-            # else:
-            #     collate_hoi_embeddings.append(self.text2tensor[text])
             collate_hoi_embeddings.append(collate_query_hoi_embeddings)
-
+            # time 0.005001544952392578
         collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
         losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
 
@@ -186,12 +180,7 @@ class SentenceCriterion:
             'action_pred_logits': action_outputs_class[-1],
             'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
         }
-        # :param targets: dict {
-        #     'hoi_sentence': List[str],  list of hoi text, ex: ["a photo of a person lassoing a cow", ...].
-        #                     len = batch size
-        # }
         :param targets: List[dict] {
-            'hoi_sentence: ["a photo of a person lassoing a cow", ...]
         }
 
         :return losses: dict {
@@ -199,7 +188,6 @@ class SentenceCriterion:
         }
         """
         assert 'pred_hoi_embeddings' in outputs
-        # assert 'hoi_sentence' in targets
         pred_hoi_embeddings = outputs['pred_hoi_embeddings']
         device = pred_hoi_embeddings.device
         losses = {}
@@ -207,24 +195,75 @@ class SentenceCriterion:
         # label composition
         collate_hoi_embeddings = []
         for i, t in enumerate(targets):
-            # text = t['hoi_sentence'][0]
-            text = random.choice(t['hoi_sentence'])
-            if text == self.special_sentence:
-                # collate_query_hoi_embeddings = [self.special_sentence_tensor for i in range(100)]
+            # if t['hoi_sentence'][0] == self.special_sentence:
+            if len(t['valid_pairs']) == 0:
                 collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
-                # print(collate_query_hoi_embeddings.size())
             else:
-                embedding_idx = self.text2idx[text]
-                # top_k_indices = self.top_k_index[embedding_idx]
-                top_k_indices = self.real2synth_tensor_id[embedding_idx]
-                # tensor([101, 104, 103,  98,  96, 105, 106,  97, 100, 102]) first one is original, e.g. 101
+                # # sol 3 (work -> 23 minute per epoch)
+                # # start_time = time.time()
+                #
+                # total_hoi_sentence = len(t['valid_pairs'])
+                # per_sentence_len = math.ceil(100 / total_hoi_sentence)
+                # mask = torch.rand(100) > self.p_v
+                # collate_a = []
+                # collate_b = []
+                # for j, pair in enumerate(t['valid_pairs']):
+                #     embedding_idx = self.pair2tensor_id_narrow[pair]
+                #
+                #     top_k_indices = self.real2synth_tensor_id[embedding_idx]
+                #
+                #     tile_top_k = torch.tile(top_k_indices,
+                #                             (math.ceil(per_sentence_len / len(top_k_indices)),))[:per_sentence_len]
+                #     tile_idx = torch.full((per_sentence_len, ), top_k_indices[0])
+                #     collate_a.append(tile_top_k)
+                #     collate_b.append(tile_idx)
+                #
+                # # total_time = time.time() - start_time
+                # # print(f'Total time {total_time}')
+                # collate_a = torch.cat(collate_a)[:100]
+                # collate_b = torch.cat(collate_b)[:100]
+                # orig = collate_a * mask + collate_b * ~mask
+                # # time 0.00400090217590332
 
-                mask = torch.rand(100) > self.p_v
-                rand_idxs = torch.randint(1, len(top_k_indices), size=(1, 100))[0]
-                rand_idxs[mask] = 0  # keep original embedding
-                rand_similar_label = top_k_indices[rand_idxs]
+                # sol 4
+                if len(t['valid_pairs']) == 1:
+                    pair = t['valid_pairs'][0]
+                    orig = torch.full((100, ), self.pair2tensor_id[pair])
+                    choice_dict = self.pair_choice_tensor_id[pair]
+                    verb_choice = choice_dict['change_verb']
+                    obj_choice = choice_dict['change_obj']
+                    both_choice = choice_dict['change_both']
+                else:
+                    pairs = random.choices(t['valid_pairs'], k=10)
+                    orig = torch.cat([torch.full((10, ), self.pair2tensor_id[pair]) for pair in pairs])
+                    verb_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_verb'] for pair in pairs])
+                    obj_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_obj'] for pair in pairs])
+                    both_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_both'] for pair in pairs])
 
-                collate_query_hoi_embeddings = self.text_embeddings[rand_similar_label].unsqueeze(0)
+                verb_mask = torch.rand(100) > self.p_verb
+                obj_mask = torch.rand(100) > self.p_obj
+                both_mask = verb_mask*obj_mask
+                if len(verb_choice) > 1:
+                    verb = verb_choice[torch.randint(len(verb_choice)-1, size=(100, ))]
+                    orig[verb_mask] = verb[verb_mask]
+                elif len(verb_choice) == 1:
+                    verb = torch.full((100, ), verb_choice[0])
+                    orig[verb_mask] = verb[verb_mask]
+                if len(obj_choice) > 1:
+                    obj = obj_choice[torch.randint(len(obj_choice)-1, size=(100, ))]
+                    orig[obj_mask] = obj[obj_mask]
+                elif len(obj_choice) == 1:
+                    obj = torch.full((100, ), obj_choice[0])
+                    orig[obj_mask] = obj[obj_mask]
+                if len(both_choice) > 1:
+                    both = both_choice[torch.randint(len(both_choice)-1, size=(100, ))]
+                    orig[both_mask] = both[both_mask]
+                elif len(both_choice) == 1:
+                    both = torch.full((100, ), both_choice[0])
+                    orig[both_mask] = both[both_mask]
+                # time 0.005002498626708984
+
+                collate_query_hoi_embeddings = self.text_embeddings[orig].unsqueeze(0)
 
             collate_hoi_embeddings.append(collate_query_hoi_embeddings)
 
@@ -333,8 +372,11 @@ if __name__ == '__main__':
     # criterion.inference({"pred_hoi_embeddings": pred})
 
     # target = [{'hoi_pair': [(4, 4)]}] * 16
-    target = [{'hoi_sentence': ['a photo of a person lassoing a cow']}] * 16
-    pred = torch.rand(16, 100, 512, requires_grad=True)
+    batch_size = 16
+    target = [{'hoi_sentence': ['a photo of a person lassoing a cow', 'a photo of a person hopping on a bicycle'],
+               'valid_pairs': [(27, 40), (57, 46)]
+               }] * batch_size
+    pred = torch.rand(batch_size, 100, 512, requires_grad=True)
 
     start_time = time.time()
 

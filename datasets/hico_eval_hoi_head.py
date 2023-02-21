@@ -1,170 +1,19 @@
-import numpy as np
-import os
-import gzip
 import json
+import os
 
+import numpy as np
+
+from datasets.hico_fag_eval import (
+    compute_ap,
+    compute_pr,
+    compute_center_distacne,
+    compute_large_area,
+    compute_iou,
+    dump_json_object,
+    match_hoi
+)
 from util.topk import top_k
 from .hico_text_label import hico_text_label
-
-
-class NumpyAwareJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.ndarray):
-            if obj.ndim == 1:
-                return obj.tolist()
-            else:
-                return [self.default(obj[i]) for i in range(obj.shape[0])]
-        elif isinstance(obj, np.int64):
-            return int(obj)
-        elif isinstance(obj, np.int32):
-            return int(obj)
-        elif isinstance(obj, np.int16):
-            return int(obj)
-        elif isinstance(obj, np.float64):
-            return float(obj)
-        elif isinstance(obj, np.float32):
-            return float(obj)
-        elif isinstance(obj, np.float16):
-            return float(obj)
-        elif isinstance(obj, np.uint64):
-            return int(obj)
-        elif isinstance(obj, np.uint32):
-            return int(obj)
-        elif isinstance(obj, np.uint16):
-            return int(obj)
-        return json.JSONEncoder.default(self, obj)
-
-
-def write(file_name, data, mode='wb'):
-    with open(file_name, mode) as f:
-        f.write(data)
-
-
-def dump_json_object(dump_object, file_name, compress=False, indent=4):
-    data = json.dumps(
-        dump_object, cls=NumpyAwareJSONEncoder, sort_keys=True, indent=indent)
-    if compress:
-        write(file_name, gzip.compress(data.encode('utf8')))
-    else:
-        write(file_name, data, 'w')
-
-
-def compute_area(bbox, invalid=None):
-    x1, y1, x2, y2 = bbox
-
-    if (x2 <= x1) or (y2 <= y1):
-        area = invalid
-    else:
-        area = (x2 - x1 + 1) * (y2 - y1 + 1)
-
-    return area
-
-
-def compute_iou(bbox1, bbox2, verbose=False):
-    x1, y1, x2, y2 = bbox1
-    x1_, y1_, x2_, y2_ = bbox2
-
-    x1_in = max(x1, x1_)
-    y1_in = max(y1, y1_)
-    x2_in = min(x2, x2_)
-    y2_in = min(y2, y2_)
-
-    intersection = compute_area(bbox=[x1_in, y1_in, x2_in, y2_in], invalid=0.0)
-
-    area1 = compute_area(bbox1, invalid=0.0)
-    area2 = compute_area(bbox2, invalid=0.0)
-    union = area1 + area2 - intersection
-    iou = intersection / (union + 1e-6)
-
-    if verbose:
-        return iou, intersection, union
-
-    return iou
-
-
-def match_hoi(pred_det, gt_dets):
-    is_match = False
-    remaining_gt_dets = [gt_det for gt_det in gt_dets]
-    for i, gt_det in enumerate(gt_dets):
-        human_iou = compute_iou(pred_det['human_box'], gt_det['human_box'])
-        if human_iou > 0.5:
-            object_iou = compute_iou(pred_det['object_box'], gt_det['object_box'])
-            if object_iou > 0.5:
-                is_match = True
-                del remaining_gt_dets[i]
-                break
-
-    return is_match, remaining_gt_dets
-
-
-def compute_ap(precision, recall):
-    if np.any(np.isnan(recall)):
-        return np.nan
-
-    ap = 0
-    for t in np.arange(0, 1.1, 0.1):  # 0, 0.1, 0.2, ..., 1.0
-        selected_p = precision[recall >= t]
-        if selected_p.size == 0:
-            p = 0
-        else:
-            p = np.max(selected_p)
-        ap += p / 11.
-
-    return ap
-
-
-def compute_pr(y_true, y_score, npos):
-    sorted_y_true = [y for y, _ in
-                     sorted(zip(y_true, y_score), key=lambda x: x[1], reverse=True)]
-    tp = np.array(sorted_y_true)
-
-    if len(tp) == 0:
-        return 0, 0, False
-
-    fp = ~tp
-    tp = np.cumsum(tp)
-    fp = np.cumsum(fp)
-    if npos == 0:
-        recall = np.nan * tp
-    else:
-        recall = tp / npos
-    precision = tp / (tp + fp)
-    return precision, recall, True
-
-
-def compute_center_distacne(bbox1, bbox2, img_h, img_w):
-    x11, y11, x12, y12 = bbox1
-    x21, y21, x22, y22 = bbox2
-
-    c_x1 = (x11 + x12) / 2.0 / img_w
-    c_x2 = (x21 + x22) / 2.0 / img_w
-    c_y1 = (y11 + y12) / 2.0 / img_h
-    c_y2 = (y21 + y22) / 2.0 / img_h
-
-    diff_x = c_x1 - c_x2
-    diff_y = c_y1 - c_y2
-
-    distance = np.linalg.norm(np.array([diff_x, diff_y]))
-    return distance
-
-
-def compute_large_area(bbox1, bbox2, img_h, img_w, invalid=0.0):
-    x11, y11, x12, y12 = bbox1
-    x21, y21, x22, y22 = bbox2
-
-    if (x12 <= x11) or (y12 <= y11):
-        area1 = invalid
-    else:
-        area1 = (x12 - x11 + 1) / img_w * (y12 - y11 + 1) / img_h
-
-    if (x22 <= x21) or (y22 <= y21):
-        area2 = invalid
-    else:
-        area2 = (x22 - x21 + 1) / img_w * (y22 - y21 + 1) / img_h
-
-    area = max(area1, area2)
-
-    return area
 
 
 class HICOHoiHeadEvaluator:
@@ -219,7 +68,6 @@ class HICOHoiHeadEvaluator:
             assert item['verb_id'] - 1 == v_id
             self.mapping[idx] = item["id"]
 
-        # Using GGNet evaluation: https://github.com/SherlockHolmes221/GGNet/blob/main/src/lib/eval/hico_eval_de_ko.py
         print("Convert preds...")
         count = 0
         for img_preds, img_gts in zip(preds, gts):
@@ -578,7 +426,6 @@ class HICOHoiHeadEvaluator:
         for extra_i in self.extra_keys:
             assert npos_extra_all[extra_i] == npos_all
 
-    # Refer to CDN: https://github.com/YueLiao/CDN/blob/main/datasets/hico_eval.py
     def triplet_nms_filter(self, preds):
         preds_filtered = []
         for img_preds in preds:
@@ -612,7 +459,6 @@ class HICOHoiHeadEvaluator:
 
         return preds_filtered
 
-    # Modified from CDN: https://github.com/YueLiao/CDN/blob/main/datasets/hico_eval.py
     def pairwise_nms(self, subs, objs, scores):
         sx1, sy1, sx2, sy2 = subs[:, 0], subs[:, 1], subs[:, 2], subs[:, 3]
         ox1, oy1, ox2, oy2 = objs[:, 0], objs[:, 1], objs[:, 2], objs[:, 3]

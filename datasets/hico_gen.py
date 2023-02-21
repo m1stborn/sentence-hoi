@@ -133,6 +133,7 @@ class HICODetection(torch.utils.data.Dataset):
             sub_obj_pairs = []
             hoi_labels = []
             hoi_sentences = []
+            valid_pair = []
             # hoi_sentences_candidate = []
 
             # For hoi.csv generation
@@ -172,11 +173,12 @@ class HICODetection(torch.utils.data.Dataset):
                     obj_boxes.append(obj_box)
 
                     hoi_sentences.append(self.pair2text[pair])
-
+                    valid_pair.append(pair)
             target['filename'] = img_anno['file_name']
 
             target['hoi_sentence'] = hoi_sentences if len(hoi_sentences) != 0 else ['A photo of a person.']
             target['hoi_pairs'] = hoi_pair
+            target['valid_pairs'] = valid_pair
 
             if len(sub_obj_pairs) == 0:
                 target['obj_labels'] = torch.zeros((0,), dtype=torch.int64)

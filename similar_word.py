@@ -18,7 +18,7 @@ def main():
 
     # Load verb
     verb2idx = {}
-    with open('data/similar_word/hico_list_vb.txt', encoding='utf-8') as f:
+    with open('data/hico_list_vb.txt', encoding='utf-8') as f:
         f.readline()
         f.readline()  # skip first 2 line
         for i, line in enumerate(f):
@@ -27,7 +27,7 @@ def main():
 
     # Load object
     obj2idx = {}
-    with open('data/similar_word/hico_list_obj.txt', encoding='utf-8') as f:
+    with open('data/hico_list_obj.txt', encoding='utf-8') as f:
         f.readline()
         f.readline()  # skip 2 line
         for i, line in enumerate(f):
