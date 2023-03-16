@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn
-from transformers import CLIPTokenizer, CLIPTextModelWithProjection
+# from transformers import CLIPTokenizer, CLIPTextModelWithProjection
 import random
 
 try:
@@ -38,8 +38,8 @@ def apply_risk_mask(choice_list, mask, target):
 class SentenceCriterion:
     def __init__(self,
                  # embedding_file="./checkpoint/hoi_clip_embedding.pth",
-                 # embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
-                 embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
+                 embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
+                 # embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
                  clip_model="openai/clip-vit-base-patch32", device="cuda"):
         super().__init__()
         self.device = device
@@ -51,13 +51,14 @@ class SentenceCriterion:
         # special sentence
         self.special_sentence = "A photo of a person."
         if not os.path.exists("./checkpoint/special_sentence_tensor.pth"):
-            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
-            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
-            inputs = tokenizer([self.special_sentence], padding=True, return_tensors="pt", max_length=13)
-            outputs = model_proj(**inputs)
-            # print(outputs.text_embeds, outputs.text_embeds.size())
-            torch.save({"A photo of a person.": outputs.text_embeds}, "./checkpoint/special_sentence_tensor.pth")
-            self.special_sentence_tensor = outputs.text_embeds
+            # tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+            # model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+            # inputs = tokenizer([self.special_sentence], padding=True, return_tensors="pt", max_length=13)
+            # outputs = model_proj(**inputs)
+            # # print(outputs.text_embeds, outputs.text_embeds.size())
+            # torch.save({"A photo of a person.": outputs.text_embeds}, "./checkpoint/special_sentence_tensor.pth")
+            # self.special_sentence_tensor = outputs.text_embeds
+            pass
         else:
             self.special_sentence_tensor = torch.load("./checkpoint/special_sentence_tensor.pth")[self.special_sentence]
             print("load special sentence tensor from pretrained.", self.special_sentence_tensor.size())
@@ -81,25 +82,26 @@ class SentenceCriterion:
         self.k = 30
 
         if embedding_file is not None:
-            print("Load hoi_clip_embedding from pretrained.")
-            self.text2tensor = torch.load(embedding_file)
+            # print("Load hoi_clip_embedding from pretrained.")
+            # self.text2tensor = torch.load(embedding_file)
             # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
-
+            pass
         else:
-            text2tensor = {}
-            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
-            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
-            print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
-            for i, text in enumerate(self.text2pair.keys()):
-                inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
-                outputs = model_proj(**inputs)
-                text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
-            self.text2tensor = text2tensor
-            torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
-            # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
+            # text2tensor = {}
+            # tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+            # model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+            # print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
+            # for i, text in enumerate(self.text2pair.keys()):
+            #     inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
+            #     outputs = model_proj(**inputs)
+            #     text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
+            # self.text2tensor = text2tensor
+            # torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
+            pass
 
         if "ckpt" in embedding_file:
             ckpt = torch.load(embedding_file)
+            print(ckpt.keys())
             self.text_embeddings = ckpt["text_tensor"]
             self.text2idx = ckpt["sentence2tensor_id"]
             self.pair2tensor_id = ckpt["pair2tensor_id"]
@@ -110,7 +112,7 @@ class SentenceCriterion:
             self.real2synth_tensor_id = {k: torch.tensor(v) for k, v in self.real2synth_tensor_id.items()}
 
             # embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
-            self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
+            # self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
 
         else:
             self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
@@ -292,55 +294,15 @@ class SentenceCriterion:
                 orig = apply_risk_mask(obj_choice, obj_mask, orig)
                 orig = apply_risk_mask(both_choice, both_mask, orig)
 
-                # # Apply verb
-                # if len(verb_choice) > 1:
-                #     verb_choice = torch.cat(verb_choice)
-                #     verb = verb_choice[torch.randint(len(verb_choice) - 1, size=(100,))]
-                #     orig[verb_mask] = verb[verb_mask]
-                # elif len(verb_choice) == 1:
-                #     verb_choice = torch.cat(verb_choice)
-                #     verb = torch.full((100,), verb_choice[0])
-                #     orig[verb_mask] = verb[verb_mask]
-                #
-                # # Apply object
-                # if len(obj_choice) > 1:
-                #     obj_choice = torch.cat(obj_choice)
-                #     obj = obj_choice[torch.randint(len(obj_choice) - 1, size=(100,))]
-                #     orig[obj_mask] = obj[obj_mask]
-                # elif len(obj_choice) == 1:
-                #     obj_choice = torch.cat(obj_choice)
-                #     obj = torch.full((100,), obj_choice[0])
-                #     orig[obj_mask] = obj[obj_mask]
-                #
-                # # Apply both
-                # if len(both_choice) > 1:
-                #     both_choice = torch.cat(both_choice)
-                #     both = both_choice[torch.randint(len(both_choice) - 1, size=(100,))]
-                #     orig[both_mask] = both[both_mask]
-                # elif len(both_choice) == 1:
-                #     both_choice = torch.cat(both_choice)
-                #     both = torch.full((100,), both_choice[0])
-                #     orig[both_mask] = both[both_mask]
-
-                # time 0.005002498626708984
-                # print(verb_choice)
-                # print(obj_choice)
-                # print(both_choice)
-                # print(verb_mask[:20])
-                # print(obj_mask[:20])
-                # print(both_mask[:20])
-                # print(orig[:20])
                 collate_query_hoi_embeddings = self.text_embeddings[orig].unsqueeze(0)
 
-                # print(collate_query_hoi_embeddings.size())
             collate_triplet_labels.append(orig.unsqueeze(0))
             collate_hoi_embeddings.append(collate_query_hoi_embeddings)
         collate_triplet_labels = torch.cat(collate_triplet_labels, dim=0)  # torch.Size([1, 100])
         collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
         losses['tri_loss'] = batch_hard_triplet_loss(collate_triplet_labels.flatten(),
                                                      collate_hoi_embeddings.flatten(end_dim=1), margin=0.5)
-        # losses['tri_loss'] = batch_all_triplet_loss(collate_triplet_labels.flatten(),
-        #                                             collate_hoi_embeddings.flatten(end_dim=1), margin=0.5)
+
         losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
 
         return losses
@@ -383,14 +345,7 @@ class SentenceCriterion:
 
 if __name__ == '__main__':
     criterion = SentenceCriterion()
-    # print(criterion.pair_choice_tensor_id)
-    # print(criterion.pair_choice_tensor_id[(27, 40)])
-    # print(criterion.pair_choice_tensor_id[(57, 46)])
-    # for p, choice_dict in criterion.pair_choice_tensor_id.items():
-    #     for k, v in choice_dict.items():
-    #         for idx in v:
-    #             if idx > ma:
-    #                 ma = idx
+    # print(criterion.)
 
     batch_size = 1
     target = [{'hoi_sentence': ['a photo of a person lassoing a cow', 'a photo of a person hopping on a bicycle'],
@@ -401,9 +356,9 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
+    # l1_loss = criterion.batch_l1_loss({"pred_hoi_embeddings": pred}, target)
     l1_loss = criterion.batch_l1_con_loss({"pred_hoi_embeddings": pred}, target)
     # l1_loss = criterion.batch_l1_triplet_loss({"pred_hoi_embeddings": pred}, target)
-
 
     total_time = time.time() - start_time
     print(f'Training time {total_time}')

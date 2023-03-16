@@ -1,6 +1,7 @@
-python3 -m torch.distributed.launch \
-    --nproc_per_node=1 \
+python -m torch.distributed.launch \
+    --nproc_per_node=2 \
     --use_env \
+    main_fag.py \
     --pretrained pretrained/HICO_GEN_VLKT_S.pth \
     --dataset_file hico \
     --hoi_path ../gen-vlkt/data/hico_20160224_det \
@@ -14,5 +15,5 @@ python3 -m torch.distributed.launch \
     --with_obj_clip_label \
     --use_nms_filter \
     --thres_nms 0.7 \
-    --mixup \
     --with_sentence_branch \
+    --mixup \

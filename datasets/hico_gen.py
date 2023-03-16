@@ -1,6 +1,7 @@
 """
 HICO detection dataset.
 """
+import os
 import random
 from pathlib import Path
 
@@ -83,13 +84,16 @@ class HICODetection(torch.utils.data.Dataset):
 
         # device = "cuda" if torch.cuda.is_available() else "cpu"
         # _, self.clip_preprocess = clip.load(args.clip_model, device)
+        self.mixup = False
         if args.mixup:
             self.mixup = args.mixup
-            self.mixup_prob = 0.5
+            self.mixup_prob = 0.1
             self.mixup_alpha = 2
             with open(f"{args.hoi_path}/annotations/bg_image_idx.json", 'r') as f:
                 bg_data = json.load(f)
             self.bg_image_filename = bg_data['bg_image_filename']
+        with open(f"./data/annotations/train_img_contains_rare_hoi.json", 'r') as f:
+            self.img_rare_list = json.load(f)
 
     def __len__(self):
         return len(self.ids)
@@ -136,7 +140,8 @@ class HICODetection(torch.utils.data.Dataset):
 
                 # mixup image: condition to mixup, maybe rare only?
                 if self.mixup:
-                    if torch.rand(1) > self.mixup_prob:
+                    # if torch.rand(1) > self.mixup_prob and self.img_rare_list[idx]:
+                    if torch.rand(1) > self.mixup_prob and self.img_rare_list[idx]:
                         mixup_filename = random.choice(self.bg_image_filename)
                         img_bg = Image.open(self.img_folder / mixup_filename).convert('RGB')
                         lamb = np.random.beta(self.mixup_alpha, self.mixup_alpha)

@@ -66,7 +66,7 @@ class HICOHoiHeadEvaluator:
             # print(f"obj {o_id}, verb {v_id}, {item['object_cat'], item['verb_id'] } ")
             assert item['object_index'] == o_id
             assert item['verb_id'] - 1 == v_id
-            self.mapping[idx] = item["id"]
+            self.mapping[idx] = item["id"]  # str id
 
         print("Convert preds... HICOHoiHeadEvaluator")
         count = 0

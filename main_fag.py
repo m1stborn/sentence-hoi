@@ -8,11 +8,11 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from accelerate import Accelerator
-from torch.utils.data import DataLoader
-from transformers import (
-    get_scheduler,
-)
+# from accelerate import Accelerator
+from torch.utils.data import DataLoader, DistributedSampler
+# from transformers import (
+#     get_scheduler,
+# )
 
 import util.misc as utils
 from datasets import build_gen_dataset, build_fag_dataset
@@ -124,7 +124,12 @@ def main(args):
         dataset_train = build_gen_dataset(image_set='train', args=args)
         dataset_val = build_gen_dataset(image_set='val', args=args)
 
-    sampler_train = torch.utils.data.RandomSampler(dataset_train)
+    if args.distributed:
+        print("using DistributedSampler")
+        sampler_train = DistributedSampler(dataset_train)
+    else:
+        sampler_train = torch.utils.data.RandomSampler(dataset_train)
+
     sampler_val = torch.utils.data.SequentialSampler(dataset_val)
     batch_sampler_train = torch.utils.data.BatchSampler(
         sampler_train, args.batch_size, drop_last=True)
@@ -177,13 +182,13 @@ def main(args):
 
     # Optimizer
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr, weight_decay=args.weight_decay)
-    # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
-    lr_scheduler = get_scheduler(
-        name="cosine",
-        optimizer=optimizer,
-        num_warmup_steps=0,
-        num_training_steps=args.epochs * len(data_loader_train),
-    )
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
+    # lr_scheduler = get_scheduler(
+    #     name="cosine",
+    #     optimizer=optimizer,
+    #     num_warmup_steps=0,
+    #     num_training_steps=args.epochs * len(data_loader_train),
+    # )
 
     print(f"Num training steps: {args.epochs * len(data_loader_train)}")
     if args.resume:
@@ -205,12 +210,12 @@ def main(args):
 
         args.start_epoch = checkpoint['epoch'] + 1
 
-    accelerator = Accelerator()
+    # accelerator = Accelerator()
 
     # Prepare everything with our `accelerator`.
-    model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion = accelerator.prepare(
-        model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion
-    )
+    # model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion = accelerator.prepare(
+    #     model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion
+    # )
 
     # Train
     print("Start training")
@@ -220,7 +225,7 @@ def main(args):
         train_stats = train_one_epoch(
             model, criterion, data_loader_train, optimizer, device,
             args, epoch, lr_scheduler, sen_criterion, args.clip_max_norm)
-        # lr_scheduler.step()
+        lr_scheduler.step()
 
         if epoch == args.epochs - 1:
             checkpoint_path = os.path.join(args.output_dir, 'checkpoint_last.pth')
@@ -232,7 +237,10 @@ def main(args):
                 'args': args,
             }, checkpoint_path)
 
-        if epoch < 100 and epoch % 2 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
+        if epoch < 4:
+            if epoch % 2 != 0:
+                continue
+        elif epoch < 60 and epoch % 5 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
             continue
 
         test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
