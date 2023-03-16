@@ -236,6 +236,7 @@ def build(args) -> Tuple[HoiTR, GenSetCriterionHOI, Union[PostProcessHOITriplet,
 
     if args.with_sentence_branch:
         weight_dict['loss_sentence_l1'] = args.sentence_l1_loss_coef
+        # weight_dict['loss_triplet'] = args.sentence_triplet_loss_coef
 
     if args.aux_loss:
         aux_weight_dict = {}

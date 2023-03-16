@@ -16,9 +16,16 @@ from util.argparser import get_args_parser
 
 
 def main(args):
+    dev = args.dev
+    eval_bbox = args.eval_bbox
     checkpoint = torch.load(args.resume, map_location='cpu')
     # overwrite args
     args = checkpoint['args']
+    # reload dev
+    args.dev = dev
+    args.mixup = False
+    args.eval_bbox = eval_bbox
+    print(f"Output dir: {args.output_dir}")
     print(f"Load model from Epoch {checkpoint['epoch']}")
 
     # Fix the seed for reproducibility.
@@ -61,14 +68,14 @@ def main(args):
 
     test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
                                   args.subject_category_id, device, args)
-    print(test_stats)
+    # print(test_stats)
     return
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('SentenceHOI training and evaluation script', parents=[get_args_parser()])
     arg = parser.parse_args()
-    if arg.output_dir:
-        arg.output_dir = arg.output_dir+"_test"
-        Path(arg.output_dir).mkdir(parents=True, exist_ok=True)
+    # if arg.output_dir and not arg.dev:
+    #     arg.output_dir = arg.output_dir+"_test"
+    #     Path(arg.output_dir).mkdir(parents=True, exist_ok=True)
     main(arg)

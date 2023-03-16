@@ -68,7 +68,7 @@ class HICOHoiHeadEvaluator:
             assert item['verb_id'] - 1 == v_id
             self.mapping[idx] = item["id"]
 
-        print("Convert preds...")
+        print("Convert preds... HICOHoiHeadEvaluator")
         count = 0
         for img_preds, img_gts in zip(preds, gts):
             img_preds = {k: v.to('cpu').numpy() for k, v in img_preds.items()}
@@ -90,6 +90,7 @@ class HICOHoiHeadEvaluator:
             topk_hoi_scores = top_k(list(hoi_scores), self.max_hois)
             topk_indexes = np.array([np.where(hoi_scores == score)[0][0] for score in topk_hoi_scores])
 
+            # TODO: filter invalid object, verb pair
             if len(subject_ids) > 0:
                 hois = [{'subject_id': subject_id, 'object_id': object_id, 'category_id': category_id, 'score': score}
                         for subject_id, object_id, category_id, score in
@@ -110,7 +111,7 @@ class HICOHoiHeadEvaluator:
                 'predictions': bboxes,
                 'hoi_prediction': hois
             })
-
+        # print(self.preds_t[0]['predictions'])
         if self.use_nms:
             self.preds_t = self.triplet_nms_filter(self.preds_t)
 
@@ -128,6 +129,7 @@ class HICOHoiHeadEvaluator:
                 score = hoi['score']
                 verb_id = hoi['category_id']  # 0-599
                 hoi_id = self.mapping[verb_id]
+                # print(verb_id, hoi_id)
                 assert int(hoi_id) > 0
 
                 data = np.array([sub_bbox[0], sub_bbox[1], sub_bbox[2], sub_bbox[3],
@@ -137,6 +139,26 @@ class HICOHoiHeadEvaluator:
                     self.pred_anno[global_id][hoi_id] = np.empty([0, 9])
 
                 self.pred_anno[global_id][hoi_id] = np.concatenate((self.pred_anno[global_id][hoi_id], data), axis=0)
+
+        # with open(f"{self.out_dir}/result.json", 'w', encoding="utf-8") as f:
+        #     print(self.pred_anno)
+        #     result = json.loads(str({"preds": self.preds_t}).replace("\'", "\""))
+        #     json.dump(result, f)
+
+        # cur_key = list(self.pred_anno.keys())
+        # for k in cur_key:
+        #     if k != 'HICO_test2015_00000001':
+        #         self.pred_anno.pop(k)
+        # # print(self.pred_anno.keys())
+        # # print(self.pred_anno['HICO_test2015_00000001'].keys())
+        # self.verbose_list = list(self.pred_anno['HICO_test2015_00000001'].keys())
+        # print(sorted(self.verbose_list))
+        # # print(self.annotations['HICO_test2015_00000001'].keys())
+        # total = 0
+        # for k, v in self.pred_anno['HICO_test2015_00000001'].items():
+        #     print(k, v.shape)
+        #     total += v.shape[0]
+        # print(total)
 
     def load_gt_dets(self):
         # Load anno_list
@@ -200,6 +222,7 @@ class HICOHoiHeadEvaluator:
         for hoi in self.hoi_list:
             o = self.eval_hoi(hoi['id'], self.global_ids, self.annotations, self.pred_anno, self.out_dir)
             outputs.append(o)
+            # break
 
         m_ap = {
             'AP': {},
@@ -320,12 +343,21 @@ class HICOHoiHeadEvaluator:
 
     def eval_hoi(self, hoi_id, global_ids, gt_dets, pred_anno,
                  mode='default', obj_cate=None):
-        # print(f'Evaluating hoi_id: {hoi_id} ...')
+        # flag = False
+        # if hoi_id in self.verbose_list:
+        #     # print(f'Evaluating hoi_id: {hoi_id} ...')
+        #     flag = True
+
         y_true = []
         y_score = []
         det_id = []
         npos = 0
+        # remaining_det = {}
         for global_id in global_ids:
+            # g_flag = False
+            # if global_id == "HICO_test2015_00000001" and flag:
+            #     g_flag = True
+
             if mode == 'ko':
                 if global_id + ".jpg" not in self.file_name_to_obj_cat:
                     continue
@@ -347,6 +379,7 @@ class HICOHoiHeadEvaluator:
 
             num_dets = hoi_dets.shape[0]
 
+            # sort by score
             sorted_idx = [idx for idx, _ in sorted(
                 zip(range(num_dets), hoi_dets[:, 8].tolist()),
                 key=lambda x: x[1],
@@ -363,12 +396,42 @@ class HICOHoiHeadEvaluator:
                 y_score.append(pred_det['score'])
                 det_id.append((global_id, i))
 
+                # if g_flag and is_match:
+                #     print(sorted_idx)
+                #     print(hoi_id)
+                #     print(pred_det['score'])
+                #     print((global_id, i))
+                #     print(is_match)
+
+            # if len(candidate_gt_dets):
+            #     remaining_det[global_id] = candidate_gt_dets
+
+            # if g_flag:
+            #     print("candidate_gt_dets", candidate_gt_dets, npos)
+            #     print(gt_dets[global_id])
+                # print(len(sorted_idx))
+                # print(f"y_ture {y_true} {len(y_true)}")
+                # print(f"y_score {y_score} {len(y_score)}")
+
+        # if len(remaining_det):
+        #     print(f"hoi_id: {hoi_id}", len(remaining_det))
+
+        # if len(remaining_det):
+        #     with open("./assets/remain.json", 'a') as file:
+        #         json.dump({
+        #             "hoi_id": hoi_id,
+        #             "remain": remaining_det
+        #         }, file)
+        #         file.write('\n')
+
         # Compute PR
         precision, recall, mark = compute_pr(y_true, y_score, npos)
         if not mark:
             ap = 0
         else:
             ap = compute_ap(precision, recall)
+        # if flag:
+        #     print(ap)
         # Compute AP
         # print(f'AP:{ap}')
         return ap, hoi_id
@@ -498,7 +561,6 @@ class HICOHoiHeadEvaluator:
 
             order = order[inds + 1]
         return keep_inds
-
 
 # if __name__ == "__main__":
 #     import torch

@@ -12,6 +12,7 @@ def main():
     ckpt = torch.load("checkpoint/synth_hoi_clip_embedding_ckpt.pth")
     text_embeddings = ckpt["text_tensor"]
     text2idx = ckpt["sentence2tensor_id"]
+    pair2tensor_id = ckpt['pair2tensor_id']
     tensor_id2sentence = {v: k for k, v in text2idx.items()}
     print(len(tensor_id2sentence))
     # pair2tensor_id = ckpt["pair2tensor_id"]
@@ -78,10 +79,15 @@ def main():
         synth = list(product(verb_choice, obj_choice))
         if len(verb_choice) > 0 and len(obj_choice) > 0:
             synth_pair_pool.extend(synth)
+            pair_id = pair2tensor_id[(verb_id, obj_id)]
             pair_choice[(verb_id, obj_id)] = {
-                "change_verb": [(verb2id[v], obj2id[o]) for v, o in synth if o == verb_id],
-                "change_obj": [(verb2id[v], obj2id[o]) for v, o in synth if v == obj_id],
-                "change_both": [(verb2id[v], obj2id[o]) for v, o in synth if o != obj_id and v != verb_id],
+                "change_verb": [(verb2id[v], obj2id[o]) for v, o in synth if obj2id[o] == obj_id
+                                and sim_matrix[pair_id, pair2tensor_id[(verb2id[v], obj2id[o])]].item() > 0.7],
+                "change_obj": [(verb2id[v], obj2id[o]) for v, o in synth if verb2id[v] == verb_id
+                               and sim_matrix[pair_id, pair2tensor_id[(verb2id[v], obj2id[o])]].item() > 0.7],
+                "change_both": [(verb2id[v], obj2id[o]) for v, o in synth
+                                if obj2id[o] != obj_id and verb2id[v] != verb_id
+                                and sim_matrix[pair_id, pair2tensor_id[(verb2id[v], obj2id[o])]].item() > 0.7],
             }
         real2synth[(verb_id, obj_id)] = [(verb2id[v], obj2id[o]) for v, o in synth]
 
@@ -111,15 +117,15 @@ def main():
             k: torch.tensor([pair2tensor_id[sub_pair] for sub_pair in v]) for k, v in choice_dict.items()
         }
 
-    print(pair_choice_tensor_id)
-    ckpt['pair_choice_tensor_id'] = pair_choice_tensor_id
-    torch.save(ckpt, "./checkpoint/pari_choice_clip_embedding_ckpt.pth")
-
     # Sanity check
     ckp1 = torch.load("./checkpoint/synth_hoi_clip_embedding_ckpt.pth")
     ckp2 = torch.load("./checkpoint/pari_choice_clip_embedding_ckpt.pth")
 
     assert torch.equal(ckp1['text_tensor'], ckp2['text_tensor'])
+
+    print(pair_choice_tensor_id)
+    ckpt['pair_choice_tensor_id'] = pair_choice_tensor_id
+    torch.save(ckpt, "./checkpoint/pari_choice_clip_embedding_ckpt.pth")
 
     # print(len(pair2tensor_id))
     # similar_sentence = {

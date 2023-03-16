@@ -17,6 +17,23 @@ except ModuleNotFoundError:
     from topk import top_k
     from hico_text_label import hico_text_label
 
+try:
+    from .triplet_loss import batch_hard_triplet_loss
+except ImportError:
+    from triplet_loss import batch_hard_triplet_loss
+
+
+def apply_risk_mask(choice_list, mask, target):
+    if len(choice_list) > 1:
+        choice_list = torch.cat(choice_list)
+        verb = choice_list[torch.randint(len(choice_list) - 1, size=(100,))]
+        target[mask] = verb[mask]
+    elif len(choice_list) == 1:
+        choice_list = torch.cat(choice_list)
+        verb = torch.full((100,), choice_list[0])
+        target[mask] = verb[mask]
+    return target
+
 
 class SentenceCriterion:
     def __init__(self,
@@ -92,6 +109,7 @@ class SentenceCriterion:
             self.real2synth_tensor_id = ckpt['real2synth_tensor_id']
             self.real2synth_tensor_id = {k: torch.tensor(v) for k, v in self.real2synth_tensor_id.items()}
 
+            # embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
             self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
 
         else:
@@ -122,14 +140,9 @@ class SentenceCriterion:
             'action_pred_logits': action_outputs_class[-1],
             'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
         }
-        # :param targets: dict {
-        #     'hoi_sentence': List[str],  list of hoi text, ex: ["a photo of a person lassoing a cow", ...].
-        #                     len = batch size
-        # }
         :param targets: List[dict] {
             'hoi_sentence: ["a photo of a person lassoing a cow", ...]
         }
-
         :return losses: dict {
             'l1_loss': tensor
         }
@@ -145,26 +158,19 @@ class SentenceCriterion:
         for i, t in enumerate(targets):
             text = t['hoi_sentence'][0]
             if text == self.special_sentence:
-                # collate_query_hoi_embeddings = [self.special_sentence_tensor for i in range(100)]
                 collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
-                # print(collate_query_hoi_embeddings.size())
             else:
                 embedding_idx = self.text2idx[text]
                 top_k_indices = self.top_k_index[embedding_idx]
-                # tensor([101, 104, 103,  98,  96, 105, 106,  97, 100, 102]) first one is original, e.g. 101
 
                 mask = torch.rand(100) > self.p_v
                 rand_idxs = torch.randint(1, len(top_k_indices), size=(1, 100))[0]
                 rand_idxs[mask] = 0  # keep original embedding
                 rand_similar_label = top_k_indices[rand_idxs]
 
-                # problematic
-                # collate_query_hoi_embeddings = [self.text_embeddings[idx].view(1, -1)
-                #                                 for idx in rand_similar_label]
                 collate_query_hoi_embeddings = self.text_embeddings[rand_similar_label].unsqueeze(0)
 
             collate_hoi_embeddings.append(collate_query_hoi_embeddings)
-            # time 0.005001544952392578
         collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
         losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
 
@@ -181,10 +187,65 @@ class SentenceCriterion:
             'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
         }
         :param targets: List[dict] {
+            'hoi_sentence: ["a photo of a person lassoing a cow", ...]
+        }
+        :return losses: dict {
+            'l1_loss': tensor
+        }
+        """
+        assert 'pred_hoi_embeddings' in outputs
+        # assert 'hoi_sentence' in targets
+        pred_hoi_embeddings = outputs['pred_hoi_embeddings']
+        device = pred_hoi_embeddings.device
+        losses = {}
+
+        # label composition
+        collate_hoi_embeddings = []
+        for i, t in enumerate(targets):
+            # text = t['hoi_sentence'][0]
+            text = random.choice(t['hoi_sentence'])
+            if text == self.special_sentence:
+                # collate_query_hoi_embeddings = [self.special_sentence_tensor for i in range(100)]
+                collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
+                # print(collate_query_hoi_embeddings.size())
+            else:
+                embedding_idx = self.text2idx[text]
+                # top_k_indices = self.top_k_index[embedding_idx]
+                # print(embedding_idx)
+                top_k_indices = self.real2synth_tensor_id[embedding_idx]
+                # print(top_k_indices)
+                # tensor([101, 104, 103,  98,  96, 105, 106,  97, 100, 102]) first one is original, e.g. 101
+
+                mask = torch.rand(100) > self.p_v
+                rand_idxs = torch.randint(1, len(top_k_indices), size=(100,))
+                rand_idxs[mask] = 0  # keep original embedding
+                rand_similar_label = top_k_indices[rand_idxs]
+
+                collate_query_hoi_embeddings = self.text_embeddings[rand_similar_label].unsqueeze(0)
+
+            collate_hoi_embeddings.append(collate_query_hoi_embeddings)
+
+        collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
+        losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
+
+        return losses
+
+    def batch_l1_triplet_loss(self, outputs, targets):
+        """
+        :param outputs: dict {
+            'pred_sub_boxes': torch.Size([3, 64, 4]) = human_pred_boxes,
+            'pred_obj_logits': torch.Size([3, 64, 81]) = [batch_size, num_queries, num_classes],
+            'pred_obj_boxes': torch.Size([3, 64, 4]) = object_pred_boxes,
+            'pred_hoi_logits': torch.Size([3, 64, 600]) = [batch_size, num_queries, classes],
+            'action_pred_logits': action_outputs_class[-1],
+            'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
+        }
+        :param targets: List[dict] {
         }
 
         :return losses: dict {
             'l1_loss': tensor
+            'tri_loss': tensor
         }
         """
         assert 'pred_hoi_embeddings' in outputs
@@ -194,98 +255,97 @@ class SentenceCriterion:
 
         # label composition
         collate_hoi_embeddings = []
+        collate_triplet_labels = []
         for i, t in enumerate(targets):
             # if t['hoi_sentence'][0] == self.special_sentence:
             if len(t['valid_pairs']) == 0:
                 collate_query_hoi_embeddings = self.special_sentence_tensor.repeat(1, 100, 1)
+                orig = torch.full((100,), 3573)
             else:
-                # # sol 3 (work -> 23 minute per epoch)
-                # # start_time = time.time()
-                #
-                # total_hoi_sentence = len(t['valid_pairs'])
-                # per_sentence_len = math.ceil(100 / total_hoi_sentence)
-                # mask = torch.rand(100) > self.p_v
-                # collate_a = []
-                # collate_b = []
-                # for j, pair in enumerate(t['valid_pairs']):
-                #     embedding_idx = self.pair2tensor_id_narrow[pair]
-                #
-                #     top_k_indices = self.real2synth_tensor_id[embedding_idx]
-                #
-                #     tile_top_k = torch.tile(top_k_indices,
-                #                             (math.ceil(per_sentence_len / len(top_k_indices)),))[:per_sentence_len]
-                #     tile_idx = torch.full((per_sentence_len, ), top_k_indices[0])
-                #     collate_a.append(tile_top_k)
-                #     collate_b.append(tile_idx)
-                #
-                # # total_time = time.time() - start_time
-                # # print(f'Total time {total_time}')
-                # collate_a = torch.cat(collate_a)[:100]
-                # collate_b = torch.cat(collate_b)[:100]
-                # orig = collate_a * mask + collate_b * ~mask
-                # # time 0.00400090217590332
-
                 # sol 4
                 if len(t['valid_pairs']) == 1:
-                    pair = t['valid_pairs'][0]
-                    orig = torch.full((100, ), self.pair2tensor_id[pair])
-                    choice_dict = self.pair_choice_tensor_id[pair]
-                    verb_choice = choice_dict['change_verb']
-                    obj_choice = choice_dict['change_obj']
-                    both_choice = choice_dict['change_both']
+                    pairs = t['valid_pairs']
+                    orig = torch.full((100,), self.pair2tensor_id[pairs[0]])
+                    # choice_dict = self.pair_choice_tensor_id[pairs[0]]
+                    # verb_choice = [choice_dict['change_verb']] if len(choice_dict['change_verb']) > 0 else []
+                    # obj_choice = [choice_dict['change_obj']] if len(choice_dict['change_obj']) > 0 else []
+                    # both_choice = [choice_dict['change_both']] if len(choice_dict['change_both']) > 0 else []
                 else:
                     pairs = random.choices(t['valid_pairs'], k=10)
-                    orig = torch.cat([torch.full((10, ), self.pair2tensor_id[pair]) for pair in pairs])
-                    verb_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_verb'] for pair in pairs])
-                    obj_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_obj'] for pair in pairs])
-                    both_choice = torch.cat([self.pair_choice_tensor_id[pair]['change_both'] for pair in pairs])
+                    # print(pairs)
+                    # print([self.pair2tensor_id[pair]for pair in pairs])
+                    orig = torch.cat([torch.full((10,), self.pair2tensor_id[pair]) for pair in pairs])
+                    # print('random')
+                verb_choice = [self.pair_choice_tensor_id[pair]['change_verb'] for pair in pairs
+                               if len(self.pair_choice_tensor_id[pair]['change_verb']) > 0]
+                obj_choice = [self.pair_choice_tensor_id[pair]['change_obj'] for pair in pairs
+                              if len(self.pair_choice_tensor_id[pair]['change_obj']) > 0]
+                both_choice = [self.pair_choice_tensor_id[pair]['change_both'] for pair in pairs
+                               if len(self.pair_choice_tensor_id[pair]['change_both']) > 0]
 
-                verb_mask = torch.rand(100) > self.p_verb
-                obj_mask = torch.rand(100) > self.p_obj
-                both_mask = verb_mask*obj_mask
-                if len(verb_choice) > 1:
-                    verb = verb_choice[torch.randint(len(verb_choice)-1, size=(100, ))]
-                    orig[verb_mask] = verb[verb_mask]
-                elif len(verb_choice) == 1:
-                    verb = torch.full((100, ), verb_choice[0])
-                    orig[verb_mask] = verb[verb_mask]
-                if len(obj_choice) > 1:
-                    obj = obj_choice[torch.randint(len(obj_choice)-1, size=(100, ))]
-                    orig[obj_mask] = obj[obj_mask]
-                elif len(obj_choice) == 1:
-                    obj = torch.full((100, ), obj_choice[0])
-                    orig[obj_mask] = obj[obj_mask]
-                if len(both_choice) > 1:
-                    both = both_choice[torch.randint(len(both_choice)-1, size=(100, ))]
-                    orig[both_mask] = both[both_mask]
-                elif len(both_choice) == 1:
-                    both = torch.full((100, ), both_choice[0])
-                    orig[both_mask] = both[both_mask]
+                verb_mask = torch.rand(100) > (1 - self.p_verb)
+                obj_mask = torch.rand(100) > (1 - self.p_obj)
+                both_mask = verb_mask * obj_mask
+                # print(orig[:20])
+
+                orig = apply_risk_mask(verb_choice, verb_mask, orig)
+                orig = apply_risk_mask(obj_choice, obj_mask, orig)
+                orig = apply_risk_mask(both_choice, both_mask, orig)
+
+                # # Apply verb
+                # if len(verb_choice) > 1:
+                #     verb_choice = torch.cat(verb_choice)
+                #     verb = verb_choice[torch.randint(len(verb_choice) - 1, size=(100,))]
+                #     orig[verb_mask] = verb[verb_mask]
+                # elif len(verb_choice) == 1:
+                #     verb_choice = torch.cat(verb_choice)
+                #     verb = torch.full((100,), verb_choice[0])
+                #     orig[verb_mask] = verb[verb_mask]
+                #
+                # # Apply object
+                # if len(obj_choice) > 1:
+                #     obj_choice = torch.cat(obj_choice)
+                #     obj = obj_choice[torch.randint(len(obj_choice) - 1, size=(100,))]
+                #     orig[obj_mask] = obj[obj_mask]
+                # elif len(obj_choice) == 1:
+                #     obj_choice = torch.cat(obj_choice)
+                #     obj = torch.full((100,), obj_choice[0])
+                #     orig[obj_mask] = obj[obj_mask]
+                #
+                # # Apply both
+                # if len(both_choice) > 1:
+                #     both_choice = torch.cat(both_choice)
+                #     both = both_choice[torch.randint(len(both_choice) - 1, size=(100,))]
+                #     orig[both_mask] = both[both_mask]
+                # elif len(both_choice) == 1:
+                #     both_choice = torch.cat(both_choice)
+                #     both = torch.full((100,), both_choice[0])
+                #     orig[both_mask] = both[both_mask]
+
                 # time 0.005002498626708984
-
+                # print(verb_choice)
+                # print(obj_choice)
+                # print(both_choice)
+                # print(verb_mask[:20])
+                # print(obj_mask[:20])
+                # print(both_mask[:20])
+                # print(orig[:20])
                 collate_query_hoi_embeddings = self.text_embeddings[orig].unsqueeze(0)
 
+                # print(collate_query_hoi_embeddings.size())
+            collate_triplet_labels.append(orig.unsqueeze(0))
             collate_hoi_embeddings.append(collate_query_hoi_embeddings)
-
+        collate_triplet_labels = torch.cat(collate_triplet_labels, dim=0)  # torch.Size([1, 100])
         collate_hoi_embeddings = torch.cat(collate_hoi_embeddings, dim=0)
+        losses['tri_loss'] = batch_hard_triplet_loss(collate_triplet_labels.flatten(),
+                                                     collate_hoi_embeddings.flatten(end_dim=1), margin=0.5)
+        # losses['tri_loss'] = batch_all_triplet_loss(collate_triplet_labels.flatten(),
+        #                                             collate_hoi_embeddings.flatten(end_dim=1), margin=0.5)
         losses['l1_loss'] = self.l1_loss(pred_hoi_embeddings, collate_hoi_embeddings.to(device))
 
         return losses
 
     def inference(self, outputs) -> List[dict]:
-        """
-        :param outputs: dict {
-                'pred_sub_boxes': torch.Size([3, 64, 4]) = human_pred_boxes,
-                'pred_obj_logits': torch.Size([3, 64, 81]) = [batch_size, num_queries, num_classes],
-                'pred_obj_boxes': torch.Size([3, 64, 4]) = object_pred_boxes,
-                'pred_hoi_logits': torch.Size([3, 64, 600]) = [batch_size, num_queries, classes],
-                'action_pred_logits': action_outputs_class[-1],
-                'pred_hoi_embedding': torch.Size([batch_size, num_query, 512])
-            }
-        : return: dict {
-                "pred_hoi": torch.tensor, # torch.Size([batch_size, num_query])
-            }
-        """
         assert 'pred_hoi_embeddings' in outputs
         pred_hoi_embeddings = outputs['pred_hoi_embeddings']
         batch_size = pred_hoi_embeddings.size(0)
@@ -320,75 +380,33 @@ class SentenceCriterion:
         # return {"pred_hoi": pred_hoi, "collate_pred": collate_pred}
         return collate_pred
 
-    # TODO
-    def triplet_loss(self, outputs, targets):
-        """
-        :param outputs: dict {
-            'pred_sub_boxes': torch.Size([3, 64, 4]) = human_pred_boxes,
-            'pred_obj_logits': torch.Size([3, 64, 81]) = [batch_size, num_queries, num_classes],
-            'pred_obj_boxes': torch.Size([3, 64, 4]) = object_pred_boxes,
-            'pred_hoi_logits': torch.Size([3, 64, 600]) = [batch_size, num_queries, classes],
-            'action_pred_logits': action_outputs_class[-1],
-            'pred_hoi_embedding': torch.Size([batch_size, 512])
-        }
-        :param targets: List[dict] {
-            'hoi_sentence: ["a photo of a person lassoing a cow", ...]
-        }
-        # :param targets: dict {
-        #     'hoi_sentence': List[str],  list of hoi text, ex: ["a photo of a person lassoing a cow", ...]
-        # }
-        :return losses: dict {
-
-        }
-        """
-        assert 'pred_hoi_embeddings' in outputs
-        # assert 'hoi_sentence' in targets
-
-        losses = {}
-
-        return losses
-
 
 if __name__ == '__main__':
     criterion = SentenceCriterion()
+    # print(criterion.pair_choice_tensor_id)
+    # print(criterion.pair_choice_tensor_id[(27, 40)])
+    # print(criterion.pair_choice_tensor_id[(57, 46)])
+    # for p, choice_dict in criterion.pair_choice_tensor_id.items():
+    #     for k, v in choice_dict.items():
+    #         for idx in v:
+    #             if idx > ma:
+    #                 ma = idx
 
-    # target = criterion.text2tensor['a photo of a person lassoing a cow']
-    # pred = F.softmax(torch.rand(10, 512, requires_grad=True), dim=1)
-    # target = F.softmax(torch.rand(10, 512), dim=1)
-    # print(pred)
-    # print(target)
-
-    # target = [{'hoi_sentence': ['a photo of a person lassoing a cow']}] * 3
-    # pred = torch.rand(3, 100, 512, requires_grad=True)
-    # # kl_loss = criterion.batch_kl_loss({"pred_hoi_embeddings": pred}, {"hoi_sentence": target})
-    #
-    # start_time = time.time()
-    #
-    # l1_loss = criterion.batch_l1_loss({"pred_hoi_embeddings": pred}, target)
-    #
-    # total_time = time.time() - start_time
-    # print(f'Training time {total_time}')
-    # print(l1_loss)
-    # criterion.inference({"pred_hoi_embeddings": pred})
-
-    # target = [{'hoi_pair': [(4, 4)]}] * 16
-    batch_size = 16
+    batch_size = 1
     target = [{'hoi_sentence': ['a photo of a person lassoing a cow', 'a photo of a person hopping on a bicycle'],
                'valid_pairs': [(27, 40), (57, 46)]
+               # 'valid_pairs': [(27, 40)]
                }] * batch_size
     pred = torch.rand(batch_size, 100, 512, requires_grad=True)
 
     start_time = time.time()
 
     l1_loss = criterion.batch_l1_con_loss({"pred_hoi_embeddings": pred}, target)
+    # l1_loss = criterion.batch_l1_triplet_loss({"pred_hoi_embeddings": pred}, target)
+
 
     total_time = time.time() - start_time
     print(f'Training time {total_time}')
     # Training time 0.011998176574707031
     print(l1_loss)
 
-    # a = torch.log_softmax(torch.randn(64, 81), dim=1)
-    # b = torch.softmax(torch.randn(64, 81), dim=1)
-    # criterion = nn.KLDivLoss()
-    # loss = criterion(a, b)
-    # print(loss)

@@ -20,12 +20,12 @@ def create_log_dir(checkpoint='checkpoint', log_path='/data/LOG/train_log'):
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
-    parser.add_argument('--lr', default=1e-4, type=float)
-    parser.add_argument('--lr_backbone', default=1e-5, type=float)
+    parser.add_argument('--lr', default=5e-5, type=float)
+    parser.add_argument('--lr_backbone', default=5e-6, type=float)
     parser.add_argument('--lr_clip', default=1e-5, type=float)
     parser.add_argument('--batch_size', default=16, type=int)
     parser.add_argument('--weight_decay', default=1e-4, type=float)
-    parser.add_argument('--epochs', default=180, type=int)
+    parser.add_argument('--epochs', default=100, type=int)
     parser.add_argument('--lr_drop', default=40, type=int)
     parser.add_argument('--clip_max_norm', default=0.1, type=float,
                         help='gradient clipping max norm')
@@ -149,7 +149,7 @@ def get_args_parser():
     # parser.add_argument('--coco_panoptic_path', type=str)
     # parser.add_argument('--remove_difficult', action='store_true')
     parser.add_argument('--hoi_path', type=str)
-    exp_time = datetime.datetime.now().strftime('%Y%m%d%H%M')
+    exp_time = datetime.datetime.now().strftime('%Y_%m%d_%H%M')
     create_log_dir(checkpoint='checkpoint', log_path='/home')
     work_dir = 'checkpoint/p_{}'.format(exp_time)
 
@@ -199,9 +199,12 @@ def get_args_parser():
     # sentence hoi
     parser.add_argument('--with_sentence_branch', action='store_true', help='Use sentence branch')
     parser.add_argument('--sentence_l1_loss_coef', default=0.3, type=float)
+    parser.add_argument('--sentence_triplet_loss_coef', default=5, type=float)
 
     parser.add_argument('--use_fag_setting', action='store_true', help='Use Fag setting for evaluator, postprocessor..')
     parser.add_argument('--no_obj', action='store_true')
+    parser.add_argument('--mixup', action='store_true')
+    parser.add_argument('--eval_bbox', action='store_true')
 
     return parser
 

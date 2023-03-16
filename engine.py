@@ -16,6 +16,7 @@ from models.gen_set_criterion import PostProcessHOITriplet
 from models.hoitr import HoiTR
 from models.hoitr_text import TextHoiTR
 from models.sentence_critreion import SentenceCriterion
+from datasets.hico_eval_bboxes import HicoEvalBbox
 
 
 def train_one_epoch(model: torch.nn.Module,
@@ -51,9 +52,10 @@ def train_one_epoch(model: torch.nn.Module,
 
         loss_dict = criterion(outputs, targets)
         if args.with_sentence_branch:
-            # sen_loss = sen_criterion.batch_l1_loss(outputs, targets)
             sen_loss = sen_criterion.batch_l1_con_loss(outputs, targets)
+            # sen_loss = sen_criterion.batch_l1_triplet_loss(outputs, targets)
             loss_dict['loss_sentence_l1'] = sen_loss['l1_loss']
+            # loss_dict['loss_triplet'] = sen_loss['tri_loss']
 
         weight_dict = criterion.weight_dict
         losses = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
@@ -116,7 +118,7 @@ def evaluate_hoi_fag(dataset_file,
     preds = []
     gts = []
 
-    for samples, targets in metric_logger.log_every(data_loader, 10, header):
+    for i, (samples, targets) in enumerate(metric_logger.log_every(data_loader, 10, header)):
         samples = samples.to(device)
 
         outputs = model(samples)
@@ -127,10 +129,11 @@ def evaluate_hoi_fag(dataset_file,
         preds.extend(list(itertools.chain.from_iterable(utils.all_gather(results))))
         # For avoiding a runtime error, the copy is used
         gts.extend(list(itertools.chain.from_iterable(utils.all_gather(copy.deepcopy(targets)))))
-
-        if args.dev and len(preds) >= 200:
+        if args.dev:
             break
-
+    # print("eval", len(preds))
+    # for k, v in preds[0].items():
+    #     print(k, v.size() if torch.is_tensor(v) else "None tensor")
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
 
@@ -145,20 +148,24 @@ def evaluate_hoi_fag(dataset_file,
             evaluator = HICOFagEvaluator(preds, gts, args.hoi_path, args.output_dir,
                                          0, use_nms=args.use_nms_filter, nms_thresh=args.thres_nms)
         else:
-            evaluator = HICOHoiHeadEvaluator(preds, gts, args.hoi_path, args.output_dir,
-                                             0, use_nms=args.use_nms_filter, nms_thresh=args.thres_nms)
+            if args.eval_bbox:
+                evaluator = HicoEvalBbox(preds, gts, args.hoi_path, args.output_dir,
+                                         0, use_nms=args.use_nms_filter, nms_thresh=args.thres_nms)
+            else:
+                evaluator = HICOHoiHeadEvaluator(preds, gts, args.hoi_path, args.output_dir,
+                                                 0, use_nms=args.use_nms_filter, nms_thresh=args.thres_nms)
 
-        stats = evaluator.evaluation_default()
-        print(f"(Default) mAP: {stats['mAP_def']}"
-              f"mAP rare: {stats['mAP_def_rare']}"
-              f"mAP non-rare: {stats['mAP_def_non_rare']}")
+                stats = evaluator.evaluation_default()
+                print(f"(Default) mAP: {stats['mAP_def']}"
+                      f"mAP rare: {stats['mAP_def_rare']}"
+                      f"mAP non-rare: {stats['mAP_def_non_rare']}")
 
-        stats_ko = evaluator.evaluation_ko()
-        print(f"(Known Object) mAP: {stats_ko['mAP_ko']}"
-              f"mAP rare: {stats_ko['mAP_ko_rare']}"
-              f"mAP non-rare: {stats_ko['mAP_ko_non_rare']}")
+        # stats_ko = evaluator.evaluation_ko()
+        # print(f"(Known Object) mAP: {stats_ko['mAP_ko']}"
+        #       f"mAP rare: {stats_ko['mAP_ko_rare']}"
+        #       f"mAP non-rare: {stats_ko['mAP_ko_non_rare']}")
 
-        stats.update(stats_ko)
+        # stats.update(stats_ko)
         # if args.eval_extra:
         #     evaluator.evaluation_extra()
 

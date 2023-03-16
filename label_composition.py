@@ -68,6 +68,7 @@ def main():
     id2verb = {v: k for k, v in verb2id.items()}
     id2obj = {v: k for k, v in obj2id.items()}
     sim_verb['no_interaction'] = {}
+
     # with open("data/similar_word/extend_verb2id.json", "w", encoding="utf-8") as file:
     #     json.dump(verb2id, file, ensure_ascii=False, indent=4)
     #
@@ -99,9 +100,6 @@ def main():
         if len(verb_choice) > 0 and len(obj_choice) > 0:
             synth_pair_pool.extend(synth)
         real2synth[(verb_id, obj_id)] = [(verb2id[v], obj2id[o]) for v, o in synth]
-
-    # threshold = 0.8 -> 859
-    # threshold = 0.7 -> 4616
 
     print(len(synth_pair_pool))
     df = pd.DataFrame.from_dict({"id": [i for i in range(len(synth_pair_pool))],
@@ -146,7 +144,7 @@ def main():
     tensor_id2pair = {v: k for k, v in pair2tensor_id.items()}
     # print(real2synth)
 
-    real2synth_tensor_id = {pair2tensor_id[k]: [pair2tensor_id[k]] + [pair2tensor_id[p] for p in synth_pairs]
+    real2synth_tensor_id = {pair2tensor_id[k]: [pair2tensor_id[k]] + [pair2tensor_id[p] for p in synth_pairs[:-1]]
                             for k, synth_pairs in real2synth.items()}
     print(real2synth_tensor_id)
     # real2sentence = {k: v for k, v in real2synth_tensor_id}
@@ -156,7 +154,7 @@ def main():
         "pair2tensor_id": pair2tensor_id,
         'sentence2tensor_id': {text: pair2tensor_id[p] for p, text in hico_text_label.items()},
         "real2synth_tensor_id": real2synth_tensor_id,  # include self
-    }, "./checkpoint/synth_hoi_clip_embedding_ckpt.pth")
+    }, "./checkpoint/synth_hoi_gpt-1_embedding_ckpt.pth")
 
     # with open("data/similar_word/pair2id.txt", "w", encoding="utf-8") as f:
     #     for k, v in pair2tensor_id.items():

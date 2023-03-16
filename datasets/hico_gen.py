@@ -1,9 +1,10 @@
 """
 HICO detection dataset.
 """
+import random
 from pathlib import Path
 
-import torchvision.transforms
+import torchvision.transforms as t
 from PIL import Image
 import json
 from collections import defaultdict
@@ -82,6 +83,13 @@ class HICODetection(torch.utils.data.Dataset):
 
         # device = "cuda" if torch.cuda.is_available() else "cpu"
         # _, self.clip_preprocess = clip.load(args.clip_model, device)
+        if args.mixup:
+            self.mixup = args.mixup
+            self.mixup_prob = 0.5
+            self.mixup_alpha = 2
+            with open(f"{args.hoi_path}/annotations/bg_image_idx.json", 'r') as f:
+                bg_data = json.load(f)
+            self.bg_image_filename = bg_data['bg_image_filename']
 
     def __len__(self):
         return len(self.ids)
@@ -124,6 +132,22 @@ class HICODetection(torch.utils.data.Dataset):
             if self._transforms is not None:
                 img_0, target_0 = self._transforms[0](img, target)
                 img, target = self._transforms[1](img_0, target_0)
+                bg_size = (img.size(1), img.size(2))
+
+                # mixup image: condition to mixup, maybe rare only?
+                if self.mixup:
+                    if torch.rand(1) > self.mixup_prob:
+                        mixup_filename = random.choice(self.bg_image_filename)
+                        img_bg = Image.open(self.img_folder / mixup_filename).convert('RGB')
+                        lamb = np.random.beta(self.mixup_alpha, self.mixup_alpha)
+
+                        self.mixup_transform = t.Compose([
+                            t.Resize(bg_size),
+                            t.ToTensor(),
+                            t.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+                        ])
+                        img_bg = self.mixup_transform(img_bg)
+                        img = img * lamb + (1 - lamb) * img_bg
 
             kept_box_indices = [label[0] for label in target['labels']]
 

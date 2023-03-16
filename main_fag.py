@@ -105,6 +105,8 @@ Fag dataset structure:
 
 
 def main(args):
+    utils.init_distributed_mode(args)
+
     # Fix the seed for reproducibility.
     device = torch.device(args.device)
     seed = args.seed + utils.get_rank()
@@ -131,43 +133,22 @@ def main(args):
     data_loader_val = DataLoader(dataset_val, 8, sampler=sampler_val,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
-    # print(dataset_val.rare_triplets, dataset_val.non_rare_triplets)
-    # img_tensor, anno_dict = dataset_train[0]
-    # for k, v in anno_dict.items():
-    #     if torch.is_tensor(v):
-    #         print(k, v.size())
-    #     else:
-    #         print(k, v)
-
-    # -----------------------------------------
-    # dataset_fag_train = build_fag_dataset(image_set="train", args=args)
-    # img_tensor, anno_dict = dataset_fag_train[0]
-    # print("Fag dataset:")
-    # for k, v in anno_dict.items():
-    #     if torch.is_tensor(v):
-    #         print(k, ":", v.size())
-    #     else:
-    #         print(k, ":", v)
-    # print("Gen dataset:")
-    # img_tensor, anno_dict = dataset_train[0]
-    # for k, v in anno_dict.items():
-    #     if torch.is_tensor(v):
-    #         print(k, ":", v.size())
-    #     else:
-    #         print(k, ":", v)
-    # -----------------------------------------
-
     # Model
     model, criterion, postprocessors = build_model(args)
     model.to(device)
+
+    model_without_ddp = model
+    if args.distributed:
+        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
+        model_without_ddp = model.module
 
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('number of params:', n_parameters)
 
     param_dicts = [
-        {"params": [p for n, p in model.named_parameters() if "backbone" not in n and p.requires_grad]},
+        {"params": [p for n, p in model_without_ddp.named_parameters() if "backbone" not in n and p.requires_grad]},
         {
-            "params": [p for n, p in model.named_parameters() if "backbone" in n and p.requires_grad],
+            "params": [p for n, p in model_without_ddp.named_parameters() if "backbone" in n and p.requires_grad],
             "lr": args.lr_backbone,
         },
     ]
@@ -185,14 +166,14 @@ def main(args):
         pretrain_model = None
     if pretrain_model is not None:
         pretrain_dict = torch.load(pretrain_model, map_location='cpu')['model']
-        my_model_dict = model.state_dict()
+        my_model_dict = model_without_ddp.state_dict()
         pretrain_dict = {k: v for k, v in pretrain_dict.items() if k in my_model_dict}
 
         # convert pretrain weight
         pretrain_dict['query_embed.weight'] = pretrain_dict['query_embed.weight'].clone()[:args.num_queries]
 
         my_model_dict.update(pretrain_dict)
-        model.load_state_dict(my_model_dict)
+        model_without_ddp.load_state_dict(my_model_dict)
 
     # Optimizer
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr, weight_decay=args.weight_decay)
@@ -214,15 +195,15 @@ def main(args):
             pretrain_dict = {k: v for k, v in checkpoint['model'].items() if k in my_model_dict}
             pretrain_dict['verb_cls_embed.weight'] = checkpoint['model']['hoi_visual_projection.weight'].clone()
             pretrain_dict['verb_cls_embed.bias'] = checkpoint['model']['hoi_visual_projection.bias'].clone()
-            model.load_state_dict(pretrain_dict, strict=False)
+            model_without_ddp.load_state_dict(pretrain_dict, strict=False)
         else:
-            model.load_state_dict(checkpoint['model'], strict=False)
+            model_without_ddp.load_state_dict(checkpoint['model'], strict=False)
             if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint \
                     and 'epoch' in checkpoint and not args.with_sentence_branch:
                 optimizer.load_state_dict(checkpoint['optimizer'])
                 lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
 
-            args.start_epoch = checkpoint['epoch'] + 1
+        args.start_epoch = checkpoint['epoch'] + 1
 
     accelerator = Accelerator()
 
@@ -244,7 +225,7 @@ def main(args):
         if epoch == args.epochs - 1:
             checkpoint_path = os.path.join(args.output_dir, 'checkpoint_last.pth')
             utils.save_on_master({
-                'model': model.state_dict(),
+                'model': model_without_ddp.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'lr_scheduler': lr_scheduler.state_dict(),
                 'epoch': epoch,
@@ -269,7 +250,7 @@ def main(args):
             print(f"Saving epoch {epoch}!")
             checkpoint_path = os.path.join(args.output_dir, 'checkpoint_best.pth')
             utils.save_on_master({
-                'model': model.state_dict(),
+                'model': model_without_ddp.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'lr_scheduler': lr_scheduler.state_dict(),
                 'epoch': epoch,
