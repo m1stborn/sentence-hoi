@@ -1,6 +1,7 @@
 python -m torch.distributed.launch \
     --nproc_per_node=2 \
     --use_env \
+    main_fag.py \
     --pretrained pretrained/HICO_GEN_VLKT_S.pth \
     --dataset_file hico \
     --hoi_path ../gen-vlkt/data/hico_20160224_det \
