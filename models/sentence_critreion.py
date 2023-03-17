@@ -111,7 +111,7 @@ class SentenceCriterion:
             self.real2synth_tensor_id = {k: torch.tensor(v) for k, v in self.real2synth_tensor_id.items()}
 
             # embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
-            self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
+            # self.pair_choice_tensor_id = ckpt['pair_choice_tensor_id']
 
         else:
             self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
