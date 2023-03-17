@@ -38,8 +38,8 @@ def apply_risk_mask(choice_list, mask, target):
 class SentenceCriterion:
     def __init__(self,
                  # embedding_file="./checkpoint/hoi_clip_embedding.pth",
-                 # embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
-                 embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
+                 embedding_file="./checkpoint/synth_hoi_clip_embedding_ckpt.pth",
+                 # embedding_file="./checkpoint/pari_choice_clip_embedding_ckpt.pth",
                  clip_model="openai/clip-vit-base-patch32", device="cuda"):
         super().__init__()
         self.device = device
