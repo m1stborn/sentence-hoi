@@ -82,7 +82,7 @@ def train_one_epoch(model: torch.nn.Module,
         if max_norm > 0:
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
         optimizer.step()
-        lr_scheduler.step()
+        # lr_scheduler.step()
 
         metric_logger.update(loss=loss_value, **loss_dict_reduced_scaled, **loss_dict_reduced_unscaled)
         if hasattr(criterion, 'loss_labels'):

@@ -89,7 +89,7 @@ def match_pair(bboxes, pred_pairs, gt_pairs):
             else:
                 ap_dict[label] = [False]
 
-    print('match_pair', collate)
+    # print('match_pair', collate)
     # print(ap_dict)
 
     # print(match_and_correct)
@@ -294,9 +294,9 @@ class HicoEvalBbox:
 
         # print(self.pred_anno['HICO_test2015_00000001'].keys())
         num1 = {k: f"{len(v)}" for k, v in self.pred_anno['HICO_test2015_00000001'].items()}
-        print(num1)
+        # print(num1)
         o = self.eval_hoi('246', self.global_ids, self.annotations, self.pred_anno, self.out_dir)
-        print(o)
+        # print(o)
 
         # for hoi_id in ap_dict.keys():
         #     o = self.eval_hoi(hoi_id, self.global_ids, self.annotations, self.pred_anno, self.out_dir)
@@ -452,8 +452,8 @@ class HicoEvalBbox:
                 y_true.append(is_match)
                 y_score.append(pred_det['score'])
                 det_id.append((global_id, i))
-            if global_id == "HICO_test2015_00000001":
-                print('eval_hoi', hoi_id, num_dets, y_true, y_score)
+            # if global_id == "HICO_test2015_00000001":
+            #     print('eval_hoi', hoi_id, num_dets, y_true, y_score)
 
         # Compute PR
         precision, recall, mark = compute_pr(y_true, y_score, npos)

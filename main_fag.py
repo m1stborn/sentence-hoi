@@ -8,11 +8,11 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from accelerate import Accelerator
+# from accelerate import Accelerator
 from torch.utils.data import DataLoader
-from transformers import (
-    get_scheduler,
-)
+# from transformers import (
+#     get_scheduler,
+# )
 
 import util.misc as utils
 from datasets import build_gen_dataset, build_fag_dataset
@@ -177,13 +177,13 @@ def main(args):
 
     # Optimizer
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr, weight_decay=args.weight_decay)
-    # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
-    lr_scheduler = get_scheduler(
-        name="cosine",
-        optimizer=optimizer,
-        num_warmup_steps=0,
-        num_training_steps=args.epochs * len(data_loader_train),
-    )
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
+    # lr_scheduler = get_scheduler(
+    #     name="cosine",
+    #     optimizer=optimizer,
+    #     num_warmup_steps=0,
+    #     num_training_steps=args.epochs * len(data_loader_train),
+    # )
 
     print(f"Num training steps: {args.epochs * len(data_loader_train)}")
     if args.resume:
@@ -205,12 +205,12 @@ def main(args):
 
         args.start_epoch = checkpoint['epoch'] + 1
 
-    accelerator = Accelerator()
+    # accelerator = Accelerator()
 
     # Prepare everything with our `accelerator`.
-    model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion = accelerator.prepare(
-        model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion
-    )
+    # model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion = accelerator.prepare(
+    #     model, optimizer, data_loader_train, data_loader_val, lr_scheduler, criterion, sen_criterion
+    # )
 
     # Train
     print("Start training")
@@ -220,7 +220,7 @@ def main(args):
         train_stats = train_one_epoch(
             model, criterion, data_loader_train, optimizer, device,
             args, epoch, lr_scheduler, sen_criterion, args.clip_max_norm)
-        # lr_scheduler.step()
+        lr_scheduler.step()
 
         if epoch == args.epochs - 1:
             checkpoint_path = os.path.join(args.output_dir, 'checkpoint_last.pth')
