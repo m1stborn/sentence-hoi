@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn
-from transformers import CLIPTokenizer, CLIPTextModelWithProjection
+# from transformers import CLIPTokenizer, CLIPTextModelWithProjection
 import random
 
 try:
@@ -51,13 +51,14 @@ class SentenceCriterion:
         # special sentence
         self.special_sentence = "A photo of a person."
         if not os.path.exists("./checkpoint/special_sentence_tensor.pth"):
-            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
-            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
-            inputs = tokenizer([self.special_sentence], padding=True, return_tensors="pt", max_length=13)
-            outputs = model_proj(**inputs)
-            # print(outputs.text_embeds, outputs.text_embeds.size())
-            torch.save({"A photo of a person.": outputs.text_embeds}, "./checkpoint/special_sentence_tensor.pth")
-            self.special_sentence_tensor = outputs.text_embeds
+            # tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+            # model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+            # inputs = tokenizer([self.special_sentence], padding=True, return_tensors="pt", max_length=13)
+            # outputs = model_proj(**inputs)
+            # # print(outputs.text_embeds, outputs.text_embeds.size())
+            # torch.save({"A photo of a person.": outputs.text_embeds}, "./checkpoint/special_sentence_tensor.pth")
+            # self.special_sentence_tensor = outputs.text_embeds
+            pass
         else:
             self.special_sentence_tensor = torch.load("./checkpoint/special_sentence_tensor.pth")[self.special_sentence]
             print("load special sentence tensor from pretrained.", self.special_sentence_tensor.size())
@@ -86,17 +87,17 @@ class SentenceCriterion:
             # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
 
         else:
-            text2tensor = {}
-            tokenizer = CLIPTokenizer.from_pretrained(clip_model)
-            model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
-            print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
-            for i, text in enumerate(self.text2pair.keys()):
-                inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
-                outputs = model_proj(**inputs)
-                text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
-            self.text2tensor = text2tensor
-            torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
-            # self.text_embeddings = torch.cat(list(self.text2tensor.values()))  # torch.Size([600, 512])
+            # text2tensor = {}
+            # tokenizer = CLIPTokenizer.from_pretrained(clip_model)
+            # model_proj = CLIPTextModelWithProjection.from_pretrained(clip_model)
+            # print("hoi_clip_embedding.pth is not given, using clip model to encoding.")
+            # for i, text in enumerate(self.text2pair.keys()):
+            #     inputs = tokenizer([text], padding=True, return_tensors="pt", max_length=13)
+            #     outputs = model_proj(**inputs)
+            #     text2tensor[text] = F.log_softmax(outputs.text_embeds, dim=1)
+            # self.text2tensor = text2tensor
+            # torch.save(text2tensor, "./checkpoint/hoi_clip_embedding_log_space.pth")
+            pass
 
         if "ckpt" in embedding_file:
             ckpt = torch.load(embedding_file)
