@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import torch
 # from accelerate import Accelerator
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, DistributedSampler
 # from transformers import (
 #     get_scheduler,
 # )
@@ -124,7 +124,12 @@ def main(args):
         dataset_train = build_gen_dataset(image_set='train', args=args)
         dataset_val = build_gen_dataset(image_set='val', args=args)
 
-    sampler_train = torch.utils.data.RandomSampler(dataset_train)
+    if args.distributed:
+        print("using DistributedSampler")
+        sampler_train = DistributedSampler(dataset_train)
+    else:
+        sampler_train = torch.utils.data.RandomSampler(dataset_train)
+
     sampler_val = torch.utils.data.SequentialSampler(dataset_val)
     batch_sampler_train = torch.utils.data.BatchSampler(
         sampler_train, args.batch_size, drop_last=True)
