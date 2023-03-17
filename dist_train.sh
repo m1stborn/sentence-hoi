@@ -1,5 +1,5 @@
-python3 -m torch.distributed.launch \
-    --nproc_per_node=1 \
+python -m torch.distributed.launch \
+    --nproc_per_node=2 \
     --use_env \
     --pretrained pretrained/HICO_GEN_VLKT_S.pth \
     --dataset_file hico \
