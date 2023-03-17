@@ -15,7 +15,7 @@ python main_fag.py \
         --thres_nms 0.7 \
         --mixup \
         --with_sentence_branch \
-        --resume checkpoint/p_202301261744/checkpoint_best.pth \
+#        --resume checkpoint/p_202301261744/checkpoint_best.pth \
 #        --dev
 
 # Interaction Head: Verb
