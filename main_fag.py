@@ -237,7 +237,10 @@ def main(args):
                 'args': args,
             }, checkpoint_path)
 
-        if epoch < 100 and epoch % 2 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
+        if epoch < 4:
+            if epoch % 2 != 0:
+                continue
+        elif epoch < 60 and epoch % 5 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
             continue
 
         test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
