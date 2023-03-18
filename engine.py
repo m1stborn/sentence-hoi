@@ -52,8 +52,8 @@ def train_one_epoch(model: torch.nn.Module,
 
         loss_dict = criterion(outputs, targets)
         if args.with_sentence_branch:
-            sen_loss = sen_criterion.batch_l1_loss(outputs, targets)
-            # sen_loss = sen_criterion.batch_l1_con_loss(outputs, targets)
+            # sen_loss = sen_criterion.batch_l1_loss(outputs, targets)
+            sen_loss = sen_criterion.batch_l1_con_loss(outputs, targets)
             # sen_loss = sen_criterion.batch_l1_triplet_loss(outputs, targets)
             loss_dict['loss_sentence_l1'] = sen_loss['l1_loss']
             # loss_dict['loss_triplet'] = sen_loss['tri_loss']
