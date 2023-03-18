@@ -153,7 +153,7 @@ class HICODetection(torch.utils.data.Dataset):
                         ])
                         img_bg = self.mixup_transform(img_bg)
                         img = img * lamb + (1 - lamb) * img_bg
-                        print(f"smple lamb {lamb} {idx}")
+
             kept_box_indices = [label[0] for label in target['labels']]
 
             target['labels'] = target['labels'][:, 1]
