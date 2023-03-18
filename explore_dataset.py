@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import random
+from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -52,10 +53,12 @@ def main(args):
     hoi_list = json.load(open(os.path.join("./data/annotations/", 'hoi_list_new.json'), 'r'))
     with open("./data/annotations/hoi_id_to_num.json", "r") as file:
         hoi_rare_mapping = json.load(file)
+    count_dict = defaultdict()
     rare_img_list = []  # boolean list
     for i, anno in tqdm(enumerate(dataset_train.annotations)):
         is_rare = False
         hoi_label = []
+        # print(anno['hoi_annotation'])
         for hoi in anno['hoi_annotation']:
             hoi_id = hoi['hoi_category_id'] - 1
             str_id = hoi_list[hoi_id]['id']
@@ -64,14 +67,22 @@ def main(args):
                 "id": str_id,
                 **hoi_dict,
             })
+
+            tmp = count_dict.get(hoi_id, 0)
+            count_dict[hoi_id] = tmp + 1
+
             if hoi_dict['rare'] == True:
                 is_rare = True
-                break
+
         rare_img_list.append(is_rare)
-        print(anno['file_name'], hoi_label, is_rare)
+        # print(anno['file_name'], hoi_label, is_rare)
         # if i > 100:
         #     break
-
+        # break
+    print(len(count_dict))
+    rare_dict = {k: v for k, v in count_dict.items() if v <= 10}
+    print(rare_dict, len(rare_dict))
+    print(sum(list(rare_dict.values())))
     # with open("./data/annotations/train_img_contains_rare_hoi.json", "w", encoding="utf-8") as file:
     #     json.dump(rare_img_list, file, ensure_ascii=False, indent=4)
     # print(np.sum(rare_img_list))
