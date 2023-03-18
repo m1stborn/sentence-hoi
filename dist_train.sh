@@ -16,4 +16,4 @@ python -m torch.distributed.launch \
     --use_nms_filter \
     --thres_nms 0.7 \
     --with_sentence_branch \
-#    --mixup \
+    --mixup \
