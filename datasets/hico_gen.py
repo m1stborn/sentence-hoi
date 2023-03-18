@@ -83,6 +83,7 @@ class HICODetection(torch.utils.data.Dataset):
 
         # device = "cuda" if torch.cuda.is_available() else "cpu"
         # _, self.clip_preprocess = clip.load(args.clip_model, device)
+        self.mixup = False
         if args.mixup:
             self.mixup = args.mixup
             self.mixup_prob = 0.5
