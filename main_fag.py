@@ -182,7 +182,7 @@ def main(args):
 
     # Optimizer
     optimizer = torch.optim.AdamW(param_dicts, lr=args.lr, weight_decay=args.weight_decay)
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.5)
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop, gamma=0.1)
     # lr_scheduler = get_scheduler(
     #     name="cosine",
     #     optimizer=optimizer,
@@ -237,10 +237,12 @@ def main(args):
                 'args': args,
             }, checkpoint_path)
 
-        if epoch < 4:
-            if epoch % 2 != 0:
-                continue
-        elif epoch < 60 and epoch % 5 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
+        # if epoch < 4 and  1 < epoch:
+        #     if epoch % 2 != 0:
+        #         continue
+        if epoch < 60 and epoch % 5 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
+            continue
+        elif epoch % 2 != 0:
             continue
 
         test_stats = evaluate_hoi_fag(args.dataset_file, model, postprocessors, data_loader_val,
