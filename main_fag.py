@@ -240,7 +240,7 @@ def main(args):
         # if epoch < 4 and  1 < epoch:
         #     if epoch % 2 != 0:
         #         continue
-        if epoch < 10 or epoch < 60:
+        if epoch < 10 or epoch > 60:
             if epoch % 2 != 0:
                 continue
         elif epoch < 60:
