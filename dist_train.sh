@@ -15,5 +15,5 @@ python -m torch.distributed.launch \
     --with_obj_clip_label \
     --use_nms_filter \
     --thres_nms 0.7 \
-    --with_sentence_branch \
     --mixup \
+#    --with_sentence_branch \

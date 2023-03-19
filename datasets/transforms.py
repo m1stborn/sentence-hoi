@@ -202,6 +202,17 @@ class RandomResize(object):
         return resize(img, target, size, self.max_size)
 
 
+class TargetResize(object):
+    def __init__(self, size, max_size=None):
+        assert isinstance(size, (list, tuple))
+        self.size = size
+        self.max_size = max_size
+
+    def __call__(self, img, target=None):
+        # size = random.choice(self.sizes)
+        return resize(img, target, self.size, self.max_size)
+
+
 class RandomPad(object):
     def __init__(self, max_pad):
         self.max_pad = max_pad

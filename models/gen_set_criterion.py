@@ -4,7 +4,11 @@ import torch.nn.functional as F
 from torch import nn
 
 from util.box_ops import box_cxcywh_to_xyxy, generalized_box_iou
-from util.misc import (accuracy, get_world_size)
+from util.misc import (
+    accuracy,
+    get_world_size,
+    is_dist_avail_and_initialized
+)
 
 
 def _sigmoid(x):
@@ -164,14 +168,19 @@ class SetCriterionHOI(nn.Module):
 
     def loss_hoi_labels(self, outputs, targets, indices, num_interactions, topk=5):
         assert 'pred_hoi_logits' in outputs
-        src_logits = outputs['pred_hoi_logits']
+        src_logits = outputs['pred_hoi_logits']  # [bs, num_query, 600]
 
         idx = _get_src_permutation_idx(indices)
         target_classes_o = torch.cat([t['hoi_labels'][J] for t, (_, J) in zip(targets, indices)])
+        # [num_interaction, 600]
         target_classes = torch.zeros_like(src_logits)
         target_classes[idx] = target_classes_o
-        src_logits = _sigmoid(src_logits)
+        src_logits = _sigmoid(src_logits)   # [bs, num_query, 600]
         # loss_hoi_ce = _neg_loss(src_logits, target_classes, weights=None, alpha=self.alpha)
+
+        # print(target_classes.size(), src_logits.size(), target_classes_o.size())
+        # print(idx)
+
         loss_hoi_ce = _neg_loss(src_logits, target_classes)
         losses = {'loss_hoi_labels': loss_hoi_ce}
 
@@ -257,9 +266,16 @@ class SetCriterionHOI(nn.Module):
         num_interactions = sum(len(t['obj_labels']) for t in targets)
         num_interactions = torch.as_tensor([num_interactions], dtype=torch.float,
                                            device=next(iter(outputs.values())).device)
-        # if is_dist_avail_and_initialized():
-        #     torch.distributed.all_reduce(num_interactions)
+        # num_interactions = total interaction in this batch
+        if is_dist_avail_and_initialized():
+            torch.distributed.all_reduce(num_interactions)
         num_interactions = torch.clamp(num_interactions / get_world_size(), min=1).item()
+
+        # print("criterion", len(targets), len(indices), num_interactions)
+        # print("criterion", indices)
+        # for t in targets:
+        #     print(t.keys())
+        # print("sum hoi", sum(len(t['hoi_labels']) for t in targets), num_interactions)
 
         # Compute all the requested losses
         losses = {}

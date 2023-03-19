@@ -1,5 +1,5 @@
 # Interaction Head: HOI
-python collate_choice.py \
+python dev_main.py \
         --pretrained pretrained/HICO_GEN_VLKT_S.pth \
         --dataset_file hico \
         --hoi_path ../gen-vlkt/data/hico_20160224_det \
@@ -12,5 +12,7 @@ python collate_choice.py \
         --with_clip_label \
         --with_obj_clip_label \
         --use_nms_filter \
-        --with_sentence_branch \
-        --thres_nms 0.7
+        --thres_nms 0.7 \
+#        --dev \
+#        --mixup \
+#        --with_sentence_branch \

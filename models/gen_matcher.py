@@ -63,6 +63,8 @@ class HungarianMatcherHOI(nn.Module):
         else:
             cost_giou = torch.stack((cost_sub_giou, cost_obj_giou)).max(dim=0)[0]
 
+        # print(cost_hoi_class.size(), cost_bbox.size(), cost_giou.size(), cost_obj_class.size())
+
         C = self.cost_hoi_class * cost_hoi_class + self.cost_bbox * cost_bbox + \
             self.cost_giou * cost_giou + self.cost_obj_class * cost_obj_class
 

@@ -85,18 +85,124 @@ class HICODetection(torch.utils.data.Dataset):
         # device = "cuda" if torch.cuda.is_available() else "cpu"
         # _, self.clip_preprocess = clip.load(args.clip_model, device)
         self.mixup = False
-        if args.mixup:
+        if args.mixup and img_set == 'train':
             self.mixup = args.mixup
-            self.mixup_prob = 0.1
+            self.mixup_prob = 0.9
             self.mixup_alpha = 2
             with open(f"{args.hoi_path}/annotations/bg_image_idx.json", 'r') as f:
                 bg_data = json.load(f)
             self.bg_image_filename = bg_data['bg_image_filename']
-        with open(f"./data/annotations/train_img_contains_rare_hoi.json", 'r') as f:
-            self.img_rare_list = json.load(f)
+            self.mixup_keywords = ['boxes', 'labels', 'hoi_sentence', 'valid_pairs',
+                                   'obj_labels', 'verb_labels', 'hoi_labels', 'sub_boxes', 'obj_boxes']
+            with open(f"./data/annotations/train_img_contains_rare_hoi.json", 'r') as f:
+                self.img_rare_list = json.load(f)
+                self.rare_idx_list = [i for i, x in enumerate(self.img_rare_list) if x]
+                # print(self.rare_idx_list)
 
     def __len__(self):
         return len(self.ids)
+
+    def get_mixup(self, idx, target_size=None):
+        img_anno = self.annotations[self.ids[idx]]
+
+        img = Image.open(self.img_folder / img_anno['file_name']).convert('RGB')
+        w, h = img.size
+
+        if self.img_set == 'train' and len(img_anno['annotations']) > self.num_queries:
+            img_anno['annotations'] = img_anno['annotations'][:self.num_queries]
+
+        boxes = [obj['bbox'] for obj in img_anno['annotations']]
+        # guard against no boxes via resizing
+        boxes = torch.as_tensor(boxes, dtype=torch.float32).reshape(-1, 4)
+
+        if self.img_set == 'train':
+            # Add index for confirming which boxes are kept after image transformation
+            classes = [(i, self._valid_obj_ids.index(obj['category_id'])) for i, obj in
+                       enumerate(img_anno['annotations'])]
+        else:
+            classes = [self._valid_obj_ids.index(obj['category_id']) for obj in img_anno['annotations']]
+        classes = torch.tensor(classes, dtype=torch.int64)
+
+        target = {'orig_size': torch.as_tensor([int(h), int(w)]), 'size': torch.as_tensor([int(h), int(w)])}
+
+        boxes[:, 0::2].clamp_(min=0, max=w)
+        boxes[:, 1::2].clamp_(min=0, max=h)
+        keep = (boxes[:, 3] > boxes[:, 1]) & (boxes[:, 2] > boxes[:, 0])
+        boxes = boxes[keep]
+        classes = classes[keep]
+
+        # Box relative annotation
+        target['boxes'] = boxes
+        target['labels'] = classes
+        target['iscrowd'] = torch.tensor([0 for _ in range(boxes.shape[0])])
+        target['area'] = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
+
+        mixup_transform = T.Compose([
+            T.TargetResize(target_size),
+            T.ToTensor(),
+            T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        img, target = mixup_transform(img, target)
+
+        kept_box_indices = [label[0] for label in target['labels']]
+
+        target['labels'] = target['labels'][:, 1]
+
+        obj_labels, verb_labels, sub_boxes, obj_boxes = [], [], [], []
+        sub_obj_pairs = []
+        hoi_labels = []
+        hoi_sentences = []
+        valid_pair = []
+
+        for hoi in img_anno['hoi_annotation']:
+            if hoi['subject_id'] not in kept_box_indices or hoi['object_id'] not in kept_box_indices:
+                continue
+            verb_obj_pair = (self._valid_verb_ids.index(hoi['category_id']),
+                             target['labels'][kept_box_indices.index(hoi['object_id'])])
+            if verb_obj_pair not in self.text_label_ids:
+                continue
+
+            pair = (self._valid_verb_ids.index(hoi['category_id']),
+                    target['labels'][kept_box_indices.index(hoi['object_id'])].item())
+            sub_obj_pair = (hoi['subject_id'], hoi['object_id'])
+            if sub_obj_pair in sub_obj_pairs:
+                verb_labels[sub_obj_pairs.index(sub_obj_pair)][self._valid_verb_ids.index(hoi['category_id'])] = 1
+                hoi_labels[sub_obj_pairs.index(sub_obj_pair)][self.text_label_ids.index(verb_obj_pair)] = 1
+            else:
+                sub_obj_pairs.append(sub_obj_pair)
+                obj_labels.append(target['labels'][kept_box_indices.index(hoi['object_id'])])
+                verb_label = [0 for _ in range(len(self._valid_verb_ids))]
+                hoi_label = [0] * len(self.text_label_ids)
+                hoi_label[self.text_label_ids.index(verb_obj_pair)] = 1
+                verb_label[self._valid_verb_ids.index(hoi['category_id'])] = 1
+                sub_box = target['boxes'][kept_box_indices.index(hoi['subject_id'])]
+                obj_box = target['boxes'][kept_box_indices.index(hoi['object_id'])]
+                verb_labels.append(verb_label)
+                hoi_labels.append(hoi_label)
+                sub_boxes.append(sub_box)
+                obj_boxes.append(obj_box)
+
+                hoi_sentences.append(self.pair2text[pair])
+                valid_pair.append(pair)
+        target['filename'] = img_anno['file_name']
+
+        target['hoi_sentence'] = hoi_sentences if len(hoi_sentences) != 0 else ['A photo of a person.']
+        target['valid_pairs'] = valid_pair
+
+        if len(sub_obj_pairs) == 0:
+            target['obj_labels'] = torch.zeros((0,), dtype=torch.int64)
+            target['verb_labels'] = torch.zeros((0, len(self._valid_verb_ids)), dtype=torch.float32)
+            target['hoi_labels'] = torch.zeros((0, len(self.text_label_ids)), dtype=torch.float32)
+            target['sub_boxes'] = torch.zeros((0, 4), dtype=torch.float32)
+            target['obj_boxes'] = torch.zeros((0, 4), dtype=torch.float32)
+        else:
+            target['obj_labels'] = torch.stack(obj_labels)
+            target['verb_labels'] = torch.as_tensor(verb_labels, dtype=torch.float32)
+            target['hoi_labels'] = torch.as_tensor(hoi_labels, dtype=torch.float32)
+            target['sub_boxes'] = torch.stack(sub_boxes)
+            target['obj_boxes'] = torch.stack(obj_boxes)
+
+        return img, target
 
     def __getitem__(self, idx):
         img_anno = self.annotations[self.ids[idx]]
@@ -133,26 +239,11 @@ class HICODetection(torch.utils.data.Dataset):
             target['iscrowd'] = torch.tensor([0 for _ in range(boxes.shape[0])])
             target['area'] = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
 
+            bg_size = None
             if self._transforms is not None:
                 img_0, target_0 = self._transforms[0](img, target)
                 img, target = self._transforms[1](img_0, target_0)
-                bg_size = (img.size(1), img.size(2))
-
-                # mixup image: condition to mixup, maybe rare only?
-                if self.mixup:
-                    # if torch.rand(1) > self.mixup_prob and self.img_rare_list[idx]:
-                    if torch.rand(1) > self.mixup_prob and self.img_rare_list[idx]:
-                        mixup_filename = random.choice(self.bg_image_filename)
-                        img_bg = Image.open(self.img_folder / mixup_filename).convert('RGB')
-                        lamb = np.random.beta(self.mixup_alpha, self.mixup_alpha)
-
-                        self.mixup_transform = t.Compose([
-                            t.Resize(bg_size),
-                            t.ToTensor(),
-                            t.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-                        ])
-                        img_bg = self.mixup_transform(img_bg)
-                        img = img * lamb + (1 - lamb) * img_bg
+                bg_size = (img.size(2), img.size(1))  # reverse
 
             kept_box_indices = [label[0] for label in target['labels']]
 
@@ -221,6 +312,31 @@ class HICODetection(torch.utils.data.Dataset):
                 target['hoi_labels'] = torch.as_tensor(hoi_labels, dtype=torch.float32)
                 target['sub_boxes'] = torch.stack(sub_boxes)
                 target['obj_boxes'] = torch.stack(obj_boxes)
+
+            # mixup
+            # if self.mixup and not self.img_rare_list[idx]:
+            if self.mixup and not self.img_rare_list[idx] and torch.rand(1) > self.mixup_prob:
+                lamb = np.random.beta(self.mixup_alpha, self.mixup_alpha)
+                mixup_idx = random.choice(self.rare_idx_list)
+                # print("mixup_idx", mixup_idx)
+                mixup_img, mixup_anno = self.get_mixup(mixup_idx, bg_size)
+
+                # mixup images
+                img = img * lamb + (1 - lamb) * mixup_img
+                # mixup annotations
+                # num_extend_bboxes = len(mixup_anno['boxes'])
+                target['boxes'] = torch.cat([target['boxes'], mixup_anno['boxes']])
+                target['labels'] = torch.cat([target['labels'], mixup_anno['labels']])
+                target['sub_boxes'] = torch.cat([target['sub_boxes'], mixup_anno['sub_boxes']])
+                target['obj_boxes'] = torch.cat([target['obj_boxes'], mixup_anno['obj_boxes']])
+
+                target['hoi_sentence'] += mixup_anno['hoi_sentence']
+                target['valid_pairs'] += mixup_anno['valid_pairs']
+                target['obj_labels'] = torch.cat([target['obj_labels'], mixup_anno['obj_labels']])
+
+                target['verb_labels'] = torch.cat([target['verb_labels']*lamb, mixup_anno['verb_labels']*(1-lamb)])
+                target['hoi_labels'] = torch.cat([target['hoi_labels']*lamb, mixup_anno['hoi_labels']*(1-lamb)])
+
         else:
             target['filename'] = img_anno['file_name']
             target['boxes'] = boxes
