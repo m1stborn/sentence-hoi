@@ -9,11 +9,11 @@ python -m torch.distributed.launch \
     --num_verb_classes 117 \
     --backbone resnet50 \
     --num_queries 100 \
-    --dec_layers 3 \
+    --dec_layers 6 \
     --eval \
     --with_clip_label \
     --with_obj_clip_label \
     --use_nms_filter \
     --thres_nms 0.7 \
-    --mixup \
+#    --mixup \
 #    --with_sentence_branch \

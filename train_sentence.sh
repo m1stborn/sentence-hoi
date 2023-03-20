@@ -13,7 +13,7 @@ python main_fag.py \
         --with_obj_clip_label \
         --use_nms_filter \
         --thres_nms 0.7 \
-        --mixup \
+#        --mixup \
 #        --with_sentence_branch \
 #        --resume checkpoint/p_202301261744/checkpoint_best.pth \
 #        --dev
