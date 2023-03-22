@@ -237,13 +237,10 @@ def main(args):
                 'args': args,
             }, checkpoint_path)
 
-        # if epoch < 4 and  1 < epoch:
-        #     if epoch % 2 != 0:
-        #         continue
-        if epoch < 10 or epoch >= 60:
+        if epoch < 10 or epoch >= 120:
             if epoch % 2 != 0:
                 continue
-        elif epoch < 60:
+        elif epoch < 120:
             if epoch % 5 != 0 and epoch != args.epochs-1:  # eval every 5 epoch before lr_drop
                 continue
         # elif epoch % 2 != 0:
