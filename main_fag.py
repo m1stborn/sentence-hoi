@@ -135,7 +135,7 @@ def main(args):
         sampler_train, args.batch_size, drop_last=True)
     data_loader_train = DataLoader(dataset_train, batch_sampler=batch_sampler_train,
                                    collate_fn=utils.collate_fn, num_workers=args.num_workers)
-    data_loader_val = DataLoader(dataset_val, 8, sampler=sampler_val,
+    data_loader_val = DataLoader(dataset_val, 16, sampler=sampler_val,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
     # Model
@@ -205,7 +205,7 @@ def main(args):
             model_without_ddp.load_state_dict(checkpoint['model'], strict=False)
             if 'optimizer' in checkpoint and 'lr_scheduler' in checkpoint \
                     and 'epoch' in checkpoint and not args.with_sentence_branch:
-                optimizer.load_state_dict(checkpoint['optimizer'])
+                # optimizer.load_state_dict(checkpoint['optimizer'])
                 lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
 
         args.start_epoch = checkpoint['epoch'] + 1
