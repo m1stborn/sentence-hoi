@@ -16,6 +16,5 @@ python -m torch.distributed.launch \
     --use_nms_filter \
     --thres_nms 0.7 \
     --resume checkpoint/p_2023_0320_0335/checkpoint_best.pth \
-
-#    --mixup \
+    --mixup \
 #    --with_sentence_branch \
